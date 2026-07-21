@@ -109,9 +109,9 @@ class LkPatcherUi(ctk.CTk):
         buttons = ctk.CTkFrame(body)
         buttons.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
         buttons.grid_columnconfigure((0, 1, 2), weight=1)
-        ctk.CTkButton(buttons, text="Unlock serial", command=lambda: self.start_preset("unlock-serial")).grid(row=0, column=0, padx=8, pady=8, sticky="ew")
+        ctk.CTkButton(buttons, text="Unlock Bootloader", command=lambda: self.start_preset("unlock-serial")).grid(row=0, column=0, padx=8, pady=8, sticky="ew")
         ctk.CTkButton(buttons, text="Erase partition", command=lambda: self.start_preset("erase-serial")).grid(row=0, column=1, padx=8, pady=8, sticky="ew")
-        ctk.CTkButton(buttons, text="Unlock + replace erase", command=lambda: self.start_preset("unlock-serial-nvdata")).grid(row=0, column=2, padx=8, pady=8, sticky="ew")
+        ctk.CTkButton(buttons, text="Unlock Bootloader + erase", command=lambda: self.start_preset("unlock-serial-nvdata")).grid(row=0, column=2, padx=8, pady=8, sticky="ew")
 
         self.log_box = ctk.CTkTextbox(body, wrap="word")
         self.log_box.grid(row=1, column=0, padx=10, pady=(0, 10), sticky="nsew")
