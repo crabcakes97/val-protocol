@@ -282,4 +282,4 @@ Always test patched images on recoverable lab devices before using them in produ
 
 ## License
 
-No open-source license has been selected in this prepared copy. Add a license before publishing if you want to grant public reuse rights.
+GNU Affero General Public License v3.0
