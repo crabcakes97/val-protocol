@@ -413,6 +413,18 @@ auto-selects the same way: `unlock.py custom --patches auto` fingerprints
 the stock md1img (size + sha256) and picks the bundled kansas/nevada
 table, refusing unknown builds with porting instructions.
 
+### Full-RAM dump status (nevada, kernel 5.15.180-android13-8)
+
+- No `/proc/kcore` (`CONFIG_PROC_KCORE` off), no `/dev/mem`/`kmem`
+  (`CONFIG_DEVMEM` off) — compiled out, not permission issues.
+- SysRq crash works (panic → 262KB ramoops logs → clean reboot) but yields
+  logs only; expdb is logs-only storage; no USB fetch command found.
+- **Open, proven possible:** unsigned kernel modules load
+  (`CONFIG_MODULE_SIG_FORCE` off, `modules_disabled=0`). Recipe: sync GKI
+  `android13-8` sources for `5.15.180-g9b2308ac0ad6`, build a minimal
+  physical-range reader (`/proc/iomem` System RAM map is world-readable),
+  `insmod` via root, dump in chunks. Multi-hour job, not yet done.
+
 Fastboot-only code paths — normal Android boot is untouched. Flash to the
 inactive slot (`fastboot flash lk_b …`, `fastboot --set-active=b`), test,
 fall back with `--set-active=a`. `config unprotect` may still deny via
