@@ -18,6 +18,7 @@ PRESETS = (
     "erase-serial",
     "unlock-serial-nvdata",
     "modem-unlock",
+    "factory-allow",
 )
 
 
@@ -231,6 +232,19 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Confirmacion explicita de riesgo para --modem-size-bypass.",
     )
+    parser.add_argument(
+        "--factory-allow",
+        action="store_true",
+        help=(
+            "UNSAFE RESEARCH para --preset factory-allow: NOPea el gate tbz "
+            "del deny ('command restricted') en el dispatcher oem."
+        ),
+    )
+    parser.add_argument(
+        "--factory-allow-unsafe",
+        action="store_true",
+        help="Confirmacion explicita de riesgo para --factory-allow.",
+    )
     return parser
 
 
@@ -321,6 +335,15 @@ def build_patch_command(args: argparse.Namespace, root: Path, analysis_dir: Path
             patch_cmd.extend(["--modem-size-bypass", "--modem-allow-unsafe"])
         else:
             patch_cmd.append("--modem-research-report-only")
+        return patch_cmd
+
+    if args.preset == "factory-allow":
+        require_arg(args.factory_allow, "--preset factory-allow requiere --factory-allow.")
+        require_arg(
+            args.factory_allow_unsafe,
+            "--preset factory-allow requiere --factory-allow-unsafe.",
+        )
+        patch_cmd.extend(["--factory-allow", "--factory-allow-unsafe"])
         return patch_cmd
 
     if args.preset in {"unlock-imei", "unlock-serial"}:

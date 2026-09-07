@@ -95,6 +95,24 @@ MODEM_SIZE_GATES: tuple[tuple[str, int, bytes, bytes, str], ...] = (
 AARCH64_NOP = bytes.fromhex("1f2003d5")
 
 
+# Factory/ramdump restriction gate (nevada XT2615V phone LK, aarch64,
+# LK base 0xffff000050f00000; offsets are lk.bin file offsets).
+# The oem command dispatcher near VA 0xffff000050f0f3d0 tests status bits
+# (tbnz/tbz/cbnz chain); one failing check lands at VA 0xffff000050f0f414,
+# which loads "command restricted" and branches to the deny path, while
+# fall-through calls the command handler (ldr x8,[x21,#0x10]; blr x8).
+# Entry: (label, file_offset, expected_old_bytes, new_bytes, why).
+FACTORY_GATES: tuple[tuple[str, int, bytes, bytes, str], ...] = (
+    (
+        "restricted-tbz",
+        0xF3F4,
+        bytes.fromhex("00010036"),  # tbz w0,#0 -> deny("command restricted")
+        bytes.fromhex("1f2003d5"),  # nop: fall through to handler-call path
+        "tbz status-bit0 deny -> fall through to command handler",
+    ),
+)
+
+
 def patch_bytes_checked(data: bytearray, offset: int, old: bytes, new: bytes, label: str) -> None:
     """Same-footprint patch with old-byte gate. Raises on any mismatch."""
     if len(old) != len(new):
@@ -122,6 +140,21 @@ def apply_modem_size_gates(data: bytearray, analysis_dir: Path) -> list[tuple[st
         applied.append((label, offset, old, new))
         va = f" VA=0x{lk_base + offset:x}" if lk_base else ""
         print(f"Patch   : modem {label} @ 0x{offset:x} / HxD {offset:08X}{va}  {old.hex()} -> {new.hex()}")
+    return applied
+
+
+def apply_factory_gates(data: bytearray, analysis_dir: Path) -> list[tuple[str, int, bytes, bytes]]:
+    """Apply FACTORY_GATES with old-byte verification. Returns applied list."""
+    try:
+        lk_base = load_analysis_base(analysis_dir)
+    except (OSError, ValueError, FileNotFoundError):
+        lk_base = 0
+    applied: list[tuple[str, int, bytes, bytes]] = []
+    for label, offset, old, new, _why in FACTORY_GATES:
+        patch_bytes_checked(data, offset, old, new, label)
+        applied.append((label, offset, old, new))
+        va = f" VA=0x{lk_base + offset:x}" if lk_base else ""
+        print(f"Patch   : factory {label} @ 0x{offset:x} / HxD {offset:08X}{va}  {old.hex()} -> {new.hex()}")
     return applied
 
 
@@ -3880,6 +3913,25 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--factory-allow",
+        action="store_true",
+        help=(
+            "UNSAFE RESEARCH: NOPea el gate tbz que lleva al deny "
+            "('command restricted') en el dispatcher oem, forzando el camino "
+            "al handler. Requiere --factory-allow-unsafe. Un solo gate de la "
+            "cadena: si el comando sigue restringido, falta trazar el "
+            "siguiente gate."
+        ),
+    )
+    parser.add_argument(
+        "--factory-allow-unsafe",
+        action="store_true",
+        help=(
+            "Confirmacion explicita de riesgo para --factory-allow. "
+            "Sin esto, se rehusa."
+        ),
+    )
+    parser.add_argument(
         "--apply",
         action="store_true",
         help="Escribe el archivo parcheado. Sin esto solo hace dry-run.",
@@ -4003,11 +4055,12 @@ def main() -> int:
         and not args.unlock_erase_only
         and not args.modem_research_report_only
         and not args.modem_size_bypass
+        and not args.factory_allow
     ):
         print(
             "Error: usa --erase-partition <nombre>, --from/--to, --frp-skip-check, "
             "--frp-compare-value, --key-force-success, --key-custom-signature, --key-token-secret, "
-            "--erase-token-partition, --unlock-erase-only, --modem-research-report-only, --modem-size-bypass, o una combinacion.",
+            "--erase-token-partition, --unlock-erase-only, --modem-research-report-only, --modem-size-bypass, --factory-allow, o una combinacion.",
             file=sys.stderr,
         )
         return 2
@@ -4015,6 +4068,12 @@ def main() -> int:
         print(
             "Error: --modem-size-bypass requiere --modem-allow-unsafe "
             "(lee las notas de riesgo del preset modem-unlock).",
+            file=sys.stderr,
+        )
+        return 2
+    if args.factory_allow and not args.factory_allow_unsafe:
+        print(
+            "Error: --factory-allow requiere --factory-allow-unsafe.",
             file=sys.stderr,
         )
         return 2
@@ -4075,6 +4134,7 @@ def main() -> int:
             bool(erase_token_partition),
             args.unlock_erase_only,
             args.modem_size_bypass,
+            args.factory_allow,
         ]
         if any(conflicting):
             print(
@@ -4097,6 +4157,17 @@ def main() -> int:
         print("Warn    : NO remappea MMU/EMI-MPU (el kernel lo reconstruye), NO toca watchdog,")
         print("Warn    : NO da EL3. Un MD image con regiones fuera de rango puede")
         print("Warn    : corromper memoria LK -> bootloop con USB muerto. Ten recovery listo.")
+
+    if args.factory_allow:
+        try:
+            applied = apply_factory_gates(data, args.analysis_dir)
+        except (OSError, ValueError) as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 1
+        print(f"FactoryGates: {len(applied)}/{len(FACTORY_GATES)} restriction gates -> NOP")
+        print("Warn    : esto fuerza UN gate de la cadena deny; otros checks")
+        print("Warn    : (tbnz/cbnz vecinos) pueden seguir negando. El test en")
+        print("Warn    : el equipo decide: 'oem ramdump' sin 'restricted' = win.")
 
     if partition_patch is not None:
         old_name, new_name = partition_patch
