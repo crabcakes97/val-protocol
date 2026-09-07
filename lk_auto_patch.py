@@ -246,6 +246,24 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Confirmacion explicita de riesgo para --factory-allow.",
     )
+    parser.add_argument(
+        "--experimental",
+        action="store_true",
+        help=(
+            "Permite builds LK desconocidos en los presets modem-unlock, "
+            "factory-allow y full-allow (descubrimiento por-image verificado). "
+            "Sin esto, un build fuera de la tabla se rehusa."
+        ),
+    )
+    parser.add_argument(
+        "--detect-only",
+        action="store_true",
+        help=(
+            "Auto-deteccion sin cambios: analiza el LK, identifica el build "
+            "(tabla conocida o desconocido) y reporta que gates de cada "
+            "familia se resuelven. No parchea ni reempaca."
+        ),
+    )
     return parser
 
 
@@ -334,6 +352,8 @@ def build_patch_command(args: argparse.Namespace, root: Path, analysis_dir: Path
                 "--preset modem-unlock con --modem-size-bypass requiere --modem-allow-unsafe.",
             )
             patch_cmd.extend(["--modem-size-bypass", "--modem-allow-unsafe"])
+            if args.experimental:
+                patch_cmd.append("--experimental")
         else:
             patch_cmd.append("--modem-research-report-only")
         return patch_cmd
@@ -345,6 +365,8 @@ def build_patch_command(args: argparse.Namespace, root: Path, analysis_dir: Path
             "--preset factory-allow requiere --factory-allow-unsafe.",
         )
         patch_cmd.extend(["--factory-allow", "--factory-allow-unsafe"])
+        if args.experimental:
+            patch_cmd.append("--experimental")
         return patch_cmd
 
     if args.preset == "full-allow":
@@ -360,6 +382,8 @@ def build_patch_command(args: argparse.Namespace, root: Path, analysis_dir: Path
                 "--factory-allow-unsafe",
             ]
         )
+        if args.experimental:
+            patch_cmd.append("--experimental")
         return patch_cmd
 
     if args.preset in {"unlock-imei", "unlock-serial"}:
@@ -478,6 +502,22 @@ def main() -> int:
         if not args.full_disasm:
             analysis_cmd.append("--no-full-disasm")
         run_command(analysis_cmd, root)
+
+        if args.detect_only:
+            detect_cmd = [
+                sys.executable,
+                "-c",
+                "import sys; sys.path.insert(0, %r); "
+                "from lk_patch_partition import detect_report; "
+                "from pathlib import Path; "
+                "raise SystemExit(detect_report(Path(%r), %r))" % (
+                    str(root), str(analysis_dir), bool(args.experimental)),
+            ]
+            run_command(detect_cmd, root)
+            print()
+            print("Done (detect-only, no changes written)")
+            print(f"Analysis dir : {analysis_dir}")
+            return 0
 
         patch_cmd = build_patch_command(args, root, analysis_dir, patched_bin)
         run_command(patch_cmd, root)

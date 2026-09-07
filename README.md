@@ -391,6 +391,28 @@ python lk_auto_patch.py lk.img -o /tmp/lk_factory.img \
 `--preset full-allow --modem-size-bypass --modem-allow-unsafe
 --factory-allow --factory-allow-unsafe`.
 
+### Cross-device: auto-detect + experimental
+
+Gate offsets are **discovered per image**, not hardcoded: anchor string →
+code xref (deny block) → backwards scan for the feeding branch
+(`B.HI`/`B.NE` for modem gates, `TBZ bit0` for factory gates). Verified
+builds live in a known-build table — discovery must reproduce the table
+offsets or the run refuses (layout drift). Anything else needs
+`--experimental` (discovery-only trust, banner printed):
+
+```bash
+python lk_auto_patch.py other-moto-lk.img -o /tmp/out.img \
+  --preset full-allow --modem-size-bypass --modem-allow-unsafe \
+  --factory-allow --factory-allow-unsafe --experimental
+```
+
+`--detect-only` fingerprints without touching anything (build id +
+resolvable gates per family, or the exact refusal reason). ARM32 Thumb LKs
+refuse cleanly (no thumb gate map yet). The modem cell-unlock side
+auto-selects the same way: `unlock.py custom --patches auto` fingerprints
+the stock md1img (size + sha256) and picks the bundled kansas/nevada
+table, refusing unknown builds with porting instructions.
+
 Fastboot-only code paths — normal Android boot is untouched. Flash to the
 inactive slot (`fastboot flash lk_b …`, `fastboot --set-active=b`), test,
 fall back with `--set-active=a`. `config unprotect` may still deny via

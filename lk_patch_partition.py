@@ -137,31 +137,329 @@ def patch_bytes_checked(data: bytearray, offset: int, old: bytes, new: bytes, la
 
 def apply_modem_size_gates(data: bytearray, analysis_dir: Path) -> list[tuple[str, int, bytes, bytes]]:
     """Apply MODEM_SIZE_GATES with old-byte verification. Returns applied list."""
-    try:
-        lk_base = load_analysis_base(analysis_dir)
-    except (OSError, ValueError, FileNotFoundError):
-        lk_base = 0
-    applied: list[tuple[str, int, bytes, bytes]] = []
-    for label, offset, old, new, _why in MODEM_SIZE_GATES:
-        patch_bytes_checked(data, offset, old, new, label)
-        applied.append((label, offset, old, new))
-        va = f" VA=0x{lk_base + offset:x}" if lk_base else ""
-        print(f"Patch   : modem {label} @ 0x{offset:x} / HxD {offset:08X}{va}  {old.hex()} -> {new.hex()}")
-    return applied
+    return apply_discovered_gates(
+        data, analysis_dir, "modem", experimental=False,
+    )
 
 
 def apply_factory_gates(data: bytearray, analysis_dir: Path) -> list[tuple[str, int, bytes, bytes]]:
     """Apply FACTORY_GATES with old-byte verification. Returns applied list."""
+    return apply_discovered_gates(
+        data, analysis_dir, "factory", experimental=False,
+    )
+
+
+# ---- cross-device gate discovery (experimental) ----
+# Fixed offset tables above are nevada-only. For any other Motorola LK the
+# gates are located per-image: anchor string -> code xref (deny block) ->
+# backwards scan for the feeding conditional branch. Anything unresolved
+# raises instead of patching (refusal triggers).
+
+B_COND_HI = 0x8
+B_COND_NE = 0x1
+
+GATE_ANCHORS: dict[str, bytes] = {
+    "size-log": b"MD image size(%u) < check header size(%u)",
+    "region-log": b"Header version detect fail[size:%d]",
+    "restricted-log": b"command restricted",
+    "notallowed-log": b"Not allowed command",
+}
+
+# Verified LK builds: discovery must reproduce these offsets or refuse
+# (layout drift). Unknown builds need --experimental (discovery-only trust).
+KNOWN_LK_BUILDS: tuple[dict, ...] = (
+    {
+        "id": "nevada XT2615V bootloader -111-3 (Val-patched phone pull)",
+        "arch": "aarch64",
+        "base": 0xFFFF000050F00000,
+        "version_needle": b"W1WNS36.18-111-3",
+        "modem_offsets": (0x49A9C, 0x49AAC, 0x49B24),
+        "factory_offsets": (0xF3F4, 0xAD88),
+    },
+    {
+        "id": "nevada XT2615V bootloader -114-1 (RETUS stock)",
+        "arch": "aarch64",
+        "base": 0xFFFF000050F00000,
+        "version_needle": b"W1WNS36.18-114-1",
+        "modem_offsets": (0x49A9C, 0x49AAC, 0x49B24),
+        "factory_offsets": (0xF3F4, 0xAD88),
+    },
+)
+
+
+def _decode_b_cond(word: int, va: int) -> tuple[int, int] | None:
+    """Decode B.cond -> (cond, target_va). None if not B.cond."""
+    if (word & 0xFF000000) != 0x54000000:
+        return None
+    imm = (word >> 5) & 0x7FFFF
+    if imm & 0x40000:
+        imm -= 0x80000
+    return (word & 0xF, va + imm * 4)
+
+
+def _decode_tbz(word: int, va: int) -> tuple[int, int] | None:
+    """Decode TBZ -> (bit, target_va). None if not TBZ (TBNZ excluded)."""
+    if (word & 0x7F000000) != 0x36000000:
+        return None
+    imm = (word >> 5) & 0x3FFF
+    if imm & 0x2000:
+        imm -= 0x4000
+    return ((word >> 19) & 0x1F, va + imm * 4)
+
+
+def _find_string_refs(data: bytes, base: int, str_va: int) -> list[int]:
+    """File offsets of ADRP+ADD sequences computing str_va. May be empty."""
+    refs: list[int] = []
+    n = len(data) - 20
+    for off in range(0, n, 4):
+        word = struct.unpack_from("<I", data, off)[0]
+        if (word & 0x9F000000) != 0x90000000:
+            continue
+        va = base + off
+        imm = (((word >> 5) & 0x7FFFF) << 2) | ((word >> 29) & 0x3)
+        if imm & 0x100000:
+            imm -= 0x200000
+        if (va & ~0xFFF) + imm * 0x1000 != (str_va & ~0xFFF):
+            continue
+        rd = word & 0x1F
+        for jump in range(1, 5):
+            word2 = struct.unpack_from("<I", data, off + jump * 4)[0]
+            if (word2 & 0xFF800000) != 0x91000000 or ((word2 >> 5) & 0x1F) != rd:
+                continue
+            imm12 = (word2 >> 10) & 0xFFF
+            if (word2 >> 22) & 0x3 == 1:
+                imm12 <<= 12
+            if ((va & ~0xFFF) + imm * 0x1000) + imm12 == str_va:
+                refs.append(off)
+            break
+    return refs
+
+
+def _string_start(data: bytes, idx: int) -> int:
+    """Back up from a mid-string hit to the string's first byte."""
+    while idx > 0 and 32 <= data[idx - 1] < 127:
+        idx -= 1
+    return idx
+
+
+def _deny_block_for_anchor(data: bytes, base: int, anchor_key: str) -> int:
+    """File offset of the deny block loading the anchor string.
+
+    Raises ValueError (refusal trigger) when the anchor or any xref is
+    missing — never guess.
+    """
+    needle = GATE_ANCHORS[anchor_key]
+    hit = data.find(needle)
+    if hit < 0:
+        raise ValueError(
+            f"anchor {anchor_key!r} ({needle[:40]!r}…) not in this LK: "
+            "layout unknown, refusing"
+        )
+    str_off = _string_start(data, hit)
+    refs = _find_string_refs(data, base, base + str_off)
+    if not refs:
+        raise ValueError(
+            f"anchor {anchor_key!r} present but unreferenced by code: "
+            "cannot locate deny block, refusing"
+        )
+    return refs[0]
+
+
+def _backscan_branch(
+    data: bytes,
+    base: int,
+    deny_off: int,
+    kinds: tuple[str, ...],
+    window: int = 1024,
+    nearest_only: bool = False,
+) -> list[int]:
+    """File offsets of branches feeding the deny block.
+
+    kinds: "bhi" (B.cond HI), "bne" (B.cond NE), "tbz0" (TBZ bit 0).
+    Candidates are scanned up to `window` bytes back; a feeder counts when
+    its target lands in the deny-block head zone [deny_off-64, deny_off]
+    (branches land on the block head, above the string-loading ADRP).
+    With nearest_only, only the closest feeder is kept (oem gates where a
+    single direct feeder is the deny decision).
+    """
+    deny_va = base + deny_off
+    found: list[int] = []
+    start = max(0, deny_off - window)
+    for off in range(start, deny_off, 4):
+        word = struct.unpack_from("<I", data, off)[0]
+        va = base + off
+        targets: list[int] = []
+        if "bhi" in kinds:
+            dec = _decode_b_cond(word, va)
+            if dec is not None and dec[0] == B_COND_HI:
+                targets.append(dec[1])
+        if "bne" in kinds:
+            dec = _decode_b_cond(word, va)
+            if dec is not None and dec[0] == B_COND_NE:
+                targets.append(dec[1])
+        if "tbz0" in kinds:
+            dec = _decode_tbz(word, va)
+            if dec is not None and dec[0] == 0:
+                targets.append(dec[1])
+        if any(deny_va - 64 <= tgt <= deny_va for tgt in targets):
+            found.append(off)
+    if nearest_only and found:
+        return [max(found)]
+    return found
+
+
+def fingerprint_lk(
+    data: bytes, arch: str, base: int
+) -> tuple[dict | None, str]:
+    """Match (arch, base, version-needle) against KNOWN_LK_BUILDS.
+
+    Returns (build-or-None, describe-string). Never raises on unknown.
+    """
+    describe = f"arch={arch} base=0x{base:x} size={len(data)}"
+    for build in KNOWN_LK_BUILDS:
+        if (
+            build["arch"] == arch
+            and build["base"] == base
+            and data.find(build["version_needle"]) >= 0
+        ):
+            return build, describe + f" known={build['id']}"
+    return None, describe + " known=none(unknown build)"
+
+
+def discover_modem_gates(
+    data: bytes, base: int
+) -> list[tuple[str, int, bytes, bytes, str]]:
+    """Locate LK-side MD validation gates per-image. Raises on any gap."""
+    if base == 0:
+        raise ValueError("LK base unknown: cannot resolve VAs, refusing")
+    gates: list[tuple[str, int, bytes, bytes, str]] = []
+    size_deny = _deny_block_for_anchor(data, base, "size-log")
+    for num, off in enumerate(
+        _backscan_branch(data, base, size_deny, ("bhi",)), 1
+    ):
+        old = bytes(data[off : off + 4])
+        gates.append(
+            (
+                f"size-bound-gate-{num}",
+                off,
+                old,
+                AARCH64_NOP,
+                "B.HI -> MD-size fail log; nop falls through to continue",
+            )
+        )
+    if not gates:
+        raise ValueError(
+            "no B.HI feeder into the MD-size deny block: refusing"
+        )
+    region_deny = _deny_block_for_anchor(data, base, "region-log")
+    region_gates = _backscan_branch(data, base, region_deny, ("bne",))
+    if not region_gates:
+        raise ValueError(
+            "no B.NE feeder into the region-id deny block: refusing"
+        )
+    for num, off in enumerate(region_gates, 1):
+        old = bytes(data[off : off + 4])
+        gates.append(
+            (
+                f"region-id-gate-{num}",
+                off,
+                old,
+                AARCH64_NOP,
+                "B.NE -> unknown-region fail log; nop falls through",
+            )
+        )
+    return gates
+
+
+def discover_factory_gates(
+    data: bytes, base: int
+) -> list[tuple[str, int, bytes, bytes, str]]:
+    """Locate oem restriction gates per-image. Raises on any gap."""
+    if base == 0:
+        raise ValueError("LK base unknown: cannot resolve VAs, refusing")
+    gates: list[tuple[str, int, bytes, bytes, str]] = []
+    for label, anchor in (
+        ("restricted-tbz", "restricted-log"),
+        ("config-unprotect-tbz", "notallowed-log"),
+    ):
+        deny = _deny_block_for_anchor(data, base, anchor)
+        feeders = _backscan_branch(data, base, deny, ("tbz0",),
+                                   nearest_only=True)
+        if not feeders:
+            raise ValueError(
+                f"no TBZ-bit0 feeder into the {anchor} deny block: refusing"
+            )
+        off = feeders[0]
+        gates.append(
+            (
+                label,
+                off,
+                bytes(data[off : off + 4]),
+                AARCH64_NOP,
+                "TBZ-bit0 deny -> nop falls through to handler path",
+            )
+        )
+    return gates
+
+
+def apply_discovered_gates(
+    data: bytearray,
+    analysis_dir: Path,
+    family: str,
+    experimental: bool,
+) -> list[tuple[str, int, bytes, bytes]]:
+    """Cross-device gate patcher with refusal triggers.
+
+    family: "modem" or "factory". Steps: arch gate (aarch64 only) ->
+    fingerprint -> known-build cross-check (offsets must reproduce) or
+    --experimental for unknown builds -> per-gate old-byte verification.
+    Returns applied list. Raises ValueError on any trigger.
+    """
+    arch = load_analysis_architecture(analysis_dir)
+    if arch != "aarch64":
+        raise ValueError(
+            f"family {family!r}: cross-device discovery supports aarch64 "
+            f"only; this LK is {arch!r}: refusing (no thumb gate map yet)"
+        )
     try:
         lk_base = load_analysis_base(analysis_dir)
     except (OSError, ValueError, FileNotFoundError):
         lk_base = 0
+    build, describe = fingerprint_lk(bytes(data), arch, lk_base)
+    print(f"Fingerprint: {describe}")
+    if family == "modem":
+        gates = discover_modem_gates(bytes(data), lk_base)
+        key = "modem_offsets"
+    elif family == "factory":
+        gates = discover_factory_gates(bytes(data), lk_base)
+        key = "factory_offsets"
+    else:
+        raise ValueError(f"unknown gate family {family!r}")
+    found = tuple(off for _, off, _, _, _ in gates)
+    if build is not None:
+        if sorted(found) != sorted(build[key]):
+            raise ValueError(
+                f"known build {build['id']!r} but discovery resolved "
+                f"{[hex(o) for o in found]} vs expected "
+                f"{[hex(o) for o in build[key]]}: layout drift, refusing"
+            )
+        print(f"KnownBuild: {build['id']} (offsets reproduced)")
+    else:
+        if not experimental:
+            raise ValueError(
+                "unknown LK build: re-run with --experimental to trust "
+                "per-image discovery on this image (offsets "
+                f"{[hex(o) for o in found]} unverified against any table)"
+            )
+        print("Mode    : EXPERIMENTAL cross-device (unknown build, "
+              "discovery-only trust)")
     applied: list[tuple[str, int, bytes, bytes]] = []
-    for label, offset, old, new, _why in FACTORY_GATES:
+    for label, offset, old, new, _why in gates:
         patch_bytes_checked(data, offset, old, new, label)
         applied.append((label, offset, old, new))
         va = f" VA=0x{lk_base + offset:x}" if lk_base else ""
-        print(f"Patch   : factory {label} @ 0x{offset:x} / HxD {offset:08X}{va}  {old.hex()} -> {new.hex()}")
+        print(f"Patch   : {family} {label} @ 0x{offset:x} / HxD {offset:08X}{va}  "
+              f"{old.hex()} -> {new.hex()}")
     return applied
 
 
@@ -190,6 +488,62 @@ def modem_absent_scan(data: bytes) -> list[str]:
         if lowered.find(needle.lower()) < 0:
             missing.append(label)
     return missing
+
+
+def detect_report(analysis_dir: Path, experimental: bool) -> int:
+    """Auto-detect: fingerprint + per-family gate resolution. Read-only.
+
+    Returns 0 when every resolvable family resolves (or explains refusal),
+    1 when a hard trigger fires. Never writes.
+    """
+    input_path = analysis_dir / "lk.bin"
+    try:
+        data = bytes(input_path.read_bytes())
+    except OSError as exc:
+        print(f"Error: {exc}")
+        return 2
+    try:
+        arch = load_analysis_architecture(analysis_dir)
+    except OSError:
+        arch = "aarch64"
+    try:
+        base = load_analysis_base(analysis_dir)
+    except (OSError, ValueError, FileNotFoundError):
+        base = 0
+    build, describe = fingerprint_lk(data, arch, base)
+    print(f"Detect  : {describe}")
+    print(f"Known   : {build['id'] if build else 'NO (unknown build)'}")
+    if arch != "aarch64":
+        print("Modem   : REFUSE (aarch64 discovery only)")
+        print("Factory : REFUSE (aarch64 discovery only)")
+        return 1
+    if build is None and not experimental:
+        print("Modem   : REFUSE unknown build without --experimental")
+        print("Factory : REFUSE unknown build without --experimental")
+        return 1
+    rc = 0
+    for family, discover in (
+        ("modem", discover_modem_gates),
+        ("factory", discover_factory_gates),
+    ):
+        try:
+            gates = discover(data, base)
+        except ValueError as exc:
+            print(f"{family.capitalize():<8}: REFUSE {exc}")
+            rc = 1
+            continue
+        if build is not None:
+            key = "modem_offsets" if family == "modem" else "factory_offsets"
+            found = tuple(off for _, off, _, _, _ in gates)
+            if sorted(found) != sorted(build[key]):
+                print(f"{family.capitalize():<8}: REFUSE layout drift "
+                      f"{[hex(o) for o in found]} vs {[hex(o) for o in build[key]]}")
+                rc = 1
+                continue
+        offsets = ", ".join(f"0x{off:x}" for _, off, _, _, _ in gates)
+        print(f"{family.capitalize():<8}: OK gates=[{offsets}]"
+              + (" (experimental, unknown build)" if build is None else ""))
+    return rc
 
 
 def print_modem_research_report(data: bytearray, analysis_dir: Path) -> None:
@@ -3939,6 +4293,15 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--experimental",
+        action="store_true",
+        help=(
+            "Permite builds LK desconocidos (fuera de la tabla verificada): "
+            "los gates se resuelven por-image con verificacion, sin garantia "
+            "de la tabla. Sin esto, un build desconocido se rehusa."
+        ),
+    )
+    parser.add_argument(
         "--apply",
         action="store_true",
         help="Escribe el archivo parcheado. Sin esto solo hace dry-run.",
@@ -4155,11 +4518,13 @@ def main() -> int:
 
     if args.modem_size_bypass:
         try:
-            applied = apply_modem_size_gates(data, args.analysis_dir)
+            applied = apply_discovered_gates(
+                data, args.analysis_dir, "modem", args.experimental
+            )
         except (OSError, ValueError) as exc:
             print(f"Error: {exc}", file=sys.stderr)
             return 1
-        print(f"ModemGates: {len(applied)}/3 LK-side MD validation gates -> NOP")
+        print(f"ModemGates: {len(applied)} LK-side MD validation gates -> NOP")
         print("Warn    : esto NO bypassa la firma del modem (verificacion fuera de LK),")
         print("Warn    : NO remappea MMU/EMI-MPU (el kernel lo reconstruye), NO toca watchdog,")
         print("Warn    : NO da EL3. Un MD image con regiones fuera de rango puede")
@@ -4167,13 +4532,15 @@ def main() -> int:
 
     if args.factory_allow:
         try:
-            applied = apply_factory_gates(data, args.analysis_dir)
+            applied = apply_discovered_gates(
+                data, args.analysis_dir, "factory", args.experimental
+            )
         except (OSError, ValueError) as exc:
             print(f"Error: {exc}", file=sys.stderr)
             return 1
-        print(f"FactoryGates: {len(applied)}/{len(FACTORY_GATES)} restriction gates -> NOP")
-        print("Warn    : esto fuerza UN gate de la cadena deny; otros checks")
-        print("Warn    : (tbnz/cbnz vecinos) pueden seguir negando. El test en")
+        print(f"FactoryGates: {len(applied)} restriction gates -> NOP")
+        print("Warn    : cada gate se resolvio por-image con verificacion; otros")
+        print("Warn    : checks vecinos pueden seguir negando. El test en")
         print("Warn    : el equipo decide: 'oem ramdump' sin 'restricted' = win.")
 
     if partition_patch is not None:
