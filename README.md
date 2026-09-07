@@ -442,6 +442,30 @@ on `gz` (GenieZone hypervisor) images: `tools/sign_mtk_cert.py -w` +
 `tools/verify_mtk_image.py` (`Result: VALID`). Live-proven on nevada:
 a 1-byte behavior-neutral log-text change, re-signed, **booted through
 the full chain on slot B** (preloader→bl2_ext→TEE→GZ→LK→fastboot alive).
+Status: **proof of concept** — acceptance proven, no payload presets yet
+(SMMU/stage-2 gate design needs hypervisor disassembly first).
+
+Run it end to end (proof-of-concept canary, exact bytes reproducible):
+
+```bash
+# 1. pull the live hypervisor (rooted device, slot A healthy):
+adb shell 'su -c "dd if=/dev/block/by-name/gz_a of=/sdcard/gz_a.img bs=4096"'
+adb pull /sdcard/gz_a.img gz_a.img
+
+# 2. build the canary (1 log byte + re-sign, exact size kept, VALID):
+python lk_auto_patch.py gz_a.img -o /tmp/gz_canary.img --preset gz-canary
+
+# 3. flash the INACTIVE slot and boot it (no system needed there):
+fastboot flash gz_b /tmp/gz_canary.img
+fastboot --set-active=b
+fastboot reboot bootloader
+# PASS = fastboot USB answers (hypervisor accepted + ran forged cert).
+
+# 4. home, and keep this image: it is the exact-size restore file too:
+fastboot --set-active=a
+fastboot reboot
+```
+
 Consequences and constraints:
 
 - Exact-fit partitions (gz fills its 32MB partition) reject the +96-byte
