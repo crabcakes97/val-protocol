@@ -98,7 +98,7 @@ This repository is intended for repair, interoperability research, recovery work
   - key validator candidates
   - partition erase operations
   - serial number runtime source
-- Applies three high-level presets.
+- Applies research presets (unlock, erase, and modem flows).
 - Uses runtime serial number derivation for generated keys.
 - Rebuilds the original multi-image container.
 - Updates MTK `CERT2` image hashes.
@@ -280,27 +280,96 @@ Compatibility is pattern-based, not model-name-based. A new LK is considered com
 
 Always test patched images on recoverable lab devices before using them in production workflows.
 
-## Modem-unlock research preset (nevada / XT2615V)
+## Modem-unlock research preset (nevada / Moto G Play 2026 XT2615V)
 
-`--preset modem-unlock` targets the LK-side MediaTek CCCI modem-load path
-(Moto G Play 2026, MT6835). By default it is **report-only**: it locates
-the real modem/CCCI/MPU/MMU markers in your LK and changes zero bytes.
+`--preset modem-unlock` targets the LK-side MediaTek CCCI modem-load path.
+Developed against the LK **pulled from the live phone** (slot `_a`,
+bootloader `W1WNS36.18-111-3`, AArch64 payload, base
+`0xffff000050f00000`) — no lab or foreign images.
+
+By default the preset is **report-only**: it locates the real
+modem/CCCI/MPU/MMU markers in your LK and changes zero payload bytes.
 With `--modem-size-bypass --modem-allow-unsafe` it NOPs three verified
-LK-side MD table-validation gates (12 bytes, old-byte gated, re-signs
-`VALID`).
+LK-side MD table-validation gates (12 bytes total, old-byte gated, then
+re-signs `VALID`).
 
-```bash
-python lk_auto_patch.py "path/to/lk.img" -o /tmp/lk_report.img \
-  --preset modem-unlock
-python lk_auto_patch.py "path/to/lk.img" -o /tmp/lk_modem_bypass.img \
-  --preset modem-unlock --modem-size-bypass --modem-allow-unsafe
-```
+### What this LK actually is (read before believing anything else)
 
-Limits worth knowing up front: this LK has no `modem_auth` /
-`load_modem_fw` / `mmu_table_init` (verified absent), LK is not EL3, LK
-memory maps don't survive kernel boot, and modem signatures are verified
-outside LK. Full analysis, gate table, test evidence, and slot-safe
-flash/recovery: [MODEM_UNLOCK.md](MODEM_UNLOCK.md).
+- It is **not EL3**. LK calls *into* ATF/EL3 via SMC; patching LK stays at
+  LK privilege. There is no EL3 via this preset.
+- LK's MMU/EMI-MPU/mblock setup is **rebuilt by the kernel at boot**, so an
+  LK remap does not persist into Linux/modem runtime.
+- Modem signature verification does **not** live in LK. The CERT2 re-sign
+  path remains the working bypass for flashing modified images.
+- Symbol reality check (byte scan of the phone LK): `modem_auth`,
+  `load_modem_fw`, `mmu_table_init`, `armv7_mmu_init` are all **absent**.
+  The real surface is `platform_load_modem`, `ccci_plat_apply_mpu_setting`,
+  `emi_mpu_set_protection`, `arm64_mmu_*`, `mtk_wdt_doe_setup`,
+  `motorola_alloc_mblock`, plus DT nodes (`emimpu@10226000`, `emi_mpu`,
+  `reserved-memory`, `ccci-dpmaif-*`, `md1_ccif`).
+
+### The patch: LK-side MD validation gates
+
+Function near VA `0xFFFF000050F49A24` validates the MD image table: region
+id in `w22` must be one of `0xBC / 0x200 / 0x11C`, and `w22 <= w20`
+(size bound). Violations log via the CCCI printer and return NULL. The
+bypass NOPs the three branches feeding those fail paths:
+
+| Gate | lk.bin offset / VA | old → new |
+|---|---|---|
+| region-id (`b.ne` → unknown-region fail) | `0x49A9C` / `…F49A9C` | `21060054` → `1f2003d5` (nop) |
+| size-bound-1 (`b.hi` → size-fail + NULL) | `0x49AAC` / `…F49AAC` | `88040054` → `1f2003d5` (nop) |
+| size-bound-2 (`b.hi` → size-fail + NULL) | `0x49B24` / `…F49B24` | `c8000054` → `1f2003d5` (nop) |
+
+Same 3 old-byte values confirmed on both the phone build (-111-3) and
+RETUS stock (-114-1). Any mismatch aborts (wrong build = instant refuse).
+This gates **LK-side table parsing only**: no modem-signature bypass, no
+modem-side size-limit removal, no DMA overlap, no watchdog/EL3 changes.
+A malformed MD table can corrupt LK memory → bootloop with dead USB, so
+test with recovery ready.
+
+### Step-by-step runbook (slot A active)
+
+0. Preconditions: bootloader unlocked, root (`su -c id` → `uid=0`), 30%+
+   battery, steady cable, stock RETUS `lk.img` on hand.
+1. Pull the live LK (16 MB partition):
+   ```bash
+   adb shell 'su -c "dd if=/dev/block/by-name/lk_a of=/sdcard/lk_a_phone.img bs=4096"'
+   adb pull /sdcard/lk_a_phone.img lk_a_phone.img
+   adb shell rm /sdcard/lk_a_phone.img
+   ```
+2. Report-only scan (changes nothing):
+   ```bash
+   python lk_auto_patch.py lk_a_phone.img -o /tmp/lk_report.img \
+     --preset modem-unlock
+   ```
+3. Build the bypass image (12 bytes, re-signs `Result: VALID`):
+   ```bash
+   python lk_auto_patch.py lk_a_phone.img -o /tmp/lk_modem_bypass.img \
+     --preset modem-unlock --modem-size-bypass --modem-allow-unsafe
+   ```
+4. Flash the **inactive** slot first (on `_a`, so `lk_b` — there is no
+   `/dev/block/by-name/lk` on this device):
+   ```bash
+   fastboot flash lk_b /tmp/lk_modem_bypass.img
+   fastboot --set-active=b
+   ```
+5. Verify: boot, then `adb shell dmesg | grep -i ccci`, confirm
+   fastboot/USB stay alive.
+6. Recover (Vol-Down+Power cable trick to force fastboot):
+   ```bash
+   fastboot --set-active=a              # known-good LK, or:
+   fastboot flash lk_b <RETUS>/lk.img   # stock recovery
+   ```
+   Stock LK restores the lock flow but boots fine — it is the recovery
+   image, not a brick. Never touch preloader/efuse.
+
+Test evidence on the phone pull: `--apply` output differs by exactly the
+12 gate bytes, all other subimages identical, re-sign `VALID`. Standalone
+`tools/verify_mtk_image.py` reports `cert2 padded data exceeds file size`
+on repacked images — it says the same for the **unmodified phone pull**,
+a pre-existing script quirk with the -111-3 container, not a repack
+defect. Full forensic record: [MODEM_UNLOCK.md](MODEM_UNLOCK.md).
 
 ## License
 
