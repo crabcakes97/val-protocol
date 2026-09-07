@@ -431,6 +431,25 @@ fall back with `--set-active=a`. `config unprotect` may still deny via
 further checks; each remaining gate gets traced the same way (string →
 xref → branch → gated NOP).
 
+### Hypervisor (GenieZone) images: patch + re-sign compatible
+
+The same CERT2 hash-override re-sign used for LK/modem works mechanically
+on `gz` (GenieZone hypervisor) images: `tools/sign_mtk_cert.py -w` +
+`tools/verify_mtk_image.py` (`Result: VALID`). Live-proven on nevada:
+a 1-byte behavior-neutral log-text change, re-signed, **booted through
+the full chain on slot B** (preloader→bl2_ext→TEE→GZ→LK→fastboot alive).
+Consequences and constraints:
+
+- Exact-fit partitions (gz fills its 32MB partition) reject the +96-byte
+  cert growth (`data size is larger than partition size`): trim trailing
+  zero padding back to exact partition size after re-signing, then
+  re-verify parse before flashing.
+- Test on the inactive slot (`fastboot flash gz_b …`,
+  `fastboot --set-active=b`); fastboot USB presence is the pass signal
+  (no system needed on that slot). Fall back with `--set-active=a`.
+- No GZ *payload* presets exist yet — SMMU/stage-2 gate design needs
+  hypervisor disassembly first. The acceptance proof is what this unlocks.
+
 ## License
 
 GNU Affero General Public License v3.0
