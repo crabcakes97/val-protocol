@@ -77,6 +77,47 @@ signatures, modem-side size limits, or create DMA overlap, and it does
 not touch MMU/EMI-MPU/watchdog/EL3. A malformed MD table can corrupt LK
 memory → bootloop with dead USB. Test with recovery ready.
 
+## Step-by-step runbook (nevada XT2615V, slot A active)
+
+0. **Preconditions.** Bootloader unlocked, Magisk/KernelSU root granted
+   (`adb shell 'su -c id'` → `uid=0`), 30%+ battery, steady cable,
+   stock RETUS `lk.img` on hand as recovery.
+
+1. **Pull the live LK** (16 MB partition → trimmed container):
+   ```bash
+   adb shell 'su -c "dd if=/dev/block/by-name/lk_a of=/sdcard/lk_a_phone.img bs=4096"'
+   adb pull /sdcard/lk_a_phone.img lk_a_phone.img
+   adb shell rm /sdcard/lk_a_phone.img
+   ```
+
+2. **Report-only scan** (changes nothing, prints the 12 marker offsets
+   and confirms the 4 absent names):
+   ```bash
+   python3 lk_auto_patch.py lk_a_phone.img -o /tmp/lk_report.img \
+     --preset modem-unlock
+   ```
+
+3. **Build the bypass image** (12 bytes, re-signed, `Result: VALID`):
+   ```bash
+   python3 lk_auto_patch.py lk_a_phone.img -o /tmp/lk_modem_bypass.img \
+     --preset modem-unlock --modem-size-bypass --modem-allow-unsafe
+   ```
+
+4. **Flash the inactive slot first** (device on `_a`, so `lk_b`):
+   ```bash
+   fastboot flash lk_b /tmp/lk_modem_bypass.img
+   fastboot --set-active=b
+   ```
+
+5. **Verify.** Boot, then `adb shell dmesg | grep -i ccci` and confirm
+   fastboot/USB stay alive. Any USB-dead bootloop → recovery below.
+
+6. **Recover.** Vol-Down+Power cable trick to force fastboot, then:
+   ```bash
+   fastboot --set-active=a                 # known-good LK, or:
+   fastboot flash lk_b <RETUS>/lk.img      # stock recovery
+   ```
+
 ## Usage
 
 ```bash
