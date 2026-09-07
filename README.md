@@ -373,9 +373,13 @@ defect. Full forensic record: [MODEM_UNLOCK.md](MODEM_UNLOCK.md).
 
 ### `factory-allow` preset (ungate hidden fastboot commands)
 
-Same Val pipeline, different target: the oem command dispatcher. Live-proven
-on slot B: `fastboot oem ramdump` went from `command restricted` to usage
-text, and `ramdump enable` returned OKAY. Two NOPs, old-byte gated:
+Same Val pipeline, different target: the oem command dispatcher. This is
+what **factory mode would unlock** — the preset enables those same factory
+OEM commands without needing factory mode or cable: `oem ramdump …`
+(usage + `enable`), `oem config …` (reaches the UTAG layer), plus the
+already-visible `hw`, `cdms`, `read_sv`, `get_unlock_data`, `cid_prov_req`.
+Live-proven on slot B (ramdump went from `command restricted` to working).
+Two NOPs, old-byte gated:
 
 | Gate | lk.bin offset / VA | old → new |
 |---|---|---|

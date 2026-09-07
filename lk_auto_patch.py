@@ -20,7 +20,13 @@ PRESETS = (
     "modem-unlock",
     "factory-allow",
     "full-allow",
+    "gz-canary",
 )
+
+# GZ canary: 1-byte behavior-neutral log-text change proving hypervisor
+# CERT2 acceptance. (log "Hello from" -> "Hello fron", same footprint.)
+GZ_CANARY_OLD = b"Hello from"
+GZ_CANARY_NEW = b"Hello fron"
 
 
 def run_command(cmd: list[str], cwd: Path) -> None:
@@ -40,6 +46,71 @@ def default_analysis_dir(image: Path) -> Path:
 
 def default_output_image(image: Path) -> Path:
     return image.with_name(image.stem + ".patched" + image.suffix)
+
+
+def run_gz_canary(args: argparse.Namespace, root: Path) -> int:
+    """--preset gz-canary: 1-byte log-text canary + CERT2 re-sign for GZ.
+
+    Refuses unless b'Hello from' occurs exactly once (old-byte gate).
+    Trims to exact input size (exact-fit partitions reject cert growth),
+    then requires verify_mtk_image.py to report VALID. Returns exit code.
+    """
+    image = args.image.resolve()
+    output = (args.output or image.with_name(image.stem + ".canary.img")).resolve()
+    data = bytearray(image.read_bytes())
+    hits = []
+    start = 0
+    while True:
+        idx = data.find(GZ_CANARY_OLD, start)
+        if idx < 0:
+            break
+        hits.append(idx)
+        start = idx + 1
+    if len(hits) != 1:
+        print(f"Error: canary anchor found {len(hits)}x (need exactly 1): refusing",
+              file=sys.stderr)
+        return 1
+    off = hits[0]
+    print(f"Canary  : {GZ_CANARY_OLD!r} -> {GZ_CANARY_NEW!r} @ 0x{off:x}")
+    data[off:off + len(GZ_CANARY_OLD)] = GZ_CANARY_NEW
+    tmp_patched = output.with_name(output.stem + ".patched.bin")
+    tmp_patched.write_bytes(bytes(data))
+    sign_cmd = [
+        sys.executable, str(root / "tools" / "sign_mtk_cert.py"),
+        "-w", str(tmp_patched),
+        "-o", str(output.with_name(output.stem + ".signed.bin")),
+    ]
+    run_command(sign_cmd, root)
+    signed = output.with_name(output.stem + ".signed.bin").read_bytes()
+    if len(signed) < len(data):
+        print("Error: signed image shorter than input", file=sys.stderr)
+        return 1
+    trimmed = signed[:len(data)]
+    if signed[len(data):].strip(b"\x00"):
+        print("Error: cert growth overwrote non-padding bytes; refusing",
+              file=sys.stderr)
+        return 1
+    output.write_bytes(trimmed)
+    verify_cmd = [
+        sys.executable, str(root / "tools" / "verify_mtk_image.py"),
+        str(output),
+    ]
+    result = subprocess.run(verify_cmd, cwd=str(root), text=True,
+                            capture_output=True)
+    if result.stdout:
+        print(result.stdout, end="")
+    if "Result: VALID" not in (result.stdout or ""):
+        print("Error: repacked GZ failed verification", file=sys.stderr)
+        return 1
+    for tmp in (tmp_patched, output.with_name(output.stem + ".signed.bin")):
+        try:
+            tmp.unlink()
+        except OSError:
+            pass
+    print()
+    print("Done (gz-canary, 1 byte + re-sign, exact size kept)")
+    print(f"Patched image: {output}")
+    return 0
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -490,6 +561,13 @@ def main() -> int:
     if not image.is_file():
         print(f"Error: no existe {image}", file=sys.stderr)
         return 2
+
+    if args.preset == "gz-canary":
+        try:
+            return run_gz_canary(args, root)
+        except RuntimeError as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 1
 
     try:
         analysis_cmd = [
