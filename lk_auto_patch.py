@@ -21,12 +21,23 @@ PRESETS = (
     "factory-allow",
     "full-allow",
     "gz-canary",
+    "gz-range",
 )
 
 # GZ canary: 1-byte behavior-neutral log-text change proving hypervisor
 # CERT2 acceptance. (log "Hello from" -> "Hello fron", same footprint.)
 GZ_CANARY_OLD = b"Hello from"
 GZ_CANARY_NEW = b"Hello fron"
+
+# GZ range-check bypass (nevada MT6835 GZ, linked base 0 == file offsets).
+# Range validator near 0x200E4: B.HI/B.LO feeders into a log + return -8
+# deny block; NOPing both forces "contained" and falls to the map call.
+# Each entry: (label, file_offset, expected_old_bytes).
+GZ_RANGE_GATES: tuple[tuple[str, int, bytes], ...] = (
+    ("range-hi-gate", 0x200E4, bytes.fromhex("c8010054")),
+    ("range-lo-gate", 0x200EC, bytes.fromhex("83010054")),
+)
+GZ_NOP = bytes.fromhex("1f2003d5")
 
 
 def run_command(cmd: list[str], cwd: Path) -> None:
@@ -73,8 +84,43 @@ def run_gz_canary(args: argparse.Namespace, root: Path) -> int:
     off = hits[0]
     print(f"Canary  : {GZ_CANARY_OLD!r} -> {GZ_CANARY_NEW!r} @ 0x{off:x}")
     data[off:off + len(GZ_CANARY_OLD)] = GZ_CANARY_NEW
+    return _gz_sign_and_finish(bytes(data), len(bytearray(image.read_bytes())),
+                               output, root, "gz-canary, 1 byte + re-sign")
+
+
+def run_gz_range(args: argparse.Namespace, root: Path) -> int:
+    """--preset gz-range: NOP the hypervisor range-check feeders + re-sign.
+
+    UNSAFE RESEARCH: forces the containment check to pass so the map call
+    proceeds for arbitrary requests. Old-byte gated per site; any mismatch
+    refuses. Effect is untestable without a caller path (hypercall/KREE
+    mapping); slot-B boot presence validates no-regression only.
+    """
+    image = args.image.resolve()
+    output = (args.output or image.with_name(image.stem + ".gzrange.img")).resolve()
+    data = bytearray(image.read_bytes())
+    for label, offset, old in GZ_RANGE_GATES:
+        if offset < 0 or offset + len(old) > len(data):
+            print(f"Error: {label} offset 0x{offset:x} out of range: refusing",
+                  file=sys.stderr)
+            return 1
+        actual = bytes(data[offset:offset + len(old)])
+        if actual != old:
+            print(f"Error: {label} old-byte mismatch at 0x{offset:x}: "
+                  f"expected {old.hex()}, found {actual.hex()}: refusing",
+                  file=sys.stderr)
+            return 1
+        data[offset:offset + len(old)] = GZ_NOP
+        print(f"Patch   : gz {label} @ 0x{offset:x}  {old.hex()} -> {GZ_NOP.hex()}")
+    return _gz_sign_and_finish(bytes(data), len(bytearray(image.read_bytes())),
+                               output, root, "gz-range, 8 bytes + re-sign")
+
+
+def _gz_sign_and_finish(patched: bytes, input_len: int, output: Path,
+                        root: Path, done_label: str) -> int:
+    """CERT2 re-sign + exact-size trim + VALID gate for GZ images."""
     tmp_patched = output.with_name(output.stem + ".patched.bin")
-    tmp_patched.write_bytes(bytes(data))
+    tmp_patched.write_bytes(patched)
     sign_cmd = [
         sys.executable, str(root / "tools" / "sign_mtk_cert.py"),
         "-w", str(tmp_patched),
@@ -82,11 +128,11 @@ def run_gz_canary(args: argparse.Namespace, root: Path) -> int:
     ]
     run_command(sign_cmd, root)
     signed = output.with_name(output.stem + ".signed.bin").read_bytes()
-    if len(signed) < len(data):
+    if len(signed) < len(patched):
         print("Error: signed image shorter than input", file=sys.stderr)
         return 1
-    trimmed = signed[:len(data)]
-    if signed[len(data):].strip(b"\x00"):
+    trimmed = signed[:input_len]
+    if signed[input_len:].strip(b"\x00"):
         print("Error: cert growth overwrote non-padding bytes; refusing",
               file=sys.stderr)
         return 1
@@ -108,7 +154,7 @@ def run_gz_canary(args: argparse.Namespace, root: Path) -> int:
         except OSError:
             pass
     print()
-    print("Done (gz-canary, 1 byte + re-sign, exact size kept)")
+    print(f"Done ({done_label}, exact size kept)")
     print(f"Patched image: {output}")
     return 0
 
@@ -565,6 +611,13 @@ def main() -> int:
     if args.preset == "gz-canary":
         try:
             return run_gz_canary(args, root)
+        except RuntimeError as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 1
+
+    if args.preset == "gz-range":
+        try:
+            return run_gz_range(args, root)
         except RuntimeError as exc:
             print(f"Error: {exc}", file=sys.stderr)
             return 1

@@ -466,6 +466,11 @@ fastboot --set-active=a
 fastboot reboot
 ```
 
+`--preset gz-range` (same flow, 2 NOPs): forces the hypervisor address
+range-check to pass (`0x200E4: c8010054`, `0x200EC: 83010054` → NOPs,
+old-byte gated). Boots to slot-B fastboot for no-regression validation;
+effect needs a caller path (hypercall/KREE mapping, open RE target).
+
 Consequences and constraints:
 
 - Exact-fit partitions (gz fills its 32MB partition) reject the +96-byte
