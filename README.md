@@ -387,6 +387,10 @@ python lk_auto_patch.py lk.img -o /tmp/lk_factory.img \
   --preset factory-allow --factory-allow --factory-allow-unsafe
 ```
 
+`full-allow` combines both (5 NOPs, 20 bytes — needs all four flags):
+`--preset full-allow --modem-size-bypass --modem-allow-unsafe
+--factory-allow --factory-allow-unsafe`.
+
 Fastboot-only code paths — normal Android boot is untouched. Flash to the
 inactive slot (`fastboot flash lk_b …`, `fastboot --set-active=b`), test,
 fall back with `--set-active=a`. `config unprotect` may still deny via

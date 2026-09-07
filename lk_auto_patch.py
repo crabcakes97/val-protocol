@@ -19,6 +19,7 @@ PRESETS = (
     "unlock-serial-nvdata",
     "modem-unlock",
     "factory-allow",
+    "full-allow",
 )
 
 
@@ -344,6 +345,21 @@ def build_patch_command(args: argparse.Namespace, root: Path, analysis_dir: Path
             "--preset factory-allow requiere --factory-allow-unsafe.",
         )
         patch_cmd.extend(["--factory-allow", "--factory-allow-unsafe"])
+        return patch_cmd
+
+    if args.preset == "full-allow":
+        require_arg(args.modem_size_bypass, "--preset full-allow requiere --modem-size-bypass.")
+        require_arg(args.modem_allow_unsafe, "--preset full-allow requiere --modem-allow-unsafe.")
+        require_arg(args.factory_allow, "--preset full-allow requiere --factory-allow.")
+        require_arg(args.factory_allow_unsafe, "--preset full-allow requiere --factory-allow-unsafe.")
+        patch_cmd.extend(
+            [
+                "--modem-size-bypass",
+                "--modem-allow-unsafe",
+                "--factory-allow",
+                "--factory-allow-unsafe",
+            ]
+        )
         return patch_cmd
 
     if args.preset in {"unlock-imei", "unlock-serial"}:
