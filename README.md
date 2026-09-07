@@ -112,6 +112,7 @@ This repository is intended for repair, interoperability research, recovery work
 |-- lk_static_analyzer.py     # Static analysis and report generator
 |-- lk_patch_partition.py     # Patch implementation engine
 |-- lk_keygen.py              # 20-character key generator
+|-- lk_oem_cmd_mapper.py      # map every oem command gate (static-only)
 |-- lk_repack_signed.py       # Repack signed LK payload into container
 |-- liblk/                    # Minimal LK/LKS container parser
 |-- tools/
@@ -390,6 +391,10 @@ Two NOPs, old-byte gated:
 python lk_auto_patch.py lk.img -o /tmp/lk_factory.img \
   --preset factory-allow --factory-allow --factory-allow-unsafe
 ```
+
+OEM census: `lk_oem_cmd_mapper.py lk.bin` maps all 76 known commands
+(absent / routed / proven-live) against the 2 global gates and writes
+`.oemmap.json` — read-only, never probes destructive commands.
 
 `full-allow` combines both (5 NOPs, 20 bytes — needs all four flags):
 `--preset full-allow --modem-size-bypass --modem-allow-unsafe
