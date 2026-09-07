@@ -280,6 +280,28 @@ Compatibility is pattern-based, not model-name-based. A new LK is considered com
 
 Always test patched images on recoverable lab devices before using them in production workflows.
 
+## Modem-unlock research preset (nevada / XT2615V)
+
+`--preset modem-unlock` targets the LK-side MediaTek CCCI modem-load path
+(Moto G Play 2026, MT6835). By default it is **report-only**: it locates
+the real modem/CCCI/MPU/MMU markers in your LK and changes zero bytes.
+With `--modem-size-bypass --modem-allow-unsafe` it NOPs three verified
+LK-side MD table-validation gates (12 bytes, old-byte gated, re-signs
+`VALID`).
+
+```bash
+python lk_auto_patch.py "path/to/lk.img" -o /tmp/lk_report.img \
+  --preset modem-unlock
+python lk_auto_patch.py "path/to/lk.img" -o /tmp/lk_modem_bypass.img \
+  --preset modem-unlock --modem-size-bypass --modem-allow-unsafe
+```
+
+Limits worth knowing up front: this LK has no `modem_auth` /
+`load_modem_fw` / `mmu_table_init` (verified absent), LK is not EL3, LK
+memory maps don't survive kernel boot, and modem signatures are verified
+outside LK. Full analysis, gate table, test evidence, and slot-safe
+flash/recovery: [MODEM_UNLOCK.md](MODEM_UNLOCK.md).
+
 ## License
 
 GNU Affero General Public License v3.0
