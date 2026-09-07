@@ -429,6 +429,20 @@ table, refusing unknown builds with porting instructions.
   physical-range reader (`/proc/iomem` System RAM map is world-readable),
   `insmod` via root, dump in chunks. Multi-hour job, not yet done.
 
+### Live exploit surface (no flash — Trustonic MobiCore TEE)
+
+- TEE is MobiCore MTEE SDK 2.2.2.004 (Oct 2022), reachable from root shell:
+  `/dev/trusty-ipc-dev0` and `/dev/gz_kree` both open; `/dev/mobicore`
+  busy (held by TeeService — use the IPC nodes directly).
+- Full GP TEEC client stack on-device (`libMcClient`, `libTEECommon`,
+  `libgz_uree`, `libgz_gp_client`): sessions, shared memory, command
+  invocation, secure-mem alloc.
+- 14 trustlets inventoried (`/vendor/app/mcRegistry`, world-readable for
+  static audit): fingerprint, Keymaster/Keymint, Gatekeeper, Widevine,
+  HDCP + shims. **No modem TA exists.** Hands off Gatekeeper verify calls
+  (attempt counters); session open/close + fingerprint/Keymaster parsing
+  are the audit targets.
+
 Fastboot-only code paths — normal Android boot is untouched. Flash to the
 inactive slot (`fastboot flash lk_b …`, `fastboot --set-active=b`), test,
 fall back with `--set-active=a`. `config unprotect` may still deny via
