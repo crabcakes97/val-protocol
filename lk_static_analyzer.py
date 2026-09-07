@@ -3446,15 +3446,8 @@ def write_summary(
             )
             if operation.failure_message:
                 fp.write(f"      failure: {operation.failure_message!r}\n")
-            if validator.failure_edges:
-                fp.write(
-                    "      failure edges: "
-                    + ", ".join(
-                        f"0x{site:016x}->{branch}->0x{target:016x}"
-                        for site, target, branch in validator.failure_edges
-                    )
-                    + "\n"
-                )
+            if operation.failure_target is not None:
+                fp.write(f"      failure target: 0x{operation.failure_target:016x}\n")
 
 
 def build_parser() -> argparse.ArgumentParser:

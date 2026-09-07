@@ -17,6 +17,7 @@ PRESETS = (
     "unlock-serial",
     "erase-serial",
     "unlock-serial-nvdata",
+    "modem-unlock",
 )
 
 
@@ -66,7 +67,9 @@ def build_parser() -> argparse.ArgumentParser:
             "Perfil de parches. manual conserva los flags sueltos; unlock-imei, "
             "erase-imei y unlock-imei-nvdata quedan como alias compatibles, pero "
             "ahora derivan KEY desde serialno en runtime. unlock-serial, "
-            "erase-serial y unlock-serial-nvdata son los nombres explicitos."
+            "erase-serial y unlock-serial-nvdata son los nombres explicitos. "
+            "modem-unlock es RESEARCH REPORT-ONLY: localiza marcadores "
+            "modem/CCCI/MPU/MMU reales en este lk y no modifica ningun byte."
         ),
     )
     parser.add_argument(
@@ -214,6 +217,20 @@ def build_parser() -> argparse.ArgumentParser:
         default="lk",
         help="Subimagen a reemplazar. Por defecto: lk.",
     )
+    parser.add_argument(
+        "--modem-size-bypass",
+        action="store_true",
+        help=(
+            "UNSAFE RESEARCH para --preset modem-unlock: aplica los 3 NOPs de "
+            "validacion MD-side en LK (requiere --modem-allow-unsafe). Sin "
+            "esto, modem-unlock es solo reporte."
+        ),
+    )
+    parser.add_argument(
+        "--modem-allow-unsafe",
+        action="store_true",
+        help="Confirmacion explicita de riesgo para --modem-size-bypass.",
+    )
     return parser
 
 
@@ -294,6 +311,17 @@ def build_patch_command(args: argparse.Namespace, root: Path, analysis_dir: Path
         "--output",
         str(patched_bin),
     ]
+
+    if args.preset == "modem-unlock":
+        if args.modem_size_bypass:
+            require_arg(
+                args.modem_allow_unsafe,
+                "--preset modem-unlock con --modem-size-bypass requiere --modem-allow-unsafe.",
+            )
+            patch_cmd.extend(["--modem-size-bypass", "--modem-allow-unsafe"])
+        else:
+            patch_cmd.append("--modem-research-report-only")
+        return patch_cmd
 
     if args.preset in {"unlock-imei", "unlock-serial"}:
         require_arg(args.key_token_secret, f"--preset {args.preset} requiere --key-token-secret.")

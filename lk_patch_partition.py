@@ -37,6 +37,154 @@ THUMB_NOP = bytes.fromhex("00bf")
 THUMB_POP_R4_PC = bytes.fromhex("10bd")
 
 
+MODEM_RESEARCH_MARKERS: tuple[tuple[str, bytes], ...] = (
+    # Phone LK (nevada XT2615V, aarch64) uses these names. The old plan's
+    # modem_auth / load_modem_fw / mmu_table_init / armv7_mmu_init strings
+    # do not exist in this image (see MODEM_ABSENT_MARKERS).
+    ("ccci-load-modem", b"platform_load_modem"),
+    ("ccci-resv-mem", b"ccci_resv_named_memory"),
+    ("ccci-apply-mpu", b"ccci_plat_apply_mpu_setting"),
+    ("ccci-sec-data", b"ccci_sec_data"),
+    ("ccci-md-sib-mem", b"md1_sib_mem"),
+    ("ccci-md-bank4", b"md1_bank4_cache_info"),
+    ("emi-mpu-set", b"emi_mpu_set_protection"),
+    ("mmu-arm64-unmap", b"arm64_mmu_unmap"),
+    ("mmu-arm64-src", b"arch/arm64/mmu.c"),
+    ("mblock-alloc", b"motorola_alloc_mblock"),
+    ("wdt-doe-setup", b"mtk_wdt_doe_setup"),
+    ("wdt-apwdt-doe", b"apwdt is disabled by doe"),
+)
+
+MODEM_ABSENT_MARKERS: tuple[tuple[str, bytes], ...] = (
+    ("modem_auth", b"modem_auth"),
+    ("load_modem_fw", b"load_modem_fw"),
+    ("mmu_table_init", b"mmu_table_init"),
+    ("armv7_mmu_init", b"armv7_mmu_init"),
+)
+
+# LK-side MD table validation gates (nevada XT2615V phone LK, aarch64,
+# LK base 0xffff000050f00000; offsets below are lk.bin file offsets).
+# Function near VA 0xffff000050f49a24 validates the MD image region id
+# (w22 must be one of 0xbc/0x200/0x11c) and a size bound (w22 <= w20).
+# Any violation logs via the CCCI print helper and returns NULL (fail).
+# Each entry: (label, file_offset, expected_old_bytes, new_bytes, why).
+MODEM_SIZE_GATES: tuple[tuple[str, int, bytes, bytes, str], ...] = (
+    (
+        "region-id-gate",
+        0x49A9C,
+        bytes.fromhex("21060054"),  # b.ne -> unknown-region fail log
+        bytes.fromhex("1f2003d5"),  # nop: unknown id falls into 0x11c path
+        "cmp w22,#0x11c / b.ne unknown-region-log -> fall through",
+    ),
+    (
+        "size-bound-gate-1",
+        0x49AAC,
+        bytes.fromhex("88040054"),  # b.hi -> MD-size fail log + NULL return
+        bytes.fromhex("1f2003d5"),  # nop: skip fail, continue load path
+        "cmp w22,w20 / b.hi size-fail-log -> fall through to continue",
+    ),
+    (
+        "size-bound-gate-2",
+        0x49B24,
+        bytes.fromhex("c8000054"),  # b.hi -> MD-size fail log + NULL return
+        bytes.fromhex("1f2003d5"),  # nop: skip fail, continue load path
+        "cmp w22,w20 / b.hi size-fail-log -> fall through to continue",
+    ),
+)
+
+AARCH64_NOP = bytes.fromhex("1f2003d5")
+
+
+def patch_bytes_checked(data: bytearray, offset: int, old: bytes, new: bytes, label: str) -> None:
+    """Same-footprint patch with old-byte gate. Raises on any mismatch."""
+    if len(old) != len(new):
+        raise ValueError(f"{label}: old/new size mismatch ({len(old)} != {len(new)})")
+    if offset < 0 or offset + len(old) > len(data):
+        raise ValueError(f"{label}: offset 0x{offset:x} out of range")
+    actual = bytes(data[offset : offset + len(old)])
+    if actual != old:
+        raise ValueError(
+            f"{label}: old-byte mismatch at 0x{offset:x} / HxD {offset:08X}: "
+            f"expected {old.hex()}, found {actual.hex()} (wrong LK build: aborting)"
+        )
+    data[offset : offset + len(new)] = new
+
+
+def apply_modem_size_gates(data: bytearray, analysis_dir: Path) -> list[tuple[str, int, bytes, bytes]]:
+    """Apply MODEM_SIZE_GATES with old-byte verification. Returns applied list."""
+    try:
+        lk_base = load_analysis_base(analysis_dir)
+    except (OSError, ValueError, FileNotFoundError):
+        lk_base = 0
+    applied: list[tuple[str, int, bytes, bytes]] = []
+    for label, offset, old, new, _why in MODEM_SIZE_GATES:
+        patch_bytes_checked(data, offset, old, new, label)
+        applied.append((label, offset, old, new))
+        va = f" VA=0x{lk_base + offset:x}" if lk_base else ""
+        print(f"Patch   : modem {label} @ 0x{offset:x} / HxD {offset:08X}{va}  {old.hex()} -> {new.hex()}")
+    return applied
+
+
+def modem_research_scan(data: bytes) -> dict[str, list[int]]:
+    """Byte-exact scan for modem/MMU markers. Returns {label: [file_offsets]}."""
+    found: dict[str, list[int]] = {}
+    for label, needle in MODEM_RESEARCH_MARKERS:
+        offsets: list[int] = []
+        start = 0
+        while True:
+            idx = data.find(needle, start)
+            if idx < 0:
+                break
+            offsets.append(idx)
+            start = idx + 1
+        if offsets:
+            found[label] = offsets
+    return found
+
+
+def modem_absent_scan(data: bytes) -> list[str]:
+    """Labels from MODEM_ABSENT_MARKERS that appear nowhere in lk.bin."""
+    missing: list[str] = []
+    lowered = data.lower()
+    for label, needle in MODEM_ABSENT_MARKERS:
+        if lowered.find(needle.lower()) < 0:
+            missing.append(label)
+    return missing
+
+
+def print_modem_research_report(data: bytearray, analysis_dir: Path) -> None:
+    try:
+        lk_base = load_analysis_base(analysis_dir)
+    except (OSError, ValueError, FileNotFoundError):
+        lk_base = 0
+    print("Report  : modem-unlock research (REPORT-ONLY, no LK bytes changed)")
+    print(f"LK size : {len(data)} bytes")
+    if lk_base:
+        print(f"LK base : 0x{lk_base:x}")
+    found = modem_research_scan(bytes(data))
+    for label, _needle in MODEM_RESEARCH_MARKERS:
+        offsets = found.get(label, [])
+        if not offsets:
+            print(f"Marker  : {label} ABSENT")
+            continue
+        shown = ", ".join(
+            f"0x{off:x} / HxD {off:08X}" + (f" VA=0x{lk_base + off:x}" if lk_base else "")
+            for off in offsets[:5]
+        )
+        extra = f" (+{len(offsets) - 5} more)" if len(offsets) > 5 else ""
+        print(f"Marker  : {label} x{len(offsets)} @ {shown}{extra}")
+    missing = modem_absent_scan(bytes(data))
+    for label, _needle in MODEM_ABSENT_MARKERS:
+        if label in missing:
+            print(f"Absent  : {label} NOT FOUND (do not assume this function exists)")
+        else:
+            print(f"Present : {label} string present (needs xref confirmation)")
+    print("Note    : LK != EL3 (LK issues SMC calls INTO ATF/EL3; patching LK")
+    print("Note    : does not yield EL3). LK MMU/EMI-MPU tables are rebuilt by")
+    print("Note    : the kernel at boot, so LK remaps do not persist to Linux.")
+    print("Status  : REPORT ONLY - lk.bin left unmodified by design.")
+
+
 def parse_hxd_offset(value: str) -> int:
     value = value.strip()
     if value.lower().startswith("0x"):
@@ -3705,6 +3853,33 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--modem-research-report-only",
+        action="store_true",
+        help=(
+            "RESEARCH REPORT-ONLY para --preset modem-unlock: localiza "
+            "marcadores modem/CCCI/MPU/MMU reales en este lk.bin y reporta "
+            "offsets/VA sin modificar ningun byte."
+        ),
+    )
+    parser.add_argument(
+        "--modem-size-bypass",
+        action="store_true",
+        help=(
+            "UNSAFE RESEARCH: NOPea los 3 gates de validacion MD-side en LK "
+            "(region-id + 2x size-bound) con verificacion de old-bytes. "
+            "Requiere --modem-allow-unsafe. NO toca firma del modem, MMU, "
+            "EMI-MPU ni watchdog (ver notas del preset)."
+        ),
+    )
+    parser.add_argument(
+        "--modem-allow-unsafe",
+        action="store_true",
+        help=(
+            "Confirmacion explicita de riesgo para --modem-size-bypass. "
+            "Sin esto, el bypass se rehusa."
+        ),
+    )
+    parser.add_argument(
         "--apply",
         action="store_true",
         help="Escribe el archivo parcheado. Sin esto solo hace dry-run.",
@@ -3826,11 +4001,20 @@ def main() -> int:
         and not args.key_token_secret
         and not erase_token_partition
         and not args.unlock_erase_only
+        and not args.modem_research_report_only
+        and not args.modem_size_bypass
     ):
         print(
             "Error: usa --erase-partition <nombre>, --from/--to, --frp-skip-check, "
             "--frp-compare-value, --key-force-success, --key-custom-signature, --key-token-secret, "
-            "--erase-token-partition, --unlock-erase-only, o una combinacion.",
+            "--erase-token-partition, --unlock-erase-only, --modem-research-report-only, --modem-size-bypass, o una combinacion.",
+            file=sys.stderr,
+        )
+        return 2
+    if args.modem_size_bypass and not args.modem_allow_unsafe:
+        print(
+            "Error: --modem-size-bypass requiere --modem-allow-unsafe "
+            "(lee las notas de riesgo del preset modem-unlock).",
             file=sys.stderr,
         )
         return 2
@@ -3879,6 +4063,40 @@ def main() -> int:
 
     print(f"Input   : {input_path}")
     print(f"Output  : {output_path}")
+
+    if args.modem_research_report_only:
+        conflicting = [
+            partition_patch is not None,
+            args.frp_skip_check,
+            args.frp_compare_value is not None,
+            args.key_force_success,
+            bool(args.key_custom_signature),
+            bool(args.key_token_secret),
+            bool(erase_token_partition),
+            args.unlock_erase_only,
+            args.modem_size_bypass,
+        ]
+        if any(conflicting):
+            print(
+                "Error: --modem-research-report-only no se combina con otros "
+                "parches; es solo reporte.",
+                file=sys.stderr,
+            )
+            return 2
+        print_modem_research_report(data, args.analysis_dir)
+        return write_output_if_requested(output_path, data, args.apply)
+
+    if args.modem_size_bypass:
+        try:
+            applied = apply_modem_size_gates(data, args.analysis_dir)
+        except (OSError, ValueError) as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 1
+        print(f"ModemGates: {len(applied)}/3 LK-side MD validation gates -> NOP")
+        print("Warn    : esto NO bypassa la firma del modem (verificacion fuera de LK),")
+        print("Warn    : NO remappea MMU/EMI-MPU (el kernel lo reconstruye), NO toca watchdog,")
+        print("Warn    : NO da EL3. Un MD image con regiones fuera de rango puede")
+        print("Warn    : corromper memoria LK -> bootloop con USB muerto. Ten recovery listo.")
 
     if partition_patch is not None:
         old_name, new_name = partition_patch
