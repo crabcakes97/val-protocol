@@ -110,6 +110,13 @@ FACTORY_GATES: tuple[tuple[str, int, bytes, bytes, str], ...] = (
         bytes.fromhex("1f2003d5"),  # nop: fall through to handler-call path
         "tbz status-bit0 deny -> fall through to command handler",
     ),
+    (
+        "config-unprotect-tbz",
+        0xAD88,
+        bytes.fromhex("a0090036"),  # tbz w0,#0 -> deny("Not allowed command")
+        bytes.fromhex("1f2003d5"),  # nop: fall through to config subcommand
+        "tbz perm-bit0 deny -> fall through (unprotect/protect/set)",
+    ),
 )
 
 

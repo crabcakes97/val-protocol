@@ -371,6 +371,28 @@ on repacked images — it says the same for the **unmodified phone pull**,
 a pre-existing script quirk with the -111-3 container, not a repack
 defect. Full forensic record: [MODEM_UNLOCK.md](MODEM_UNLOCK.md).
 
+### `factory-allow` preset (ungate hidden fastboot commands)
+
+Same Val pipeline, different target: the oem command dispatcher. Live-proven
+on slot B: `fastboot oem ramdump` went from `command restricted` to usage
+text, and `ramdump enable` returned OKAY. Two NOPs, old-byte gated:
+
+| Gate | lk.bin offset / VA | old → new |
+|---|---|---|
+| dispatcher deny (`tbz` → "command restricted") | `0xF3F4` / `…F0F3F4` | `00010036` → `1f2003d5` |
+| config-subcommand deny (`tbz` → "Not allowed command") | `0xAD88` / `…F0AD88` | `a0090036` → `1f2003d5` |
+
+```bash
+python lk_auto_patch.py lk.img -o /tmp/lk_factory.img \
+  --preset factory-allow --factory-allow --factory-allow-unsafe
+```
+
+Fastboot-only code paths — normal Android boot is untouched. Flash to the
+inactive slot (`fastboot flash lk_b …`, `fastboot --set-active=b`), test,
+fall back with `--set-active=a`. `config unprotect` may still deny via
+further checks; each remaining gate gets traced the same way (string →
+xref → branch → gated NOP).
+
 ## License
 
 GNU Affero General Public License v3.0
