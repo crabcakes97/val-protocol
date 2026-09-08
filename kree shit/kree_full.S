@@ -94,6 +94,9 @@ _start:
     mov x2, #2; mov x3, xzr; mov x8, #SYS_OPENAT; svc #0
     mov x19, x0
     cmp x19, #0; b.lt done
+    adrp x0, msg_hb; add x0, x0, :lo12:msg_hb; bl print_cstr
+    mov w0, w19; bl print_hex32
+    adrp x0, msg_nl; add x0, x0, :lo12:msg_nl; mov x1, #1; bl print
     // resume marker: read kprog (svc,sub); default (0,0)
     mov w20, #0
     mov w25, #0
