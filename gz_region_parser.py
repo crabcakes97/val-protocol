@@ -94,12 +94,16 @@ def scan_table(data: bytes, anchor_off: int, span: int = 0x2000) -> list[dict]:
 
 def parse_live_log(path: Path) -> dict:
     text = path.read_text(errors="replace")
-    unmaps = re.findall(r"unmap2.*?([0-9a-fA-Fx]+)\+([0-9a-fA-Fx]+|\d+[KMG]?)",
-                        text)
-    shares = sorted(set(re.findall(r"(?:iova|share).*?(0x[0-9a-fA-F]+)\+(\S+)",
-                                   text)))
-    return {"unmap_lines": len(unmaps),
-            "share_windows": [f"{a}+{s}" for a, s in shares[:12]]}
+    unmaps = re.findall(
+        r"unmapping (\S+) \[SR:(\d+)\]\[([0-9a-fA-F]+)\]\[([0-9a-fA-F]+)\]"
+        r"\[ipa:[0-9a-fA-F]+\]\[size:(0x[0-9a-fA-F]+)\]\[PERM:(\d+)\]", text)
+    shares = sorted(set(re.findall(
+        r"reg share region: iova_base=(0x[0-9a-fA-F]+) size=(0x[0-9a-fA-F]+)",
+        text)))
+    return {"unmaps": [
+        {"victim": v, "sr": int(sr), "start": f"0x{a}", "end": f"0x{b}",
+         "size": sz, "perm": int(p)} for v, sr, a, b, sz, p in unmaps],
+        "share_windows": [f"{a}+{s}" for a, s in shares]}
 
 
 def main() -> int:
@@ -138,7 +142,9 @@ def main() -> int:
         for r in lent["regions"][:20]:
             print(f"  {r['offset']} addr={r['addr']} size={r['size']} prot={r['prot']}")
     if "live" in result:
-        print(f"live log: {result['live']['unmap_lines']} unmap lines; "
+        n_un = len(result['live']['unmaps'])
+        n_pm0 = sum(1 for u in result['live']['unmaps'] if u['perm'] == 0)
+        print(f"live log: {n_un} unmap entries ({n_pm0} PERM:0); "
               f"shares={result['live']['share_windows']}")
     print(f"JSON: {out}")
     return 0

@@ -27,10 +27,16 @@
  * needs a kernel module (see gki_kmod_builder.py), not this tool.
  * SiP 0x8200FF03 semantics come from gz static dispatch @0xB8A8, not live.
  *
- * TODO (recon order): disassemble UREE_RegisterSharedmem body (lib off
- * 0x23c0, 480B) to recover the ioctl arg struct + TZCMD_MEM_SHAREDMEM_REG
- * constant; until then --target sends a zeroed struct and reports the
- * kernel's return code only.
+ * Measured 32B arg struct for 0xC0205404 (RegisterSharedmem body @lib
+ * 0x23c0: stp w21,wzr,[sp,#0x10] builds it at sp+0x10; tail at 0x2564 does
+ * ldr w8,[sp,#0x14] / str w8,[x19]):
+ *   +0x00 u32 session handle (IN; fd itself is a global int, bit31=invalid)
+ *   +0x04 u32 shm handle (OUT -- kernel fills, copied to *out)
+ *   +0x08 u64 caller_info[0]   (buffer address)
+ *   +0x10 u64 caller_info[0x10] (size; both checked nonzero on entry)
+ *   +0x18 u64 pad (untouched by lib)
+ * Self-share recipe: malloc(4096) -> info={buf,0x1000} -> expect rc=0,
+ * *out=handle. Phys attempt: same struct with target phys (expect DENY).
  *
  * Build (needs NDK -- not present on the lab host, build on your machine):
  *   gcc -fsyntax-only kree_ioctl_explorer.c            # host check only
