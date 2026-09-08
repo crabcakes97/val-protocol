@@ -502,6 +502,37 @@ Consequences and constraints:
 - No GZ *payload* presets exist yet — SMMU/stage-2 gate design needs
   hypervisor disassembly first. The acceptance proof is what this unlocks.
 
+## Exploit-suite tools (nevada research set)
+
+Every tool below is **report-only by default**: static analysis, read-only
+dumps, or live queries that change nothing. Anything that builds a flashable
+image is old-byte gated, re-signs, re-verifies `VALID`, prints slot-`_b`-only
+flash commands, and never flashes itself. Proven live on the XT2615V lab
+unit where marked; the rest is ready-to-run recon.
+
+| Tool | What it does | How to use it |
+|---|---|---|
+| `lk_oem_cmd_mapper.py` | Maps all 76 known `oem` commands against the global gates (`0xF3F4`/`0xAD88`): PROVEN_LIVE / ROUTED / ABSENT + JSON. Read-only, never probes destructive commands. | `python lk_oem_cmd_mapper.py lk.bin -o out.oemmap.json` |
+| `bl2_ext_patcher.py` | Reports `sec_get_vfy_policy`/cert-verify anchors in a bl2_ext image; gated `--apply` replaces the policy entry with `mov w0,#0; ret`, re-signs, exact-size trims, verifies `VALID`. | `python bl2_ext_patcher.py bl2_ext.bin` (add `--apply --unsafe --old-bytes … --entry …` to build) |
+| `kree_ioctl_explorer.c` | NDK userspace KREE prober with the measured ABI (`0x5404` = register-shm, 32B struct documented in-file). Phases: recon, `--self-share`, gated `--target`. | Build with NDK clang, run as root on device |
+| `kree_abi_recon.py` | Recovers KREE ioctl numbers from vendor libs (GOT→PLT two-hop + `w1` backscan + per-function attribution) into JSON. | `python kree_abi_recon.py libgz_uree.so -o kree_abi.json` |
+| `kree_try.S` / `kree_share.S` | Freestanding static-PIE device probers (no libc/NDK): open, session-create scan, dma_heap share, trusty discriminator, NULL sweep. `kree_share.S` holds the live-proven service-name flow. | `aarch64-linux-gnu-as …; ld -static -e _start …; adb push …; adb shell 'su -c ./kree_share'` |
+| `gz_region_parser.py` | Parses `all_mem_region`/`oem_all_mem_region` references plus the live `gz_log` RKP unmaps + trusty share windows into JSON. | `python gz_region_parser.py gz_a.bin --base -0x200 --live-log gz_log.txt` |
+| `dead_code_survey.py` | Zero-cave + dead-function survey ranked by distance to given hooks with branch-reach flags. | `python dead_code_survey.py md1rom.bin --hooks 0x… --base 0x…` |
+| `gki_kmod_builder.py` | Generates a GKI phys-range reader module + exact repo-sync/build recipe for `5.15.180-android13-8`; validates ranges against `/proc/iomem`, refuses modem-private without explicit ack. | `python gki_kmod_builder.py --iomem iomem.txt --range 0x8c000000+0x1360000 -o gki_mod` |
+| `full_allow_wedge_diagnosis.py` | Post-mortems a wedge from `getvar` captures + LK image gates + flash history; verdicts slot-race vs gate-fault. Read-only. | `python full_allow_wedge_diagnosis.py --getvar getvar.txt --image lk_b.img` |
+| `dump_all_bootchain.py` | Full bootchain backup over root adb (preloader, lk/gz/boot/vbmeta/seccfg/scp/md1img + manifest). Refuses the fused BROM path. Never flashes/writes. | `python dump_all_bootchain.py --out backups/ --full-modem` |
+| `preloader_disasm.py` | Static preloader disassembly (auto/arm64/arm32), security anchors, verify-site context. No flash path exists in the tool. | `python preloader_disasm.py preloader_a.bin --around 0x…` |
+| `brom_interface_scanner.py` | BROM surface census: static string scan + USB ID table + boot-log SLA verdict; live handshake refused on fused devices without explicit override. | `python brom_interface_scanner.py --image preloader.bin --boot-log boot.log` |
+| `seccfg_analyzer.py` | Read-only seccfg backup parser (magic, flag words, JSON). There is no write path in this file. | `python seccfg_analyzer.py seccfg.bin` |
+| `da_extractor.py` | USB-capture DA-transfer census (metadata/hashes only — DA bytes are never written or bundled). | `python da_extractor.py capture.txt [--raw]` |
+| `preloader_payload_builder.py` | EL3 research scaffold: cave survey + return-to-caller canary *source template*; binary emission needs reviewer-confirmed offsets, and no flash command is ever printed (preloader has no slot). | `python preloader_payload_builder.py --image preloader.bin` |
+| `brom_exploit_prober.py` | Evaluates known BROM exploit preconditions against your seccfg/boot-log evidence (APPLICABLE/BLOCKED); live probing refused on fused devices. No execute flag exists. | `python brom_exploit_prober.py --boot-log boot.log` |
+
+Live-proven so far: OEM census reproduces byte-identical on the phone LK;
+KREE session + share handshake completes against `com.mediatek.geniezone.srv.mem`
+(session handle + shm handle acquired from a root shell, no flash).
+
 ## License
 
 GNU Affero General Public License v3.0
