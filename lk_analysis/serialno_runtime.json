@@ -1,0 +1,79 @@
+{
+  "architecture": "arm32_thumb",
+  "hw_get_serialno_string": "0x00000000480589e4",
+  "hw_get_serialno_string_file_offset": "0x589e4",
+  "hw_get_serialno_string_hxd_offset": "000589E4",
+  "function_end": "0x0000000048058a2e",
+  "function_end_file_offset": "0x58a2e",
+  "function_end_hxd_offset": "00058A2E",
+  "generic_prop_get_string": "0x00000000480982e0",
+  "generic_prop_get_string_file_offset": "0x982e0",
+  "generic_prop_get_string_hxd_offset": "000982E0",
+  "xrefs": [
+    {
+      "target": "serialno",
+      "string": "serialno",
+      "xref_address": "0x00000000480589ec",
+      "xref_file_offset": "0x589ec",
+      "xref_hxd_offset": "000589EC",
+      "string_address": "0x00000000480b2550",
+      "string_file_offset": "0xb2550",
+      "string_hxd_offset": "000B2550",
+      "instruction": "add r1, pc",
+      "via": "thumb ldr/add-pc r1"
+    },
+    {
+      "target": "barcode",
+      "string": "barcode",
+      "xref_address": "0x00000000480589fc",
+      "xref_file_offset": "0x589fc",
+      "xref_hxd_offset": "000589FC",
+      "string_address": "0x00000000480e172c",
+      "string_file_offset": "0xe172c",
+      "string_hxd_offset": "000E172C",
+      "instruction": "add r1, pc",
+      "via": "thumb ldr/add-pc r1"
+    }
+  ],
+  "calls": [
+    {
+      "site": "0x00000000480589ee",
+      "site_file_offset": "0x589ee",
+      "site_hxd_offset": "000589EE",
+      "target": "0x00000000480982e0",
+      "target_file_offset": "0x982e0",
+      "target_hxd_offset": "000982E0"
+    },
+    {
+      "site": "0x00000000480589fe",
+      "site_file_offset": "0x589fe",
+      "site_hxd_offset": "000589FE",
+      "target": "0x00000000480982e0",
+      "target_file_offset": "0x982e0",
+      "target_hxd_offset": "000982E0"
+    },
+    {
+      "site": "0x0000000048058a06",
+      "site_file_offset": "0x58a06",
+      "site_hxd_offset": "00058A06",
+      "target": "0x000000004806c724",
+      "target_file_offset": "0x6c724",
+      "target_hxd_offset": "0006C724"
+    },
+    {
+      "site": "0x0000000048058a1a",
+      "site_file_offset": "0x58a1a",
+      "site_hxd_offset": "00058A1A",
+      "target": "0x000000004801a0e8",
+      "target_file_offset": "0x1a0e8",
+      "target_hxd_offset": "0001A0E8"
+    }
+  ],
+  "cache_candidates": [],
+  "confidence": 90,
+  "notes": [
+    "analysis-only; no patch runtime is generated",
+    "serialno/barcode fallback chain candidate",
+    "cache candidate requires read/write to the same global cell"
+  ]
+}

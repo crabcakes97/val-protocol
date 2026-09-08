@@ -1,0 +1,26 @@
+Serialno runtime source analysis
+================================
+
+Mode: analysis-only; no runtime patch is generated.
+
+Confidence : 90
+Function   : 0x00000000480589e4
+HxD        : 000589E4
+Generic    : 0x00000000480982e0
+Generic HxD: 000982E0
+
+String xrefs
+------------
+  serialno: xref=0x00000000480589ec HxD=000589EC string='serialno'
+  barcode: xref=0x00000000480589fc HxD=000589FC string='barcode'
+
+Calls
+-----
+  0x00000000480589ee HxD=000589EE -> 0x00000000480982e0 HxD=000982E0
+  0x00000000480589fe HxD=000589FE -> 0x00000000480982e0 HxD=000982E0
+  0x0000000048058a06 HxD=00058A06 -> 0x000000004806c724 HxD=0006C724
+  0x0000000048058a1a HxD=00058A1A -> 0x000000004801a0e8 HxD=0001A0E8
+
+Cache candidates
+----------------
+  No read/write global cache candidate detected.

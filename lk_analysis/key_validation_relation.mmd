@@ -1,0 +1,14 @@
+flowchart TD
+  U["Unlock flow<br/>0x0000000048082974"]
+  C["KEY validator call<br/>0x0000000048082a4a"]
+  U --> C --> K
+  K["KEY validator<br/>0x0000000048077fe0<br/>confidence 62"]
+  H["Hash key data"]
+  B["Compare hash bytes"]
+  R["Return w20 as w0"]
+  T["Caller tests w0 bit 0"]
+  OK["Continue unlock flow"]
+  FAIL["Code validation failure"]
+  K --> H --> B --> R --> T
+  T -->|"valid"| OK
+  T -->|"cbnz -> 0x0000000048082a60"| FAIL

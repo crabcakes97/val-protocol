@@ -1,0 +1,132 @@
+[01] confidence=68 range=0x0000000048067da2-0x0000000048067ed4 HxD=0x00067DA2-0x00067ED4
+  targets: Disallow to erase partition %s on oem_locked device, avb_custom_key, debug_token, erase permission denied, fboot_cmd_erase_permission_validate
+  evidence:
+    - string target: fboot_cmd_erase_permission_validate
+    - string target: erase permission denied
+    - string target: Disallow to erase partition %s on oem_locked device
+    - string target: debug_token
+    - string target: avb_custom_key
+    - debug tag names erase permission validator
+    - contains calls whose boolean result gates erase flow
+    - branch edge reaches erase permission denied message
+  callers: none found in current flow candidates
+  denied edges:
+    - bne 0x0000000048067dde HxD=00067DDE -> 0x0000000048067e5c HxD=00067E5C (erase permission denied path)
+    - cbz 0x0000000048067e68 HxD=00067E68 -> 0x0000000048067e7c HxD=00067E7C (erase permission denied path)
+    - b 0x0000000048067e8a HxD=00067E8A -> 0x0000000048067e6a HxD=00067E6A (erase permission denied path)
+  structural instructions:
+    - string_xref: 0x0000000048067daa off=0x67daa HxD=00067DAA raw=7944  add r1, pc
+    - call: 0x0000000048067dac off=0x67dac HxD=00067DAC raw=08f0c4f8  bl #0x4806ff38
+    - string_xref: 0x0000000048067db8 off=0x67db8 HxD=00067DB8 raw=7944  add r1, pc
+    - call: 0x0000000048067dbc off=0x67dbc HxD=00067DBC raw=d0f7d6f9  bl #0x4803816c
+    - conditional_branch: 0x0000000048067dc2 off=0x67dc2 HxD=00067DC2 raw=37d0  beq #0x48067e34
+    - string_xref: 0x0000000048067dca off=0x67dca HxD=00067DCA raw=7944  add r1, pc
+    - permission_or_helper_call: 0x0000000048067dcc off=0x67dcc HxD=00067DCC raw=d0f7cef9  bl #0x4803816c
+    - conditional_branch: 0x0000000048067dd0 off=0x67dd0 HxD=00067DD0 raw=98b3  cbz r0, #0x48067e3a
+    - call: 0x0000000048067dd8 off=0x67dd8 HxD=00067DD8 raw=d0f7e4f8  bl #0x48037fa4
+    - branch_to_erase_permission_denied: 0x0000000048067dde off=0x67dde HxD=00067DDE raw=3dd1  bne #0x48067e5c
+    - call: 0x0000000048067df6 off=0x67df6 HxD=00067DF6 raw=04f04dfe  bl #0x4806ca94
+    - conditional_branch: 0x0000000048067e02 off=0x67e02 HxD=00067E02 raw=1cd2  bhs #0x48067e3e
+    - call: 0x0000000048067e04 off=0x67e04 HxD=00067E04 raw=04f0fefe  bl #0x4806cc04
+    - call: 0x0000000048067e08 off=0x67e08 HxD=00067E08 raw=1af040fd  bl #0x4808288c
+    - conditional_branch: 0x0000000048067e0e off=0x67e0e HxD=00067E0E raw=f1d0  beq #0x48067df4
+    - call: 0x0000000048067e16 off=0x67e16 HxD=00067E16 raw=f3f719fc  bl #0x4805b64c
+    - call: 0x0000000048067e1c off=0x67e1c HxD=00067E1C raw=f3f7b4ff  bl #0x4805bd88
+    - conditional_branch: 0x0000000048067e22 off=0x67e22 HxD=00067E22 raw=e7d1  bne #0x48067df4
+    - call: 0x0000000048067e2c off=0x67e2c HxD=00067E2C raw=f3f70efc  bl #0x4805b64c
+    - permission_or_helper_call: 0x0000000048067e34 off=0x67e34 HxD=00067E34 raw=1af06af8  bl #0x48081f0c
+    - conditional_branch: 0x0000000048067e38 off=0x67e38 HxD=00067E38 raw=18b1  cbz r0, #0x48067e42
+    - call: 0x0000000048067e42 off=0x67e42 HxD=00067E42 raw=1af099f8  bl #0x48081f78
+    - conditional_branch: 0x0000000048067e48 off=0x67e48 HxD=00067E48 raw=f7d1  bne #0x48067e3a
+    - string_xref: 0x0000000048067e52 off=0x67e52 HxD=00067E52 raw=7944  add r1, pc
+    - call: 0x0000000048067e54 off=0x67e54 HxD=00067E54 raw=f3f7fafb  bl #0x4805b64c
+    - call: 0x0000000048067e60 off=0x67e60 HxD=00067E60 raw=05f04af8  bl #0x4806cef8
+    - permission_or_helper_call: 0x0000000048067e64 off=0x67e64 HxD=00067E64 raw=1af012fd  bl #0x4808288c
+    - branch_to_erase_permission_denied: 0x0000000048067e68 off=0x67e68 HxD=00067E68 raw=40b1  cbz r0, #0x48067e7c
+    - call: 0x0000000048067e6e off=0x67e6e HxD=00067E6E raw=30f07ffd  bl #0x48098970
+    - string_xref: 0x0000000048067e84 off=0x67e84 HxD=00067E84 raw=7944  add r1, pc
+    - call: 0x0000000048067e86 off=0x67e86 HxD=00067E86 raw=f3f7e1fb  bl #0x4805b64c
+    - permission_or_helper_call: 0x0000000048067ec8 off=0x67ec8 HxD=00067EC8 raw=d0f750f9  bl #0x4803816c
+    - conditional_branch: 0x0000000048067ecc off=0x67ecc HxD=00067ECC raw=08b9  cbnz r0, #0x48067ed2
+    - call: 0x0000000048067ece off=0x67ece HxD=00067ECE raw=03f0b1fc  bl #0x4806b834
+  key instructions:
+    0x0000000048067da4 off=0x67da4 HxD=00067DA4: mov      r4, r0
+    0x0000000048067daa off=0x67daa HxD=00067DAA: add      r1, pc
+    0x0000000048067dac off=0x67dac HxD=00067DAC: bl       #0x4806ff38
+    0x0000000048067db0 off=0x67db0 HxD=00067DB0: ldr      r4, [r4, #0xc]
+    0x0000000048067db4 off=0x67db4 HxD=00067DB4: ldr      r1, [pc, #0xd8]
+    0x0000000048067db8 off=0x67db8 HxD=00067DB8: add      r1, pc
+    0x0000000048067dba off=0x67dba HxD=00067DBA: mov      r0, r4
+    0x0000000048067dbc off=0x67dbc HxD=00067DBC: bl       #0x4803816c
+    0x0000000048067dc0 off=0x67dc0 HxD=00067DC0: cmp      r0, #0
+    0x0000000048067dc2 off=0x67dc2 HxD=00067DC2: beq      #0x48067e34
+    0x0000000048067dc4 off=0x67dc4 HxD=00067DC4: ldr      r1, [pc, #0xcc]
+    0x0000000048067dc6 off=0x67dc6 HxD=00067DC6: mov      r0, r4
+    0x0000000048067dca off=0x67dca HxD=00067DCA: add      r1, pc
+    0x0000000048067dcc off=0x67dcc HxD=00067DCC: bl       #0x4803816c
+    0x0000000048067dd0 off=0x67dd0 HxD=00067DD0: cbz      r0, #0x48067e3a
+    0x0000000048067dd2 off=0x67dd2 HxD=00067DD2: ldr      r1, [pc, #0xc4]
+    0x0000000048067dd4 off=0x67dd4 HxD=00067DD4: mov      r0, r4
+    0x0000000048067dd6 off=0x67dd6 HxD=00067DD6: add      r1, pc
+    0x0000000048067dd8 off=0x67dd8 HxD=00067DD8: bl       #0x48037fa4
+    0x0000000048067ddc off=0x67ddc HxD=00067DDC: cmp      r0, #0
+    0x0000000048067dde off=0x67dde HxD=00067DDE: bne      #0x48067e5c
+    0x0000000048067de0 off=0x67de0 HxD=00067DE0: ldr      r5, [pc, #0xb8]
+    0x0000000048067de2 off=0x67de2 HxD=00067DE2: mov      r4, r0
+    0x0000000048067de4 off=0x67de4 HxD=00067DE4: ldr      r6, [pc, #0xb8]
+    0x0000000048067de6 off=0x67de6 HxD=00067DE6: ldr      r7, [pc, #0xbc]
+    0x0000000048067de8 off=0x67de8 HxD=00067DE8: add      r5, pc
+    0x0000000048067dea off=0x67dea HxD=00067DEA: ldr      r5, [r5]
+    0x0000000048067dec off=0x67dec HxD=00067DEC: add      r6, pc
+    0x0000000048067df0 off=0x67df0 HxD=00067DF0: add      r7, pc
+    0x0000000048067df6 off=0x67df6 HxD=00067DF6: bl       #0x4806ca94
+    0x0000000048067dfa off=0x67dfa HxD=00067DFA: cmp      r4, r0
+    0x0000000048067dfc off=0x67dfc HxD=00067DFC: mov      r0, r4
+    0x0000000048067e02 off=0x67e02 HxD=00067E02: bhs      #0x48067e3e
+    0x0000000048067e04 off=0x67e04 HxD=00067E04: bl       #0x4806cc04
+    0x0000000048067e08 off=0x67e08 HxD=00067E08: bl       #0x4808288c
+    0x0000000048067e0c off=0x67e0c HxD=00067E0C: cmp      r0, #0
+    0x0000000048067e0e off=0x67e0e HxD=00067E0E: beq      #0x48067df4
+    0x0000000048067e10 off=0x67e10 HxD=00067E10: mov      r0, r6
+    0x0000000048067e12 off=0x67e12 HxD=00067E12: mov      r1, r7
+    0x0000000048067e14 off=0x67e14 HxD=00067E14: mov      r2, r5
+    0x0000000048067e16 off=0x67e16 HxD=00067E16: bl       #0x4805b64c
+    0x0000000048067e1a off=0x67e1a HxD=00067E1A: mov      r0, r5
+    0x0000000048067e1c off=0x67e1c HxD=00067E1C: bl       #0x4805bd88
+    0x0000000048067e22 off=0x67e22 HxD=00067E22: bne      #0x48067df4
+    0x0000000048067e24 off=0x67e24 HxD=00067E24: ldr      r1, [pc, #0x80]
+    0x0000000048067e26 off=0x67e26 HxD=00067E26: mov      r0, r6
+    0x0000000048067e28 off=0x67e28 HxD=00067E28: mov      r2, r5
+    0x0000000048067e2a off=0x67e2a HxD=00067E2A: add      r1, pc
+    0x0000000048067e2c off=0x67e2c HxD=00067E2C: bl       #0x4805b64c
+    0x0000000048067e34 off=0x67e34 HxD=00067E34: bl       #0x48081f0c
+    0x0000000048067e38 off=0x67e38 HxD=00067E38: cbz      r0, #0x48067e42
+    0x0000000048067e42 off=0x67e42 HxD=00067E42: bl       #0x48081f78
+    0x0000000048067e46 off=0x67e46 HxD=00067E46: cmp      r0, #0
+    0x0000000048067e48 off=0x67e48 HxD=00067E48: bne      #0x48067e3a
+    0x0000000048067e4a off=0x67e4a HxD=00067E4A: ldr      r0, [pc, #0x60]
+    0x0000000048067e4c off=0x67e4c HxD=00067E4C: mov      r2, r4
+    0x0000000048067e4e off=0x67e4e HxD=00067E4E: ldr      r1, [pc, #0x60]
+    0x0000000048067e50 off=0x67e50 HxD=00067E50: add      r0, pc
+    0x0000000048067e52 off=0x67e52 HxD=00067E52: add      r1, pc
+    0x0000000048067e54 off=0x67e54 HxD=00067E54: bl       #0x4805b64c
+    0x0000000048067e5c off=0x67e5c HxD=00067E5C: mov      r0, r4
+    0x0000000048067e60 off=0x67e60 HxD=00067E60: bl       #0x4806cef8
+    0x0000000048067e64 off=0x67e64 HxD=00067E64: bl       #0x4808288c
+    0x0000000048067e68 off=0x67e68 HxD=00067E68: cbz      r0, #0x48067e7c
+    0x0000000048067e6a off=0x67e6a HxD=00067E6A: mov      r0, r4
+    0x0000000048067e6e off=0x67e6e HxD=00067E6E: bl       #0x48098970
+    0x0000000048067e72 off=0x67e72 HxD=00067E72: cmp      r0, #0
+    0x0000000048067e76 off=0x67e76 HxD=00067E76: mov      r0, r5
+    0x0000000048067e7c off=0x67e7c HxD=00067E7C: ldr      r0, [pc, #0x34]
+    0x0000000048067e80 off=0x67e80 HxD=00067E80: ldr      r1, [pc, #0x34]
+    0x0000000048067e82 off=0x67e82 HxD=00067E82: add      r0, pc
+    0x0000000048067e84 off=0x67e84 HxD=00067E84: add      r1, pc
+    0x0000000048067e86 off=0x67e86 HxD=00067E86: bl       #0x4805b64c
+    0x0000000048067ebc off=0x67ebc HxD=00067EBC: ldr      r0, [r0, #0xc]
+    0x0000000048067ec0 off=0x67ec0 HxD=00067EC0: ldr      r1, [pc, #0x14]
+    0x0000000048067ec6 off=0x67ec6 HxD=00067EC6: add      r1, pc
+    0x0000000048067ec8 off=0x67ec8 HxD=00067EC8: bl       #0x4803816c
+    0x0000000048067ecc off=0x67ecc HxD=00067ECC: cbnz     r0, #0x48067ed2
+    0x0000000048067ece off=0x67ece HxD=00067ECE: bl       #0x4806b834
+

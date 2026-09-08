@@ -1,0 +1,151 @@
+[
+  {
+    "function_start": "0x000000004808380c",
+    "function_end": "0x00000000480838f4",
+    "confidence": 70,
+    "evidence": [
+      "string target: frp",
+      "string target: Invalid partition table!",
+      "string target: mot_sec: Invalid partition table!",
+      "string target: mot_sec: FRP partition is invalid, lock anyway!",
+      "string target: mot_sec: Couldn't read from %llx",
+      "uses 0x100 byte window",
+      "subtracts 0x100 from partition/end pointer",
+      "passes read length 0x100 in w3",
+      "loads last byte from stack buffer [r6,#0xff]",
+      "returns equality result with ldrb/clz/lsrs",
+      "called by another flow candidate",
+      "called multiple times from unlock-related flow",
+      "caller contains Check 'Allow OEM Unlock' gate"
+    ],
+    "matched_targets": [
+      "Invalid partition table!",
+      "frp",
+      "mot_sec: Couldn't read from %llx",
+      "mot_sec: FRP partition is invalid, lock anyway!",
+      "mot_sec: Invalid partition table!"
+    ],
+    "callers": [
+      {
+        "caller_start": "0x0000000048082974",
+        "caller_start_file_offset": "0x82974",
+        "caller_start_hxd_offset": "00082974",
+        "call_site": "0x0000000048082a0a",
+        "call_site_file_offset": "0x82a0a",
+        "call_site_hxd_offset": "00082A0A"
+      },
+      {
+        "caller_start": "0x0000000048082bee",
+        "caller_start_file_offset": "0x82bee",
+        "caller_start_hxd_offset": "00082BEE",
+        "call_site": "0x0000000048082cf8",
+        "call_site_file_offset": "0x82cf8",
+        "call_site_hxd_offset": "00082CF8"
+      },
+      {
+        "caller_start": "0x0000000048082bee",
+        "caller_start_file_offset": "0x82bee",
+        "caller_start_hxd_offset": "00082BEE",
+        "call_site": "0x0000000048082dbc",
+        "call_site_file_offset": "0x82dbc",
+        "call_site_hxd_offset": "00082DBC"
+      }
+    ],
+    "function_start_file_offset": "0x8380c",
+    "function_start_hxd_offset": "0008380C",
+    "function_end_file_offset": "0x838f4",
+    "function_end_hxd_offset": "000838F4",
+    "structural_instructions": [
+      {
+        "role": "last_byte_load_sp_0xff",
+        "address": "0x000000004808385a",
+        "file_offset": "0x8385a",
+        "hxd_offset": "0008385A",
+        "instruction": "ldrb.w r0, [r6, #0xff]",
+        "raw": "96f8ff00"
+      },
+      {
+        "role": "last_byte_compare_zero",
+        "address": "0x000000004808385e",
+        "file_offset": "0x8385e",
+        "hxd_offset": "0008385E",
+        "instruction": "clz r0, r0",
+        "raw": "b0fa80f0"
+      }
+    ],
+    "xrefs": [
+      {
+        "target": "frp",
+        "string": "frp",
+        "xref_address": "0x0000000048083820",
+        "xref_file_offset": "0x83820",
+        "xref_hxd_offset": "00083820",
+        "string_address": "0x00000000480f7e38",
+        "string_file_offset": "0xf7e38",
+        "string_hxd_offset": "000F7E38",
+        "instruction": "add r0, pc",
+        "via": "thumb ldr/add-pc r0"
+      },
+      {
+        "target": "frp",
+        "string": "frp",
+        "xref_address": "0x0000000048083850",
+        "xref_file_offset": "0x83850",
+        "xref_hxd_offset": "00083850",
+        "string_address": "0x00000000480f7e38",
+        "string_file_offset": "0xf7e38",
+        "string_hxd_offset": "000F7E38",
+        "instruction": "add r0, pc",
+        "via": "thumb ldr/add-pc r0"
+      },
+      {
+        "target": "mot_sec: FRP partition is invalid, lock anyway!",
+        "string": "mot_sec: FRP partition is invalid, lock anyway!\n",
+        "xref_address": "0x000000004808386e",
+        "xref_file_offset": "0x8386e",
+        "xref_hxd_offset": "0008386E",
+        "string_address": "0x00000000481078d4",
+        "string_file_offset": "0x1078d4",
+        "string_hxd_offset": "001078D4",
+        "instruction": "add r1, pc",
+        "via": "thumb ldr/add-pc r1"
+      },
+      {
+        "target": "mot_sec: Invalid partition table!",
+        "string": "mot_sec: Invalid partition table!\n",
+        "xref_address": "0x0000000048083886",
+        "xref_file_offset": "0x83886",
+        "xref_hxd_offset": "00083886",
+        "string_address": "0x00000000481078b0",
+        "string_file_offset": "0x1078b0",
+        "string_hxd_offset": "001078B0",
+        "instruction": "add r1, pc",
+        "via": "thumb ldr/add-pc r1"
+      },
+      {
+        "target": "Invalid partition table!",
+        "string": "mot_sec: Invalid partition table!\n",
+        "xref_address": "0x000000004808389a",
+        "xref_file_offset": "0x8389a",
+        "xref_hxd_offset": "0008389A",
+        "string_address": "0x00000000481078b0",
+        "string_file_offset": "0x1078b0",
+        "string_hxd_offset": "001078B0",
+        "instruction": "add r1, pc",
+        "via": "thumb ldr/add-pc r1"
+      },
+      {
+        "target": "mot_sec: Couldn't read from %llx",
+        "string": "mot_sec: Couldn't read from %llx\n",
+        "xref_address": "0x000000004808389a",
+        "xref_file_offset": "0x8389a",
+        "xref_hxd_offset": "0008389A",
+        "string_address": "0x0000000048107908",
+        "string_file_offset": "0x107908",
+        "string_hxd_offset": "00107908",
+        "instruction": "add r1, pc",
+        "via": "thumb ldr/add-pc r1"
+      }
+    ]
+  }
+]

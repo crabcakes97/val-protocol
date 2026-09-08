@@ -1,0 +1,46 @@
+[01] confidence=70 range=0x000000004808380c-0x00000000480838f4 HxD=0x0008380C-0x000838F4
+  targets: Invalid partition table!, frp, mot_sec: Couldn't read from %llx, mot_sec: FRP partition is invalid, lock anyway!, mot_sec: Invalid partition table!
+  evidence:
+    - string target: frp
+    - string target: Invalid partition table!
+    - string target: mot_sec: Invalid partition table!
+    - string target: mot_sec: FRP partition is invalid, lock anyway!
+    - string target: mot_sec: Couldn't read from %llx
+    - uses 0x100 byte window
+    - subtracts 0x100 from partition/end pointer
+    - passes read length 0x100 in w3
+    - loads last byte from stack buffer [r6,#0xff]
+    - returns equality result with ldrb/clz/lsrs
+    - called by another flow candidate
+    - called multiple times from unlock-related flow
+    - caller contains Check 'Allow OEM Unlock' gate
+  callers:
+    - caller 0x0000000048082974, HxD=00082974, call site 0x0000000048082a0a, call_HxD=00082A0A
+    - caller 0x0000000048082bee, HxD=00082BEE, call site 0x0000000048082cf8, call_HxD=00082CF8
+    - caller 0x0000000048082bee, HxD=00082BEE, call site 0x0000000048082dbc, call_HxD=00082DBC
+  structural instructions:
+    - last_byte_load_sp_0xff: 0x000000004808385a off=0x8385a HxD=0008385A raw=96f8ff00  ldrb.w r0, [r6, #0xff]
+    - last_byte_compare_zero: 0x000000004808385e off=0x8385e HxD=0008385E raw=b0fa80f0  clz r0, r0
+  key instructions:
+    0x0000000048083814 off=0x83814 HxD=00083814: mov.w    r2, #0x100
+    0x0000000048083820 off=0x83820 HxD=00083820: add      r0, pc
+    0x0000000048083822 off=0x83822 HxD=00083822: bl       #0x480516d8
+    0x0000000048083828 off=0x83828 HxD=00083828: bl       #0x48051940
+    0x000000004808383c off=0x8383c HxD=0008383C: subs.w   r4, r4, #0x100
+    0x0000000048083844 off=0x83844 HxD=00083844: mov.w    r1, #0x100
+    0x0000000048083850 off=0x83850 HxD=00083850: add      r0, pc
+    0x0000000048083852 off=0x83852 HxD=00083852: bl       #0x48084d98
+    0x0000000048083856 off=0x83856 HxD=00083856: cmp      r0, #0x10
+    0x000000004808386e off=0x8386e HxD=0008386E: add      r1, pc
+    0x0000000048083870 off=0x83870 HxD=00083870: bl       #0x4806ff38
+    0x000000004808387a off=0x8387a HxD=0008387A: bl       #0x4806ca94
+    0x000000004808387e off=0x8387e HxD=0008387E: cmp      r0, #0xa
+    0x0000000048083886 off=0x83886 HxD=00083886: add      r1, pc
+    0x0000000048083888 off=0x83888 HxD=00083888: bl       #0x4806ff38
+    0x000000004808389a off=0x8389a HxD=0008389A: add      r1, pc
+    0x000000004808389c off=0x8389c HxD=0008389C: bl       #0x4806ff38
+    0x00000000480838a8 off=0x838a8 HxD=000838A8: cmp      ip, ip
+    0x00000000480838da off=0x838da HxD=000838DA: bl       #0x48084d98
+    0x00000000480838de off=0x838de HxD=000838DE: cmp      r0, #0x10
+    0x00000000480838ea off=0x838ea HxD=000838EA: bl       #0x4803816c
+

@@ -1,0 +1,101 @@
+Unlock-flow partition string locations
+======================================
+
+Partition: md_udc
+  found: yes (1 direct, 1 embedded)
+  - direct_string VA=0x00000000480f47cc off=0xf47cc HxD=000F47CC text='md_udc'
+  - embedded_string VA=0x0000000048106da4 off=0x106da4 HxD=00106DA4 text='Failed to erase md_udc.\n'
+
+Partition: metadata
+  found: yes (1 direct, 1 embedded)
+  - direct_string VA=0x00000000480f47c0 off=0xf47c0 HxD=000F47C0 text='metadata'
+  - embedded_string VA=0x0000000048106d54 off=0x106d54 HxD=00106D54 text='Failed to erase metadata.'
+
+Partition: nvdata
+  found: no
+
+Partition: userdata
+  found: yes (1 direct, 1 embedded)
+  - embedded_string VA=0x0000000048106d70 off=0x106d70 HxD=00106D70 text='Failed to erase userdata'
+  - direct_string VA=0x0000000048106d80 off=0x106d80 HxD=00106D80 text='userdata'
+
+Partition erase operations
+==========================
+Flow 0x0000000048082974
+==================================
+
+Partition: md_udc
+  - ERASE xref=0x0000000048082a6e off=0x82a6e HxD=00082A6E string=0x00000000480f47cc string_off=0xf47cc string_HxD=000F47CC mode=direct_string
+    string text: 'md_udc'
+    call: 0x0000000048082a70 -> 0x000000004805bd88
+    result check: 0x0000000048082a74
+    failure branch: 0x0000000048082b00
+    failure message: 0x0000000048106da4 'Failed to erase md_udc.\n'
+    context:
+       0x0000000048082a68: cmp      r0, #0
+       0x0000000048082a6a: bne      #0x48082af0
+       0x0000000048082a6c: ldr      r0, [pc, #0xe8]
+       0x0000000048082a6e: add      r0, pc
+    >> 0x0000000048082a70: bl       #0x4805bd88
+       0x0000000048082a72: vst1.32  {d2[0]}, [sl], r0
+       0x0000000048082a74: cmp      r0, #0
+       0x0000000048082a76: bne      #0x48082b00
+       0x0000000048082a78: bl       #0x48083ea0
+  - ERASE xref=0x0000000048082a82 off=0x82a82 HxD=00082A82 string=0x00000000480f47cc string_off=0xf47cc string_HxD=000F47CC mode=direct_string
+    string text: 'md_udc'
+    call: 0x0000000048082a86 -> 0x0000000048052000
+    result check: 0x0000000048082a8a
+    failure branch: 0x0000000048082b20
+    failure message: 0x0000000048106da4 'Failed to erase md_udc.\n'
+    context:
+       0x0000000048082a7e: beq      #0x48082b10
+       0x0000000048082a80: ldr      r4, [pc, #0xd8]
+       0x0000000048082a82: add      r4, pc
+       0x0000000048082a84: mov      r0, r4
+    >> 0x0000000048082a86: bl       #0x48052000
+       0x0000000048082a8a: cmp      r0, #0
+       0x0000000048082a8c: beq      #0x48082b20
+       0x0000000048082a8e: ldr      r0, [pc, #0xd0]
+       0x0000000048082a90: ldr      r1, [pc, #0xd0]
+
+Partition: metadata
+  - ERASE xref=0x0000000048082a62 off=0x82a62 HxD=00082A62 string=0x00000000480f47c0 string_off=0xf47c0 string_HxD=000F47C0 mode=direct_string
+    string text: 'metadata'
+    call: 0x0000000048082a64 -> 0x000000004805bd88
+    result check: 0x0000000048082a68
+    failure branch: 0x0000000048082af0
+    failure message: 0x0000000048106d54 'Failed to erase metadata.'
+    context:
+       0x0000000048082a5c: b.w      #0x4805b64c
+       0x0000000048082a5e: pop      {r1, r2, r4, r5, r6, r7, pc}
+       0x0000000048082a60: ldr      r0, [pc, #0xf0]
+       0x0000000048082a62: add      r0, pc
+    >> 0x0000000048082a64: bl       #0x4805bd88
+       0x0000000048082a66: ldrsb.w  r2, [r0, #0x800]
+       0x0000000048082a68: cmp      r0, #0
+       0x0000000048082a6a: bne      #0x48082af0
+       0x0000000048082a6c: ldr      r0, [pc, #0xe8]
+
+Partition: userdata
+  - ERASE xref=0x0000000048082a6e off=0x82a6e HxD=00082A6E string=0x0000000048106d80 string_off=0x106d80 string_HxD=00106D80 mode=direct_string
+    string text: 'userdata'
+    call: 0x0000000048082a70 -> 0x000000004805bd88
+    result check: 0x0000000048082a74
+    failure branch: 0x0000000048082b00
+    failure message: 0x0000000048106d70 'Failed to erase userdata'
+    context:
+       0x0000000048082a68: cmp      r0, #0
+       0x0000000048082a6a: bne      #0x48082af0
+       0x0000000048082a6c: ldr      r0, [pc, #0xe8]
+       0x0000000048082a6e: add      r0, pc
+    >> 0x0000000048082a70: bl       #0x4805bd88
+       0x0000000048082a72: vst1.32  {d2[0]}, [sl], r0
+       0x0000000048082a74: cmp      r0, #0
+       0x0000000048082a76: bne      #0x48082b00
+       0x0000000048082a78: bl       #0x48083ea0
+
+Reference modes
+---------------
+direct_string: the partition name is referenced as a direct C-string via ADRP/ADD.
+embedded_string: the target appears inside a longer diagnostic string.
+address_only: a target was matched by address but not as direct text.

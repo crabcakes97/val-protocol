@@ -1,0 +1,18 @@
+flowchart TD
+  U["Unlock flow<br/>0x0000000048082974"]
+  E1["metadata<br/>xref 0x0000000048082a62<br/>call 0x0000000048082a64"]
+  U --> E1
+  F1["failure<br/>Failed to erase metadata."]
+  E1 -->|error| F1
+  E2["md_udc<br/>xref 0x0000000048082a6e<br/>call 0x0000000048082a70"]
+  U --> E2
+  F2["failure<br/>Failed to erase md_udc.\n"]
+  E2 -->|error| F2
+  E3["userdata<br/>xref 0x0000000048082a6e<br/>call 0x0000000048082a70"]
+  U --> E3
+  F3["failure<br/>Failed to erase userdata"]
+  E3 -->|error| F3
+  E4["md_udc<br/>xref 0x0000000048082a82<br/>call 0x0000000048082a86"]
+  U --> E4
+  F4["failure<br/>Failed to erase md_udc.\n"]
+  E4 -->|error| F4

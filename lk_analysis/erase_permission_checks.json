@@ -1,0 +1,422 @@
+[
+  {
+    "function_start": "0x0000000048067da2",
+    "function_end": "0x0000000048067ed4",
+    "confidence": 68,
+    "evidence": [
+      "string target: fboot_cmd_erase_permission_validate",
+      "string target: erase permission denied",
+      "string target: Disallow to erase partition %s on oem_locked device",
+      "string target: debug_token",
+      "string target: avb_custom_key",
+      "debug tag names erase permission validator",
+      "contains calls whose boolean result gates erase flow",
+      "branch edge reaches erase permission denied message"
+    ],
+    "matched_targets": [
+      "Disallow to erase partition %s on oem_locked device",
+      "avb_custom_key",
+      "debug_token",
+      "erase permission denied",
+      "fboot_cmd_erase_permission_validate"
+    ],
+    "calls": [
+      "0x000000004806ff38",
+      "0x000000004803816c",
+      "0x0000000048037fa4",
+      "0x000000004806ca94",
+      "0x000000004806cc04",
+      "0x000000004808288c",
+      "0x000000004805b64c",
+      "0x000000004805bd88",
+      "0x0000000048081f0c",
+      "0x0000000048081f78",
+      "0x000000004806cef8",
+      "0x0000000048098970",
+      "0x000000004806b834"
+    ],
+    "callers": [],
+    "name_checks": [],
+    "denied_edges": [
+      {
+        "branch_address": "0x0000000048067dde",
+        "branch_file_offset": "0x67dde",
+        "branch_hxd_offset": "00067DDE",
+        "target": "0x0000000048067e5c",
+        "target_file_offset": "0x67e5c",
+        "target_hxd_offset": "00067E5C",
+        "mnemonic": "bne"
+      },
+      {
+        "branch_address": "0x0000000048067e68",
+        "branch_file_offset": "0x67e68",
+        "branch_hxd_offset": "00067E68",
+        "target": "0x0000000048067e7c",
+        "target_file_offset": "0x67e7c",
+        "target_hxd_offset": "00067E7C",
+        "mnemonic": "cbz"
+      },
+      {
+        "branch_address": "0x0000000048067e8a",
+        "branch_file_offset": "0x67e8a",
+        "branch_hxd_offset": "00067E8A",
+        "target": "0x0000000048067e6a",
+        "target_file_offset": "0x67e6a",
+        "target_hxd_offset": "00067E6A",
+        "mnemonic": "b"
+      }
+    ],
+    "function_start_file_offset": "0x67da2",
+    "function_start_hxd_offset": "00067DA2",
+    "function_end_file_offset": "0x67ed4",
+    "function_end_hxd_offset": "00067ED4",
+    "structural_instructions": [
+      {
+        "role": "string_xref",
+        "address": "0x0000000048067daa",
+        "file_offset": "0x67daa",
+        "hxd_offset": "00067DAA",
+        "instruction": "add r1, pc",
+        "raw": "7944"
+      },
+      {
+        "role": "call",
+        "address": "0x0000000048067dac",
+        "file_offset": "0x67dac",
+        "hxd_offset": "00067DAC",
+        "instruction": "bl #0x4806ff38",
+        "raw": "08f0c4f8"
+      },
+      {
+        "role": "string_xref",
+        "address": "0x0000000048067db8",
+        "file_offset": "0x67db8",
+        "hxd_offset": "00067DB8",
+        "instruction": "add r1, pc",
+        "raw": "7944"
+      },
+      {
+        "role": "call",
+        "address": "0x0000000048067dbc",
+        "file_offset": "0x67dbc",
+        "hxd_offset": "00067DBC",
+        "instruction": "bl #0x4803816c",
+        "raw": "d0f7d6f9"
+      },
+      {
+        "role": "conditional_branch",
+        "address": "0x0000000048067dc2",
+        "file_offset": "0x67dc2",
+        "hxd_offset": "00067DC2",
+        "instruction": "beq #0x48067e34",
+        "raw": "37d0"
+      },
+      {
+        "role": "string_xref",
+        "address": "0x0000000048067dca",
+        "file_offset": "0x67dca",
+        "hxd_offset": "00067DCA",
+        "instruction": "add r1, pc",
+        "raw": "7944"
+      },
+      {
+        "role": "permission_or_helper_call",
+        "address": "0x0000000048067dcc",
+        "file_offset": "0x67dcc",
+        "hxd_offset": "00067DCC",
+        "instruction": "bl #0x4803816c",
+        "raw": "d0f7cef9"
+      },
+      {
+        "role": "conditional_branch",
+        "address": "0x0000000048067dd0",
+        "file_offset": "0x67dd0",
+        "hxd_offset": "00067DD0",
+        "instruction": "cbz r0, #0x48067e3a",
+        "raw": "98b3"
+      },
+      {
+        "role": "call",
+        "address": "0x0000000048067dd8",
+        "file_offset": "0x67dd8",
+        "hxd_offset": "00067DD8",
+        "instruction": "bl #0x48037fa4",
+        "raw": "d0f7e4f8"
+      },
+      {
+        "role": "branch_to_erase_permission_denied",
+        "address": "0x0000000048067dde",
+        "file_offset": "0x67dde",
+        "hxd_offset": "00067DDE",
+        "instruction": "bne #0x48067e5c",
+        "raw": "3dd1"
+      },
+      {
+        "role": "call",
+        "address": "0x0000000048067df6",
+        "file_offset": "0x67df6",
+        "hxd_offset": "00067DF6",
+        "instruction": "bl #0x4806ca94",
+        "raw": "04f04dfe"
+      },
+      {
+        "role": "conditional_branch",
+        "address": "0x0000000048067e02",
+        "file_offset": "0x67e02",
+        "hxd_offset": "00067E02",
+        "instruction": "bhs #0x48067e3e",
+        "raw": "1cd2"
+      },
+      {
+        "role": "call",
+        "address": "0x0000000048067e04",
+        "file_offset": "0x67e04",
+        "hxd_offset": "00067E04",
+        "instruction": "bl #0x4806cc04",
+        "raw": "04f0fefe"
+      },
+      {
+        "role": "call",
+        "address": "0x0000000048067e08",
+        "file_offset": "0x67e08",
+        "hxd_offset": "00067E08",
+        "instruction": "bl #0x4808288c",
+        "raw": "1af040fd"
+      },
+      {
+        "role": "conditional_branch",
+        "address": "0x0000000048067e0e",
+        "file_offset": "0x67e0e",
+        "hxd_offset": "00067E0E",
+        "instruction": "beq #0x48067df4",
+        "raw": "f1d0"
+      },
+      {
+        "role": "call",
+        "address": "0x0000000048067e16",
+        "file_offset": "0x67e16",
+        "hxd_offset": "00067E16",
+        "instruction": "bl #0x4805b64c",
+        "raw": "f3f719fc"
+      },
+      {
+        "role": "call",
+        "address": "0x0000000048067e1c",
+        "file_offset": "0x67e1c",
+        "hxd_offset": "00067E1C",
+        "instruction": "bl #0x4805bd88",
+        "raw": "f3f7b4ff"
+      },
+      {
+        "role": "conditional_branch",
+        "address": "0x0000000048067e22",
+        "file_offset": "0x67e22",
+        "hxd_offset": "00067E22",
+        "instruction": "bne #0x48067df4",
+        "raw": "e7d1"
+      },
+      {
+        "role": "call",
+        "address": "0x0000000048067e2c",
+        "file_offset": "0x67e2c",
+        "hxd_offset": "00067E2C",
+        "instruction": "bl #0x4805b64c",
+        "raw": "f3f70efc"
+      },
+      {
+        "role": "permission_or_helper_call",
+        "address": "0x0000000048067e34",
+        "file_offset": "0x67e34",
+        "hxd_offset": "00067E34",
+        "instruction": "bl #0x48081f0c",
+        "raw": "1af06af8"
+      },
+      {
+        "role": "conditional_branch",
+        "address": "0x0000000048067e38",
+        "file_offset": "0x67e38",
+        "hxd_offset": "00067E38",
+        "instruction": "cbz r0, #0x48067e42",
+        "raw": "18b1"
+      },
+      {
+        "role": "call",
+        "address": "0x0000000048067e42",
+        "file_offset": "0x67e42",
+        "hxd_offset": "00067E42",
+        "instruction": "bl #0x48081f78",
+        "raw": "1af099f8"
+      },
+      {
+        "role": "conditional_branch",
+        "address": "0x0000000048067e48",
+        "file_offset": "0x67e48",
+        "hxd_offset": "00067E48",
+        "instruction": "bne #0x48067e3a",
+        "raw": "f7d1"
+      },
+      {
+        "role": "string_xref",
+        "address": "0x0000000048067e52",
+        "file_offset": "0x67e52",
+        "hxd_offset": "00067E52",
+        "instruction": "add r1, pc",
+        "raw": "7944"
+      },
+      {
+        "role": "call",
+        "address": "0x0000000048067e54",
+        "file_offset": "0x67e54",
+        "hxd_offset": "00067E54",
+        "instruction": "bl #0x4805b64c",
+        "raw": "f3f7fafb"
+      },
+      {
+        "role": "call",
+        "address": "0x0000000048067e60",
+        "file_offset": "0x67e60",
+        "hxd_offset": "00067E60",
+        "instruction": "bl #0x4806cef8",
+        "raw": "05f04af8"
+      },
+      {
+        "role": "permission_or_helper_call",
+        "address": "0x0000000048067e64",
+        "file_offset": "0x67e64",
+        "hxd_offset": "00067E64",
+        "instruction": "bl #0x4808288c",
+        "raw": "1af012fd"
+      },
+      {
+        "role": "branch_to_erase_permission_denied",
+        "address": "0x0000000048067e68",
+        "file_offset": "0x67e68",
+        "hxd_offset": "00067E68",
+        "instruction": "cbz r0, #0x48067e7c",
+        "raw": "40b1"
+      },
+      {
+        "role": "call",
+        "address": "0x0000000048067e6e",
+        "file_offset": "0x67e6e",
+        "hxd_offset": "00067E6E",
+        "instruction": "bl #0x48098970",
+        "raw": "30f07ffd"
+      },
+      {
+        "role": "string_xref",
+        "address": "0x0000000048067e84",
+        "file_offset": "0x67e84",
+        "hxd_offset": "00067E84",
+        "instruction": "add r1, pc",
+        "raw": "7944"
+      },
+      {
+        "role": "call",
+        "address": "0x0000000048067e86",
+        "file_offset": "0x67e86",
+        "hxd_offset": "00067E86",
+        "instruction": "bl #0x4805b64c",
+        "raw": "f3f7e1fb"
+      },
+      {
+        "role": "permission_or_helper_call",
+        "address": "0x0000000048067ec8",
+        "file_offset": "0x67ec8",
+        "hxd_offset": "00067EC8",
+        "instruction": "bl #0x4803816c",
+        "raw": "d0f750f9"
+      },
+      {
+        "role": "conditional_branch",
+        "address": "0x0000000048067ecc",
+        "file_offset": "0x67ecc",
+        "hxd_offset": "00067ECC",
+        "instruction": "cbnz r0, #0x48067ed2",
+        "raw": "08b9"
+      },
+      {
+        "role": "call",
+        "address": "0x0000000048067ece",
+        "file_offset": "0x67ece",
+        "hxd_offset": "00067ECE",
+        "instruction": "bl #0x4806b834",
+        "raw": "03f0b1fc"
+      }
+    ],
+    "xrefs": [
+      {
+        "target": "fboot_cmd_erase_permission_validate",
+        "string": "fboot_cmd_erase_permission_validate\n",
+        "xref_address": "0x0000000048067daa",
+        "xref_file_offset": "0x67daa",
+        "xref_hxd_offset": "00067DAA",
+        "string_address": "0x00000000480f9ab8",
+        "string_file_offset": "0xf9ab8",
+        "string_hxd_offset": "000F9AB8",
+        "instruction": "add r1, pc",
+        "via": "thumb ldr/add-pc r1"
+      },
+      {
+        "target": "avb_custom_key",
+        "string": "avb_custom_key",
+        "xref_address": "0x0000000048067db8",
+        "xref_file_offset": "0x67db8",
+        "xref_hxd_offset": "00067DB8",
+        "string_address": "0x00000000480f4784",
+        "string_file_offset": "0xf4784",
+        "string_hxd_offset": "000F4784",
+        "instruction": "add r1, pc",
+        "via": "thumb ldr/add-pc r1"
+      },
+      {
+        "target": "fboot_cmd_erase_permission_validate",
+        "string": "fboot_cmd_erase_permission_validate\n",
+        "xref_address": "0x0000000048067db8",
+        "xref_file_offset": "0x67db8",
+        "xref_hxd_offset": "00067DB8",
+        "string_address": "0x00000000480f9ab8",
+        "string_file_offset": "0xf9ab8",
+        "string_hxd_offset": "000F9AB8",
+        "instruction": "add r1, pc",
+        "via": "thumb ldr/add-pc r1"
+      },
+      {
+        "target": "debug_token",
+        "string": "debug_token",
+        "xref_address": "0x0000000048067dca",
+        "xref_file_offset": "0x67dca",
+        "xref_hxd_offset": "00067DCA",
+        "string_address": "0x00000000480f4794",
+        "string_file_offset": "0xf4794",
+        "string_hxd_offset": "000F4794",
+        "instruction": "add r1, pc",
+        "via": "thumb ldr/add-pc r1"
+      },
+      {
+        "target": "Disallow to erase partition %s on oem_locked device",
+        "string": "Disallow to erase partition %s on oem_locked device",
+        "xref_address": "0x0000000048067e52",
+        "xref_file_offset": "0x67e52",
+        "xref_hxd_offset": "00067E52",
+        "string_address": "0x00000000480f9ae0",
+        "string_file_offset": "0xf9ae0",
+        "string_hxd_offset": "000F9AE0",
+        "instruction": "add r1, pc",
+        "via": "thumb ldr/add-pc r1"
+      },
+      {
+        "target": "erase permission denied",
+        "string": "erase permission denied",
+        "xref_address": "0x0000000048067e84",
+        "xref_file_offset": "0x67e84",
+        "xref_hxd_offset": "00067E84",
+        "string_address": "0x00000000480f9b44",
+        "string_file_offset": "0xf9b44",
+        "string_hxd_offset": "000F9B44",
+        "instruction": "add r1, pc",
+        "via": "thumb ldr/add-pc r1"
+      }
+    ]
+  }
+]

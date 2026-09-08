@@ -1,0 +1,15 @@
+flowchart TD
+  U["Unlock flow<br/>0x0000000048082974"]
+  C["BL call site<br/>0x0000000048082a0a"]
+  U --> C
+  C --> F
+  F["FRP checker<br/>0x000000004808380c<br/>confidence 70"]
+  P["Locate frp partition"]
+  R["Read last 0x100 bytes"]
+  B["Load [sp,#0xff]"]
+  Z["byte == 0"]
+  L["Return lock/apply rule"]
+  A["Return allowed/no message"]
+  F --> P --> R --> B --> Z
+  Z -->|"yes"| L
+  Z -->|"no"| A

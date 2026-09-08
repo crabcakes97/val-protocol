@@ -117,7 +117,7 @@ ramdump/config/hw are included. Proven: re-runs reproduce byte-identical.
 
 ## 5. KREE / hypervisor live workflow (no flash, root shell)
 
-Measured ABI (from `kree_abi_recon.py` against live-pulled libs; `uree`
+Measured ABI (from `kree shit/kree_abi_recon.py` against live-pulled libs; `uree`
 opens `/dev/gz_kree`, TEEC libs use `/dev/mobicore-user` — separate doors):
 
 - `0x5401` create (16B `{0, service-name}`), `0x5402` close,
@@ -134,9 +134,10 @@ opens `/dev/gz_kree`, TEEC libs use `/dev/mobicore-user` — separate doors):
   self-test), `5` (chunk mem), `C` (secure storage). Never `4` (abort).
 
 ```bash
-python kree_abi_recon.py libgz_uree.so -o kree_abi.json
-# freestanding probers (no NDK: as+ld -static, push, run as root):
-aarch64-linux-gnu-as -o k.o kree_share.S
+python "kree shit/kree_abi_recon.py" libgz_uree.so -o kree_abi.json
+# freestanding probers (no NDK: as+ld -static, push, run as root) live in
+# "kree shit/" (kree_share.S = live-proven service-name flow):
+aarch64-linux-gnu-as -o k.o "kree shit/kree_share.S"
 aarch64-linux-gnu-ld -static -e _start -o kree_share k.o
 adb push kree_share /data/local/tmp/ && adb shell 'su -c /data/local/tmp/kree_share'
 ```

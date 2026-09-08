@@ -1,0 +1,12 @@
+flowchart TD
+  C["cmd_erase_permission_check<br/>0x0000000048067da2<br/>confidence 68"]
+  A["Read fastboot argument<br/>[cmd + 0x10] + 1"]
+  N["Fixed name checks"]
+  G["Permission gate / partition table attribute"]
+  OK["Proceed erase"]
+  DENY["erase permission denied"]
+  INV["Invalid partition name"]
+  C --> A --> N --> G
+  G -->|"allowed"| OK
+  G -->|"denied"| DENY
+  G -->|"not found"| INV

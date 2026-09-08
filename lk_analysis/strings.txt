@@ -1,0 +1,856 @@
+0x00000000480b2550  off=0xb2550  target='serialno'
+  string: 'serialno'
+  context: device tree.....android.Warning: can't add firmware/android node in device tree.....hardware....serialno....android,firmware....ext4....raw.fat.raw_data....Read keypad from LK:  kpd-hw-pwrkey 
+
+0x00000000480cdd40  off=0xcdd40  target='serialno'
+  string: 'androidboot.serialno='
+  context: [ERROR] CMDLINE overflow oversize:%d....[ERROR] CMDLINE overflow ...[ERROR] CMDLINE overflow....androidboot.serialno=...[cmdline clear] extract %s fails....[cmdline clear] clear str size=%d...
+
+0x00000000480cdd4c  off=0xcdd4c  target='serialno'
+  string: 'serialno='
+  context: INE overflow oversize:%d....[ERROR] CMDLINE overflow ...[ERROR] CMDLINE overflow....androidboot.serialno=...[cmdline clear] extract %s fails....[cmdline clear] clear str size=%d...cmdline clea
+
+0x00000000480d0578  off=0xd0578  target='userdata'
+  string: "%s: Can't get userdata partition index\n"
+  context: oc return NULL..%s: read entries(part_id=%d), err(%d)...%s: Can't get mrdump partition index....%s: Can't get userdata partition index..mrdump partition already resized to 16MB....Unknown mrdu
+
+0x00000000480d0586  off=0xd0586  target='userdata'
+  string: 'userdata partition index\n'
+  context: ..%s: read entries(part_id=%d), err(%d)...%s: Can't get mrdump partition index....%s: Can't get userdata partition index..mrdump partition already resized to 16MB....Unknown mrdump partition s
+
+0x00000000480d06a0  off=0xd06a0  target='userdata'
+  string: 'userdata partition erase failed\n'
+  context:  resized....unknown mrdump partition resize method (%d).....gpt_partition_table_update failed...userdata partition erase failed.....mrdump_partition_resize: start resize mrdump partition..%s: 
+
+0x00000000480d2dac  off=0xd2dac  target='barcode'
+  string: 'barcode_screen'
+  context: s]..    Console [NULL: %s]..    Console [default: %s]...Kernel console menu item content: %s....barcode_screen..Received Volume Up - %s.....No selectable menu item.....Received Volume Down - C
+
+0x00000000480d2e1c  off=0xd2e1c  target='barcode'
+  string: 'Barcode is too long for the display\n'
+  context: Received Volume Up - %s.....No selectable menu item.....Received Volume Down - CS %s, last %s...Barcode is too long for the display.....IMEI/MEID: %s...SKU: %s.DATE (mm-dd-yyyy): %s...Serial N
+
+0x00000000480d2e44  off=0xd2e44  target='imei'
+  string: 'IMEI/MEID: %s'
+  context: e menu item.....Received Volume Down - CS %s, last %s...Barcode is too long for the display.....IMEI/MEID: %s...SKU: %s.DATE (mm-dd-yyyy): %s...Serial Number: %s...Press Vol Up or Vol Down to 
+
+0x00000000480d2e44  off=0xd2e44  target='meid'
+  string: 'IMEI/MEID: %s'
+  context: e menu item.....Received Volume Down - CS %s, last %s...Barcode is too long for the display.....IMEI/MEID: %s...SKU: %s.DATE (mm-dd-yyyy): %s...Serial Number: %s...Press Vol Up or Vol Down to 
+
+0x00000000480d2e49  off=0xd2e49  target='meid'
+  string: 'MEID: %s'
+  context: u item.....Received Volume Down - CS %s, last %s...Barcode is too long for the display.....IMEI/MEID: %s...SKU: %s.DATE (mm-dd-yyyy): %s...Serial Number: %s...Press Vol Up or Vol Down to exit.
+
+0x00000000480d2e54  off=0xd2e54  target='sku'
+  string: 'SKU: %s'
+  context: Received Volume Down - CS %s, last %s...Barcode is too long for the display.....IMEI/MEID: %s...SKU: %s.DATE (mm-dd-yyyy): %s...Serial Number: %s...Press Vol Up or Vol Down to exit....Unlock B
+
+0x00000000480d3440  off=0xd3440  target='barcode'
+  string: 'barcodes'
+  context: recoverymode....Recovery mode...poweroff....Power off...Factory.switchconsole...Switch console..barcodes....Barcodes....Switch_tools_mode...Switch Tools mode...bptools.BP tools....qcom....Qcom
+
+0x00000000480d344c  off=0xd344c  target='barcode'
+  string: 'Barcodes'
+  context: ....Recovery mode...poweroff....Power off...Factory.switchconsole...Switch console..barcodes....Barcodes....Switch_tools_mode...Switch Tools mode...bptools.BP tools....qcom....Qcom....bootload
+
+0x00000000480d3650  off=0xd3650  target='esimid'
+  string: 'esimid'
+  context: erkey in failure interface to fix it....If you try to fix it, Please try it at least 6 times....esimid..ESIMID: %s..Stop boot, shutdown device..Continue boot...orange2.yellow2.redeio1.red1....
+
+0x00000000480d3658  off=0xd3658  target='esimid'
+  string: 'ESIMID: %s'
+  context:  failure interface to fix it....If you try to fix it, Please try it at least 6 times....esimid..ESIMID: %s..Stop boot, shutdown device..Continue boot...orange2.yellow2.redeio1.red1....yellow1.
+
+0x00000000480de480  off=0xde480  target='userdata'
+  string: 'userdata'
+  context: logo........LOGO........NULL........NULL........system......SYSTEM......android.....ANDROID.....userdata....USERDATA....usrdata.....USRDATA.....frp.........FRP.........NULL........NULL........
+
+0x00000000480de48c  off=0xde48c  target='userdata'
+  string: 'USERDATA'
+  context: LOGO........NULL........NULL........system......SYSTEM......android.....ANDROID.....userdata....USERDATA....usrdata.....USRDATA.....frp.........FRP.........NULL........NULL........scp1........
+
+0x00000000480de4b0  off=0xde4b0  target='frp'
+  string: 'frp'
+  context: system......SYSTEM......android.....ANDROID.....userdata....USERDATA....usrdata.....USRDATA.....frp.........FRP.........NULL........NULL........scp1........SCP1........NULL........NULL........
+
+0x00000000480de4bc  off=0xde4bc  target='frp'
+  string: 'FRP'
+  context: SYSTEM......android.....ANDROID.....userdata....USERDATA....usrdata.....USRDATA.....frp.........FRP.........NULL........NULL........scp1........SCP1........NULL........NULL........scp2........
+
+0x00000000480e172c  off=0xe172c  target='barcode'
+  string: 'barcode'
+  context: utag_puts HWREV FAILURE.....utag UTAG_HWREV is not defined or not empty.....product.ro.carrier..barcode.bootmode....bootmode UTAG is set to factory.....BAMC....ISSI....EMLSI...MACRONIX....NUMO
+
+0x00000000480e2248  off=0xe2248  target='barcode'
+  string: 'barcode_setting'
+  context: vphpwr support..Fail to check if bypass.....factory_otv_bypass..didn't find setting for bypass..barcode_setting.No barcode setting, use default scale 4.....length_scale....No barcode setting, 
+
+0x00000000480e2258  off=0xe2258  target='barcode'
+  string: 'No barcode setting, use default scale 4\n'
+  context: Fail to check if bypass.....factory_otv_bypass..didn't find setting for bypass..barcode_setting.No barcode setting, use default scale 4.....length_scale....No barcode setting, use default widt
+
+0x00000000480e225b  off=0xe225b  target='barcode'
+  string: 'barcode setting, use default scale 4\n'
+  context: l to check if bypass.....factory_otv_bypass..didn't find setting for bypass..barcode_setting.No barcode setting, use default scale 4.....length_scale....No barcode setting, use default width 3
+
+0x00000000480e2294  off=0xe2294  target='barcode'
+  string: 'No barcode setting, use default width 3\n'
+  context: setting for bypass..barcode_setting.No barcode setting, use default scale 4.....length_scale....No barcode setting, use default width 3.....line_width..font_setting....Font not set!...font....
+
+0x00000000480e2297  off=0xe2297  target='barcode'
+  string: 'barcode setting, use default width 3\n'
+  context: ting for bypass..barcode_setting.No barcode setting, use default scale 4.....length_scale....No barcode setting, use default width 3.....line_width..font_setting....Font not set!...font....men
+
+0x00000000480e2b73  off=0xe2b73  target='barcode'
+  string: '\x01barcode_setting'
+  context: .............................devices@6765........font_setting...............3courier,10..........barcode_setting............8...............E............menu_setting...............P...........
+
+0x00000000480e2b74  off=0xe2b74  target='barcode'
+  string: 'barcode_setting'
+  context: ............................devices@6765........font_setting...............3courier,10..........barcode_setting............8...............E............menu_setting...............P............
+
+0x00000000480e2f67  off=0xe2f67  target='barcode'
+  string: '\x01barcode_setting'
+  context: ............e............factory_cable..............e............usb_zlp............z............barcode_setting............8...............E............font_setting...............3courier,10.
+
+0x00000000480e2f68  off=0xe2f68  target='barcode'
+  string: 'barcode_setting'
+  context: ...........e............factory_cable..............e............usb_zlp............z............barcode_setting............8...............E............font_setting...............3courier,10..
+
+0x00000000480f2b5c  off=0xf2b5c  target='serialno'
+  string: "Device serial number\n(used interchangably with 'serialno')"
+  context: abnormal slot.  0 - slot a.  1 - slot b.  other - Reserved for the future...^(100|[1-9]?[0-9])$.Device serial number.(used interchangably with 'serialno')..^[[:print:]]*$..To indicate the devi
+
+0x00000000480f2b8c  off=0xf2b8c  target='serialno'
+  string: "serialno')"
+  context: - Reserved for the future...^(100|[1-9]?[0-9])$.Device serial number.(used interchangably with 'serialno')..^[[:print:]]*$..To indicate the device is a bare board (true|false) such that unnece
+
+0x00000000480f2e40  off=0xf2e40  target='sku'
+  string: 'carrier_sku'
+  context: olor....^[[:alpha:]]*$..carrier.Carrier IDs, see http://goo.gl/lojLh3...^[^ =[:cntrl:]]{1,32}$..carrier_sku.Device stock-keeping unit for Carrier.(less or equal than 15 alphanmueric or hyphen 
+
+0x00000000480f2e48  off=0xf2e48  target='sku'
+  string: 'sku'
+  context: ^[[:alpha:]]*$..carrier.Carrier IDs, see http://goo.gl/lojLh3...^[^ =[:cntrl:]]{1,32}$..carrier_sku.Device stock-keeping unit for Carrier.(less or equal than 15 alphanmueric or hyphen characte
+
+0x00000000480f327c  off=0xf327c  target='esimid'
+  string: 'Device ESIMID'
+  context:  in kernel display driver.(by default this is enabled as long as a display panel is attached)...Device ESIMID...^[[:alnum:]]{1,63}$.factory_kill_timeout....Timeout to shutdown in factory if us
+
+0x00000000480f3283  off=0xf3283  target='esimid'
+  string: 'ESIMID'
+  context: nel display driver.(by default this is enabled as long as a display panel is attached)...Device ESIMID...^[[:alnum:]]{1,63}$.factory_kill_timeout....Timeout to shutdown in factory if usb is di
+
+0x00000000480f3478  off=0xf3478  target='iccid'
+  string: 'iccid'
+  context: tboot oem config')..Hardware revision override.(e.g. P1B, EVT, DVT2BD, PVT).Programmable HWIDs..iccid...Device ICCID....imei....Device IMEI.(15 decimal digits including the correct checksum)..
+
+0x00000000480f3480  off=0xf3480  target='iccid'
+  string: 'Device ICCID'
+  context: m config')..Hardware revision override.(e.g. P1B, EVT, DVT2BD, PVT).Programmable HWIDs..iccid...Device ICCID....imei....Device IMEI.(15 decimal digits including the correct checksum)..imei2...
+
+0x00000000480f3487  off=0xf3487  target='iccid'
+  string: 'ICCID'
+  context: g')..Hardware revision override.(e.g. P1B, EVT, DVT2BD, PVT).Programmable HWIDs..iccid...Device ICCID....imei....Device IMEI.(15 decimal digits including the correct checksum)..imei2...Device 
+
+0x00000000480f3490  off=0xf3490  target='imei'
+  string: 'imei'
+  context: ware revision override.(e.g. P1B, EVT, DVT2BD, PVT).Programmable HWIDs..iccid...Device ICCID....imei....Device IMEI.(15 decimal digits including the correct checksum)..imei2...Device IMEI2.(15
+
+0x00000000480f3498  off=0xf3498  target='imei'
+  string: 'Device IMEI\n(15 decimal digits including the correct checksum)'
+  context: ision override.(e.g. P1B, EVT, DVT2BD, PVT).Programmable HWIDs..iccid...Device ICCID....imei....Device IMEI.(15 decimal digits including the correct checksum)..imei2...Device IMEI2.(15 decimal
+
+0x00000000480f349f  off=0xf349f  target='imei'
+  string: 'IMEI\n(15 decimal digits including the correct checksum)'
+  context: verride.(e.g. P1B, EVT, DVT2BD, PVT).Programmable HWIDs..iccid...Device ICCID....imei....Device IMEI.(15 decimal digits including the correct checksum)..imei2...Device IMEI2.(15 decimal digits
+
+0x00000000480f34d8  off=0xf34d8  target='imei'
+  string: 'imei2'
+  context: iccid...Device ICCID....imei....Device IMEI.(15 decimal digits including the correct checksum)..imei2...Device IMEI2.(15 decimal digits including the correct checksum).kernel.version..kernel v
+
+0x00000000480f34d8  off=0xf34d8  target='imei2'
+  string: 'imei2'
+  context: iccid...Device ICCID....imei....Device IMEI.(15 decimal digits including the correct checksum)..imei2...Device IMEI2.(15 decimal digits including the correct checksum).kernel.version..kernel v
+
+0x00000000480f34e0  off=0xf34e0  target='imei'
+  string: 'Device IMEI2\n(15 decimal digits including the correct checksum)'
+  context: Device ICCID....imei....Device IMEI.(15 decimal digits including the correct checksum)..imei2...Device IMEI2.(15 decimal digits including the correct checksum).kernel.version..kernel version s
+
+0x00000000480f34e0  off=0xf34e0  target='imei2'
+  string: 'Device IMEI2\n(15 decimal digits including the correct checksum)'
+  context: Device ICCID....imei....Device IMEI.(15 decimal digits including the correct checksum)..imei2...Device IMEI2.(15 decimal digits including the correct checksum).kernel.version..kernel version s
+
+0x00000000480f34e7  off=0xf34e7  target='imei'
+  string: 'IMEI2\n(15 decimal digits including the correct checksum)'
+  context: ICCID....imei....Device IMEI.(15 decimal digits including the correct checksum)..imei2...Device IMEI2.(15 decimal digits including the correct checksum).kernel.version..kernel version string.(
+
+0x00000000480f34e7  off=0xf34e7  target='imei2'
+  string: 'IMEI2\n(15 decimal digits including the correct checksum)'
+  context: ICCID....imei....Device IMEI.(15 decimal digits including the correct checksum)..imei2...Device IMEI2.(15 decimal digits including the correct checksum).kernel.version..kernel version string.(
+
+0x00000000480f380c  off=0xf380c  target='meid'
+  string: 'meid'
+  context: al messages.  E - add error messages.  I - add informational messages.  D - add debug messages..meid....Device MEID.(14 hexadecimal or 18 decimal digits)...memtest_blocks..Number of memory blo
+
+0x00000000480f3814  off=0xf3814  target='meid'
+  string: 'Device MEID\n(14 hexadecimal or 18 decimal digits)'
+  context: ges.  E - add error messages.  I - add informational messages.  D - add debug messages..meid....Device MEID.(14 hexadecimal or 18 decimal digits)...memtest_blocks..Number of memory blocks allo
+
+0x00000000480f381b  off=0xf381b  target='meid'
+  string: 'MEID\n(14 hexadecimal or 18 decimal digits)'
+  context:  - add error messages.  I - add informational messages.  D - add debug messages..meid....Device MEID.(14 hexadecimal or 18 decimal digits)...memtest_blocks..Number of memory blocks allocated t
+
+0x00000000480f3be4  off=0xf3be4  target='barcode'
+  string: "Device serial number\n(used interchangably with 'barcode')"
+  context: dated on each boot).ro.carrier value passed from kernel.(automatically updated on each boot)....Device serial number.(used interchangably with 'barcode')...[^[:cntrl:]]....Device stock-keeping
+
+0x00000000480f3c14  off=0xf3c14  target='barcode'
+  string: "barcode')"
+  context:  kernel.(automatically updated on each boot)....Device serial number.(used interchangably with 'barcode')...[^[:cntrl:]]....Device stock-keeping unit.(less or equal than 15 alphanumeric or hyp
+
+0x00000000480f4784  off=0xf4784  target='avb_custom_key'
+  string: 'avb_custom_key'
+  context: otd to flash....DAP flashing is not supported!..Partition not found.Failed to erase partition...avb_custom_key..debug_token.Failed to erase partition %s....metadata....md_udc..Erase partition 
+
+0x00000000480f4794  off=0xf4794  target='debug_token'
+  string: 'debug_token'
+  context: DAP flashing is not supported!..Partition not found.Failed to erase partition...avb_custom_key..debug_token.Failed to erase partition %s....metadata....md_udc..Erase partition %s..utagsBackup.
+
+0x00000000480f47c0  off=0xf47c0  target='metadata'
+  string: 'metadata'
+  context: t found.Failed to erase partition...avb_custom_key..debug_token.Failed to erase partition %s....metadata....md_udc..Erase partition %s..utagsBackup.Succeeded to erase partition %s.....invalid 
+
+0x00000000480f47cc  off=0xf47cc  target='md_udc'
+  string: 'md_udc'
+  context: ed to erase partition...avb_custom_key..debug_token.Failed to erase partition %s....metadata....md_udc..Erase partition %s..utagsBackup.Succeeded to erase partition %s.....invalid image!..Unab
+
+0x00000000480f7e38  off=0xf7e38  target='frp'
+  string: 'frp'
+  context: validate_utag_range.validate_hw_utag_name_full..oem_utags_ext...apply_current_path..0.5._a,_b...frp.no protection (%d)..protected (%d)..no protection (err)."%s"....Malformed command: %s...Malf
+
+0x00000000480f7f48  off=0xf7f48  target='version-bootloader'
+  string: 'version-bootloader'
+  context: t found.bypassing handler for %s....%s: ....%s[%d]: ....Done....listed above....%s: not found...version-bootloader..board...secure..storage-type....cid.channelid...uid.securestate.factory-mode
+
+0x00000000480f7f90  off=0xf7f90  target='securestate'
+  string: 'securestate'
+  context: bove....%s: not found...version-bootloader..board...secure..storage-type....cid.channelid...uid.securestate.factory-modes...iswarrantyvoid..max-download-size...max-sparse-size.current-time....
+
+0x00000000480f7fac  off=0xf7fac  target='iswarrantyvoid'
+  string: 'iswarrantyvoid'
+  context: ion-bootloader..board...secure..storage-type....cid.channelid...uid.securestate.factory-modes...iswarrantyvoid..max-download-size...max-sparse-size.current-time....poweroffalarm...version-base
+
+0x00000000480f7fbc  off=0xf7fbc  target='max-download-size'
+  string: 'max-download-size'
+  context: board...secure..storage-type....cid.channelid...uid.securestate.factory-modes...iswarrantyvoid..max-download-size...max-sparse-size.current-time....poweroffalarm...version-baseband....partitio
+
+0x00000000480f8034  off=0xf8034  target='frp'
+  string: 'frp-state'
+  context: sparse-size.current-time....poweroffalarm...version-baseband....partition-type..partition-size..frp-state...current-slot....running-boot-lun....running-slot....slot-successful.slot-bootable...
+
+0x00000000480f8034  off=0xf8034  target='frp-state'
+  string: 'frp-state'
+  context: sparse-size.current-time....poweroffalarm...version-baseband....partition-type..partition-size..frp-state...current-slot....running-boot-lun....running-slot....slot-successful.slot-bootable...
+
+0x00000000480f8114  off=0xf8114  target='is-userspace'
+  string: 'is-userspace'
+  context: s...slot-count..has-slot....erase-block-size....logical-block-size..has-partition...pcb-part-no.is-userspace....is-logical..snapshot-update-status..fdr-allowed.fboot_usb_write_queue...fboot_us
+
+0x00000000480f8340  off=0xf8340  target='sku'
+  string: 'SKU: %s\n'
+  context:  Fastboot Interface. ...earlyprintk.earlycon....androidboot.console=....printk.disable_uart=....SKU: %s.....NUM_OF_SIMS: %s.....auto....%s:%s...,921600n1...bp-tools.... androidboot.serialno=..
+
+0x00000000480f8388  off=0xf8388  target='serialno'
+  string: ' androidboot.serialno='
+  context: printk.disable_uart=....SKU: %s.....NUM_OF_SIMS: %s.....auto....%s:%s...,921600n1...bp-tools.... androidboot.serialno=.. androidboot.mode=.. androidboot.hwrev=. androidboot.radio=. androidboot
+
+0x00000000480f8395  off=0xf8395  target='serialno'
+  string: 'serialno='
+  context: e_uart=....SKU: %s.....NUM_OF_SIMS: %s.....auto....%s:%s...,921600n1...bp-tools.... androidboot.serialno=.. androidboot.mode=.. androidboot.hwrev=. androidboot.radio=. androidboot.revision=..0
+
+0x00000000480f857c  off=0xf857c  target='sku'
+  string: ' androidboot.hardware.sku='
+  context: channel ID from devtree.???.undefined...latam...emea....na..asia.... androidboot.build_vars=.... androidboot.hardware.sku=.. androidboot.num-sims=.. androidboot.memtest=... androidboot.powerof
+
+0x00000000480f8592  off=0xf8592  target='sku'
+  string: 'sku='
+  context: e.???.undefined...latam...emea....na..asia.... androidboot.build_vars=.... androidboot.hardware.sku=.. androidboot.num-sims=.. androidboot.memtest=... androidboot.poweroff_alarm=....app/mbm/li
+
+0x00000000480f898c  off=0xf898c  target='barcode'
+  string: 'Volume up key pressed for BARCODE screen'
+  context: s mode is not allowed due to cid invalid....preloader set fastboot mode.Volume down key pressed.Volume up key pressed for BARCODE screen....UTAG "%s" configured as fastboot....Reboot mode set 
+
+0x00000000480f89a6  off=0xf89a6  target='barcode'
+  string: 'BARCODE screen'
+  context: to cid invalid....preloader set fastboot mode.Volume down key pressed.Volume up key pressed for BARCODE screen....UTAG "%s" configured as fastboot....Reboot mode set to fastboot.Entering norma
+
+0x00000000480f8a38  off=0xf8a38  target='nvdata'
+  string: 'No need to erase nvdata region on regular bootup\n'
+  context: ....Reboot mode set to fastboot.Entering normal Android mode....Sticky to fastboot mode.invalid.No need to erase nvdata region on regular bootup....nvdata..Erasing nvdata is not allowed even i
+
+0x00000000480f8a49  off=0xf8a49  target='nvdata'
+  string: 'nvdata region on regular bootup\n'
+  context: et to fastboot.Entering normal Android mode....Sticky to fastboot mode.invalid.No need to erase nvdata region on regular bootup....nvdata..Erasing nvdata is not allowed even if it requires to!
+
+0x00000000480f8a6c  off=0xf8a6c  target='nvdata'
+  string: 'nvdata'
+  context: oid mode....Sticky to fastboot mode.invalid.No need to erase nvdata region on regular bootup....nvdata..Erasing nvdata is not allowed even if it requires to!...Erase NVDATA partition failed...
+
+0x00000000480f8a74  off=0xf8a74  target='nvdata'
+  string: 'Erasing nvdata is not allowed even if it requires to!'
+  context: ....Sticky to fastboot mode.invalid.No need to erase nvdata region on regular bootup....nvdata..Erasing nvdata is not allowed even if it requires to!...Erase NVDATA partition failed...powerup 
+
+0x00000000480f8a7c  off=0xf8a7c  target='nvdata'
+  string: 'nvdata is not allowed even if it requires to!'
+  context: ky to fastboot mode.invalid.No need to erase nvdata region on regular bootup....nvdata..Erasing nvdata is not allowed even if it requires to!...Erase NVDATA partition failed...powerup reason I
+
+0x00000000480f8aac  off=0xf8aac  target='nvdata'
+  string: 'Erase NVDATA partition failed.\n'
+  context: ata region on regular bootup....nvdata..Erasing nvdata is not allowed even if it requires to!...Erase NVDATA partition failed...powerup reason INVALID_TURN_ON: power down......Power up reason 
+
+0x00000000480f8ab2  off=0xf8ab2  target='nvdata'
+  string: 'NVDATA partition failed.\n'
+  context: gion on regular bootup....nvdata..Erasing nvdata is not allowed even if it requires to!...Erase NVDATA partition failed...powerup reason INVALID_TURN_ON: power down......Power up reason is: 0x
+
+0x00000000480f8d04  off=0xf8d04  target='imei'
+  string: 'IMEI/MEID: %s\n'
+  context: ....Entering %s mode fails, falling into its fail-safe mode.....Fall-through from %s boot mode..IMEI/MEID: %s...000000000000000.Failed to read UTAG IMEI, using default IMEI....Failed to read U
+
+0x00000000480f8d04  off=0xf8d04  target='meid'
+  string: 'IMEI/MEID: %s\n'
+  context: ....Entering %s mode fails, falling into its fail-safe mode.....Fall-through from %s boot mode..IMEI/MEID: %s...000000000000000.Failed to read UTAG IMEI, using default IMEI....Failed to read U
+
+0x00000000480f8d09  off=0xf8d09  target='meid'
+  string: 'MEID: %s\n'
+  context: ntering %s mode fails, falling into its fail-safe mode.....Fall-through from %s boot mode..IMEI/MEID: %s...000000000000000.Failed to read UTAG IMEI, using default IMEI....Failed to read UTAG S
+
+0x00000000480f8d24  off=0xf8d24  target='imei'
+  string: 'Failed to read UTAG IMEI, using default IMEI\n'
+  context: ing into its fail-safe mode.....Fall-through from %s boot mode..IMEI/MEID: %s...000000000000000.Failed to read UTAG IMEI, using default IMEI....Failed to read UTAG SKU, using default SKU..DATE
+
+0x00000000480f8d38  off=0xf8d38  target='imei'
+  string: 'IMEI, using default IMEI\n'
+  context: fe mode.....Fall-through from %s boot mode..IMEI/MEID: %s...000000000000000.Failed to read UTAG IMEI, using default IMEI....Failed to read UTAG SKU, using default SKU..DATE: %s....01-01-1970..
+
+0x00000000480f8d4c  off=0xf8d4c  target='imei'
+  string: 'IMEI\n'
+  context: ough from %s boot mode..IMEI/MEID: %s...000000000000000.Failed to read UTAG IMEI, using default IMEI....Failed to read UTAG SKU, using default SKU..DATE: %s....01-01-1970..Failed to read UTAG 
+
+0x00000000480f8d54  off=0xf8d54  target='sku'
+  string: 'Failed to read UTAG SKU, using default SKU\n'
+  context: m %s boot mode..IMEI/MEID: %s...000000000000000.Failed to read UTAG IMEI, using default IMEI....Failed to read UTAG SKU, using default SKU..DATE: %s....01-01-1970..Failed to read UTAG DATE, us
+
+0x00000000480f8d68  off=0xf8d68  target='sku'
+  string: 'SKU, using default SKU\n'
+  context: /MEID: %s...000000000000000.Failed to read UTAG IMEI, using default IMEI....Failed to read UTAG SKU, using default SKU..DATE: %s....01-01-1970..Failed to read UTAG DATE, using default DATE....
+
+0x00000000480f8d7b  off=0xf8d7b  target='sku'
+  string: 'SKU\n'
+  context: 00000000.Failed to read UTAG IMEI, using default IMEI....Failed to read UTAG SKU, using default SKU..DATE: %s....01-01-1970..Failed to read UTAG DATE, using default DATE....mbm.MBM-2.1-maui_vz
+
+0x00000000480f94d8  off=0xf94d8  target='battid'
+  string: 'mmi,battid'
+  context:  "mmi,esd" to 0.....mmi,battery.ERROR: Cannot update [mmi,battery]..Set "mmi,battery" to %s.....mmi,battid..ERROR: Cannot update [mmi,battid]...Set "mmi,battid" to %s..mmi,ram.ERROR: Cannot up
+
+0x00000000480f94dc  off=0xf94dc  target='battid'
+  string: 'battid'
+  context: i,esd" to 0.....mmi,battery.ERROR: Cannot update [mmi,battery]..Set "mmi,battery" to %s.....mmi,battid..ERROR: Cannot update [mmi,battid]...Set "mmi,battid" to %s..mmi,ram.ERROR: Cannot update
+
+0x00000000480f94e4  off=0xf94e4  target='battid'
+  string: 'ERROR: Cannot update [mmi,battid]\n'
+  context: o 0.....mmi,battery.ERROR: Cannot update [mmi,battery]..Set "mmi,battery" to %s.....mmi,battid..ERROR: Cannot update [mmi,battid]...Set "mmi,battid" to %s..mmi,ram.ERROR: Cannot update chosen 
+
+0x00000000480f94fe  off=0xf94fe  target='battid'
+  string: 'battid]\n'
+  context:  Cannot update [mmi,battery]..Set "mmi,battery" to %s.....mmi,battid..ERROR: Cannot update [mmi,battid]...Set "mmi,battid" to %s..mmi,ram.ERROR: Cannot update chosen node [reserve]..ramsize.mr
+
+0x00000000480f9508  off=0xf9508  target='battid'
+  string: 'Set "mmi,battid" to %s\n'
+  context: date [mmi,battery]..Set "mmi,battery" to %s.....mmi,battid..ERROR: Cannot update [mmi,battid]...Set "mmi,battid" to %s..mmi,ram.ERROR: Cannot update chosen node [reserve]..ramsize.mr5.mr6.mr7.
+
+0x00000000480f9511  off=0xf9511  target='battid'
+  string: 'battid" to %s\n'
+  context: ,battery]..Set "mmi,battery" to %s.....mmi,battid..ERROR: Cannot update [mmi,battid]...Set "mmi,battid" to %s..mmi,ram.ERROR: Cannot update chosen node [reserve]..ramsize.mr5.mr6.mr7.mr8.mmi,s
+
+0x00000000480f9ab8  off=0xf9ab8  target='fboot_cmd_erase_permission_validate'
+  string: 'fboot_cmd_erase_permission_validate\n'
+  context: --------....Power up reason:      0x%08x....Last power up reason: 0x%08x....get_powerup_reason..fboot_cmd_erase_permission_validate.....Disallow to erase partition %s on oem_locked device.eras
+
+0x00000000480f9ae0  off=0xf9ae0  target='Disallow to erase partition %s on oem_locked device'
+  string: 'Disallow to erase partition %s on oem_locked device'
+  context: ....Last power up reason: 0x%08x....get_powerup_reason..fboot_cmd_erase_permission_validate.....Disallow to erase partition %s on oem_locked device.erasing %s .....Failed to erase partition %s
+
+0x00000000480f9b44  off=0xf9b44  target='erase permission denied'
+  string: 'erase permission denied'
+  context: llow to erase partition %s on oem_locked device.erasing %s .....Failed to erase partition %s....erase permission denied.super...Invalid partition name %s...flash permission denied.Preflash val
+
+0x00000000480f9b64  off=0xf9b64  target='Invalid partition name %s'
+  string: 'Invalid partition name %s'
+  context: m_locked device.erasing %s .....Failed to erase partition %s....erase permission denied.super...Invalid partition name %s...flash permission denied.Preflash validation failed..Command is not a
+
+0x00000000480fa788  off=0xfa788  target='metadata'
+  string: '%s: Out of memory for metadata!\n'
+  context: p geometry!.....%s: Failed in validating geometry!..%s: Cannot determine current slot (%d)!.....%s: Out of memory for metadata!.....%s: Failed in validating slot %d metadata!..%s: Failed in va
+
+0x00000000480fa79e  off=0xfa79e  target='metadata'
+  string: 'metadata!\n'
+  context: iled in validating geometry!..%s: Cannot determine current slot (%d)!.....%s: Out of memory for metadata!.....%s: Failed in validating slot %d metadata!..%s: Failed in validating slot %d backu
+
+0x00000000480fa7ac  off=0xfa7ac  target='metadata'
+  string: '%s: Failed in validating slot %d metadata!\n'
+  context: ting geometry!..%s: Cannot determine current slot (%d)!.....%s: Out of memory for metadata!.....%s: Failed in validating slot %d metadata!..%s: Failed in validating slot %d backup metadata!...
+
+0x00000000480fa7cd  off=0xfa7cd  target='metadata'
+  string: 'metadata!\n'
+  context: ine current slot (%d)!.....%s: Out of memory for metadata!.....%s: Failed in validating slot %d metadata!..%s: Failed in validating slot %d backup metadata!...%s: Out of memory for partition_l
+
+0x00000000480fa7d8  off=0xfa7d8  target='metadata'
+  string: '%s: Failed in validating slot %d backup metadata!\n'
+  context:  slot (%d)!.....%s: Out of memory for metadata!.....%s: Failed in validating slot %d metadata!..%s: Failed in validating slot %d backup metadata!...%s: Out of memory for partition_list!...%s: 
+
+0x00000000480fa800  off=0xfa800  target='metadata'
+  string: 'metadata!\n'
+  context: tadata!.....%s: Failed in validating slot %d metadata!..%s: Failed in validating slot %d backup metadata!...%s: Out of memory for partition_list!...%s: Out of memory for extent_list!..%s: Exte
+
+0x00000000480fa970  off=0xfa970  target='metadata'
+  string: '%s: Failed in validating metadata!\n'
+  context: oup_list!...%s: Out of memory for blkdev_list!..%s: DAP partition table not found or invalid....%s: Failed in validating metadata!..Failed to initialize DAP storage!...%s Strg is NULL.....%s: 
+
+0x00000000480fa989  off=0xfa989  target='metadata'
+  string: 'metadata!\n'
+  context: mory for blkdev_list!..%s: DAP partition table not found or invalid....%s: Failed in validating metadata!..Failed to initialize DAP storage!...%s Strg is NULL.....%s: Index %d Out of range %d!
+
+0x00000000480faa20  off=0xfaa20  target='metadata'
+  string: 'ValidateMetadataAndLoad'
+  context: is NULL.....%s: Index %d Out of range %d!...%s: table id 0x%x, partition 0x%x, size 0x%llx!.....ValidateMetadataAndLoad.LoadMetadata....PTableGetPartitionAt....InsertLinkedExtentToList....Folk
+
+0x00000000480faa28  off=0xfaa28  target='metadata'
+  string: 'MetadataAndLoad'
+  context: ....%s: Index %d Out of range %d!...%s: table id 0x%x, partition 0x%x, size 0x%llx!.....ValidateMetadataAndLoad.LoadMetadata....PTableGetPartitionAt....InsertLinkedExtentToList....FolkPartitio
+
+0x00000000480faa38  off=0xfaa38  target='metadata'
+  string: 'LoadMetadata'
+  context:  Out of range %d!...%s: table id 0x%x, partition 0x%x, size 0x%llx!.....ValidateMetadataAndLoad.LoadMetadata....PTableGetPartitionAt....InsertLinkedExtentToList....FolkPartitionTableElements..
+
+0x00000000480faa3c  off=0xfaa3c  target='metadata'
+  string: 'Metadata'
+  context:  of range %d!...%s: table id 0x%x, partition 0x%x, size 0x%llx!.....ValidateMetadataAndLoad.LoadMetadata....PTableGetPartitionAt....InsertLinkedExtentToList....FolkPartitionTableElements..PTab
+
+0x00000000481007d4  off=0x1007d4  target='userdata'
+  string: '%s: reset userdata partition info\n'
+  context: o cache %s.. - backed up %s:%u, md5=%s..%s: buffer is NULL..%s: reset flashinfo partition info..%s: reset userdata partition info...%s: reset opt partition info....flashinfo...FALSE...TRUE....
+
+0x00000000481007de  off=0x1007de  target='userdata'
+  string: 'userdata partition info\n'
+  context: .. - backed up %s:%u, md5=%s..%s: buffer is NULL..%s: reset flashinfo partition info..%s: reset userdata partition info...%s: reset opt partition info....flashinfo...FALSE...TRUE....lba_size i
+
+0x00000000481032fc  off=0x1032fc  target='mot_sec: validate_hash_password: Version 2 datablock'
+  string: 'mot_sec: validate_hash_password: Version 2 datablock\n'
+  context: 02X%02X%02X%02X%02X%02X%02X%02X%02X.mot_sec: get_unlock_data: default password hash present.....mot_sec: validate_hash_password: Version 2 datablock....mot_sec: validate_hash_password: Version
+
+0x00000000481032fc  off=0x1032fc  target='validate_hash_password'
+  string: 'mot_sec: validate_hash_password: Version 2 datablock\n'
+  context: 02X%02X%02X%02X%02X%02X%02X%02X%02X.mot_sec: get_unlock_data: default password hash present.....mot_sec: validate_hash_password: Version 2 datablock....mot_sec: validate_hash_password: Version
+
+0x00000000481032fc  off=0x1032fc  target='validate_hash_password: Version 2 datablock'
+  string: 'mot_sec: validate_hash_password: Version 2 datablock\n'
+  context: 02X%02X%02X%02X%02X%02X%02X%02X%02X.mot_sec: get_unlock_data: default password hash present.....mot_sec: validate_hash_password: Version 2 datablock....mot_sec: validate_hash_password: Version
+
+0x0000000048103305  off=0x103305  target='validate_hash_password'
+  string: 'validate_hash_password: Version 2 datablock\n'
+  context: 2X%02X%02X%02X%02X%02X%02X.mot_sec: get_unlock_data: default password hash present.....mot_sec: validate_hash_password: Version 2 datablock....mot_sec: validate_hash_password: Version 1 databl
+
+0x0000000048103305  off=0x103305  target='validate_hash_password: Version 2 datablock'
+  string: 'validate_hash_password: Version 2 datablock\n'
+  context: 2X%02X%02X%02X%02X%02X%02X.mot_sec: get_unlock_data: default password hash present.....mot_sec: validate_hash_password: Version 2 datablock....mot_sec: validate_hash_password: Version 1 databl
+
+0x0000000048103334  off=0x103334  target='mot_sec: validate_hash_password: Version 1 datablock'
+  string: 'mot_sec: validate_hash_password: Version 1 datablock\n'
+  context: data: default password hash present.....mot_sec: validate_hash_password: Version 2 datablock....mot_sec: validate_hash_password: Version 1 datablock....mot_sec: validate_hash_password: Unsuppo
+
+0x0000000048103334  off=0x103334  target='validate_hash_password'
+  string: 'mot_sec: validate_hash_password: Version 1 datablock\n'
+  context: data: default password hash present.....mot_sec: validate_hash_password: Version 2 datablock....mot_sec: validate_hash_password: Version 1 datablock....mot_sec: validate_hash_password: Unsuppo
+
+0x0000000048103334  off=0x103334  target='validate_hash_password: Version 1 datablock'
+  string: 'mot_sec: validate_hash_password: Version 1 datablock\n'
+  context: data: default password hash present.....mot_sec: validate_hash_password: Version 2 datablock....mot_sec: validate_hash_password: Version 1 datablock....mot_sec: validate_hash_password: Unsuppo
+
+0x000000004810333d  off=0x10333d  target='validate_hash_password'
+  string: 'validate_hash_password: Version 1 datablock\n'
+  context: ault password hash present.....mot_sec: validate_hash_password: Version 2 datablock....mot_sec: validate_hash_password: Version 1 datablock....mot_sec: validate_hash_password: Unsupported data
+
+0x000000004810333d  off=0x10333d  target='validate_hash_password: Version 1 datablock'
+  string: 'validate_hash_password: Version 1 datablock\n'
+  context: ault password hash present.....mot_sec: validate_hash_password: Version 2 datablock....mot_sec: validate_hash_password: Version 1 datablock....mot_sec: validate_hash_password: Unsupported data
+
+0x000000004810336c  off=0x10336c  target='mot_sec: validate_hash_password: Unsupported datablock'
+  string: 'mot_sec: validate_hash_password: Unsupported datablock\n'
+  context: e_hash_password: Version 2 datablock....mot_sec: validate_hash_password: Version 1 datablock....mot_sec: validate_hash_password: Unsupported datablock..mot_sec: hash calculation faliure!..mot_
+
+0x000000004810336c  off=0x10336c  target='validate_hash_password'
+  string: 'mot_sec: validate_hash_password: Unsupported datablock\n'
+  context: e_hash_password: Version 2 datablock....mot_sec: validate_hash_password: Version 1 datablock....mot_sec: validate_hash_password: Unsupported datablock..mot_sec: hash calculation faliure!..mot_
+
+0x000000004810336c  off=0x10336c  target='validate_hash_password: Unsupported datablock'
+  string: 'mot_sec: validate_hash_password: Unsupported datablock\n'
+  context: e_hash_password: Version 2 datablock....mot_sec: validate_hash_password: Version 1 datablock....mot_sec: validate_hash_password: Unsupported datablock..mot_sec: hash calculation faliure!..mot_
+
+0x0000000048103375  off=0x103375  target='validate_hash_password'
+  string: 'validate_hash_password: Unsupported datablock\n'
+  context: ssword: Version 2 datablock....mot_sec: validate_hash_password: Version 1 datablock....mot_sec: validate_hash_password: Unsupported datablock..mot_sec: hash calculation faliure!..mot_sec: hash
+
+0x0000000048103375  off=0x103375  target='validate_hash_password: Unsupported datablock'
+  string: 'validate_hash_password: Unsupported datablock\n'
+  context: ssword: Version 2 datablock....mot_sec: validate_hash_password: Version 1 datablock....mot_sec: validate_hash_password: Unsupported datablock..mot_sec: hash calculation faliure!..mot_sec: hash
+
+0x00000000481033c8  off=0x1033c8  target='hash calculation failure!'
+  string: 'mot_sec: hash calculation failure!\n'
+  context: ....mot_sec: validate_hash_password: Unsupported datablock..mot_sec: hash calculation faliure!..mot_sec: hash calculation failure!..mot_sec: hash at offset i: %02d : %02x does not match...mot_
+
+0x00000000481033c8  off=0x1033c8  target='mot_sec: hash calculation failure!'
+  string: 'mot_sec: hash calculation failure!\n'
+  context: ....mot_sec: validate_hash_password: Unsupported datablock..mot_sec: hash calculation faliure!..mot_sec: hash calculation failure!..mot_sec: hash at offset i: %02d : %02x does not match...mot_
+
+0x00000000481033d1  off=0x1033d1  target='hash calculation failure!'
+  string: 'hash calculation failure!\n'
+  context: ec: validate_hash_password: Unsupported datablock..mot_sec: hash calculation faliure!..mot_sec: hash calculation failure!..mot_sec: hash at offset i: %02d : %02x does not match...mot_sec: CID 
+
+0x00000000481033ec  off=0x1033ec  target='hash at offset i:'
+  string: 'mot_sec: hash at offset i: %02d : %02x does not match\n'
+  context:  Unsupported datablock..mot_sec: hash calculation faliure!..mot_sec: hash calculation failure!..mot_sec: hash at offset i: %02d : %02x does not match...mot_sec: CID prov store setup failed ...
+
+0x00000000481033ec  off=0x1033ec  target='mot_sec: hash at offset i:'
+  string: 'mot_sec: hash at offset i: %02d : %02x does not match\n'
+  context:  Unsupported datablock..mot_sec: hash calculation faliure!..mot_sec: hash calculation failure!..mot_sec: hash at offset i: %02d : %02x does not match...mot_sec: CID prov store setup failed ...
+
+0x00000000481033f5  off=0x1033f5  target='hash at offset i:'
+  string: 'hash at offset i: %02d : %02x does not match\n'
+  context: ted datablock..mot_sec: hash calculation faliure!..mot_sec: hash calculation failure!..mot_sec: hash at offset i: %02d : %02x does not match...mot_sec: CID prov store setup failed ...mot_sec: 
+
+0x00000000481036a8  off=0x1036a8  target='cache'
+  string: 'cache'
+  context: ....mot_sec: %s initialize cid tag data failed..ccci_sec_data...mot_sec: %s insert tag failed...cache...0..:0..".......%...Q....P../?..0...*.H........061.0...U....US1.0...U....PKI Center1.0...
+
+0x000000004810488f  off=0x10488f  target='imei'
+  string: '\x05\x82J¿\x95\x14z¸â®+±{8\x1b¶\x0c\x9b\x8eÒ\x92\r¾Õå·ïÜ|!ßÛ\x0bÔÒÓ\x86BâÔñø³Ýhn\x83Ú\x1fÍ\x16¾\x81[&¹öáw°owG·\x18æZ\x08\x88pj\x0fÿÊ;\x06f\\\x0b\x01\x11ÿ\x9ee\x8fi®bøÓÿkaEÏl\x16xâ\n\xa0îÒ\r×T\x83\x04NÂ³\x039a&g§÷\x16`ÐMGiIÛwn>JjÑ®ÜZÖÙf\x0bß@ð;Ø7S®¼©Å\x9e»Þ\x7fÏ²Géÿµ0\x1cò½½\x8aÂºÊ0\x93³S¦£´$\x056Ðº\x93\x06×Í)WÞT¿gÙ#.zf³¸JaÄ\x02\x1bh]\x94+o*7¾\x0b´¡\x8e\x0cÃ\x1bß\x05Z\x8dï\x02-Using ALT IMEI UID'
+  context: F..a...f...o%6.hR.w...G....."/&.U.;..(....Z.+.j.\....1......,...[..d.&.c...ju..m.....?6...g.r.W...J...z...+.{8..............|!.......B......hn.......[&...w.owG...Z..pj...;.f\.....e.i.b...kaE.l
+
+0x000000004810497a  off=0x10497a  target='imei'
+  string: 'IMEI UID'
+  context: .@.;.7S..........G...0........0..S...$.6......)W.T.g.#.zf..Ja...h].+o*7..........Z...-Using ALT IMEI UID..dbval_find_sigrep_cert_sig passed...dbval_sigreq_create_outer: Generate Rand....dbval_
+
+0x0000000048104bb0  off=0x104bb0  target='imei'
+  string: 'Checking SigRsp IMEI - comparing serial number data data'
+  context: OVERRIDE: SigRsp Serial Number Type & Length....Validating Sigrsp Serial Number Type & Length...Checking SigRsp IMEI - comparing serial number data data....FIX ME ! Ignoring IMEI check error..
+
+0x0000000048104bc0  off=0x104bc0  target='imei'
+  string: 'IMEI - comparing serial number data data'
+  context:  Serial Number Type & Length....Validating Sigrsp Serial Number Type & Length...Checking SigRsp IMEI - comparing serial number data data....FIX ME ! Ignoring IMEI check error..Checking SigRsp 
+
+0x0000000048104bec  off=0x104bec  target='imei'
+  string: 'FIX ME ! Ignoring IMEI check error'
+  context: igrsp Serial Number Type & Length...Checking SigRsp IMEI - comparing serial number data data....FIX ME ! Ignoring IMEI check error..Checking SigRsp IMEI - checking zero padding of remaining IM
+
+0x0000000048104bfe  off=0x104bfe  target='imei'
+  string: 'IMEI check error'
+  context: r Type & Length...Checking SigRsp IMEI - comparing serial number data data....FIX ME ! Ignoring IMEI check error..Checking SigRsp IMEI - checking zero padding of remaining IMEI bytes....Checki
+
+0x0000000048104c10  off=0x104c10  target='imei'
+  string: 'Checking SigRsp IMEI - checking zero padding of remaining IMEI bytes'
+  context: Checking SigRsp IMEI - comparing serial number data data....FIX ME ! Ignoring IMEI check error..Checking SigRsp IMEI - checking zero padding of remaining IMEI bytes....Checking SigRsp IMEI - S
+
+0x0000000048104c20  off=0x104c20  target='imei'
+  string: 'IMEI - checking zero padding of remaining IMEI bytes'
+  context: IMEI - comparing serial number data data....FIX ME ! Ignoring IMEI check error..Checking SigRsp IMEI - checking zero padding of remaining IMEI bytes....Checking SigRsp IMEI - Success..Check DB
+
+0x0000000048104c4a  off=0x104c4a  target='imei'
+  string: 'IMEI bytes'
+  context: ..FIX ME ! Ignoring IMEI check error..Checking SigRsp IMEI - checking zero padding of remaining IMEI bytes....Checking SigRsp IMEI - Success..Check DB Signature..dbval_sigrsp_verify_outer - Ch
+
+0x0000000048104c58  off=0x104c58  target='imei'
+  string: 'Checking SigRsp IMEI - Success'
+  context: oring IMEI check error..Checking SigRsp IMEI - checking zero padding of remaining IMEI bytes....Checking SigRsp IMEI - Success..Check DB Signature..dbval_sigrsp_verify_outer - Check Nonce.dbva
+
+0x0000000048104c68  off=0x104c68  target='imei'
+  string: 'IMEI - Success'
+  context:  error..Checking SigRsp IMEI - checking zero padding of remaining IMEI bytes....Checking SigRsp IMEI - Success..Check DB Signature..dbval_sigrsp_verify_outer - Check Nonce.dbval_set_gen_db_fie
+
+0x0000000048105d34  off=0x105d34  target='metadata'
+  string: 'mot_sec: %s: Failed to validate its own avb metadata info\n'
+  context: ....mot_sec: %s: Invalid vbmeta size in footer......mot_sec: %s: Invalid own avb vbmeta format..mot_sec: %s: Failed to validate its own avb metadata info...mot_sec: Load vbmeta partition faile
+
+0x0000000048105d60  off=0x105d60  target='metadata'
+  string: 'metadata info\n'
+  context: er......mot_sec: %s: Invalid own avb vbmeta format..mot_sec: %s: Failed to validate its own avb metadata info...mot_sec: Load vbmeta partition failed: %d...mot_sec: Failed to validate main vbm
+
+0x0000000048106c74  off=0x106c74  target='Already unlocked'
+  string: 'Already unlocked'
+  context:  token first....mot_sec: CID is not programmed......mot_sec: Failed to blow production efuse....Already unlocked....Unsupported on engineering phone....Invalid boot state for unlocking....Chec
+
+0x0000000048106cac  off=0x106cac  target='Invalid boot state for unlocking'
+  string: 'Invalid boot state for unlocking'
+  context: sec: Failed to blow production efuse....Already unlocked....Unsupported on engineering phone....Invalid boot state for unlocking....Check 'Allow OEM Unlock' in Android Settings > Developer Opt
+
+0x0000000048106cd0  off=0x106cd0  target="Check 'Allow OEM Unlock'"
+  string: "Check 'Allow OEM Unlock' in Android Settings > Developer Options"
+  context: ....Already unlocked....Unsupported on engineering phone....Invalid boot state for unlocking....Check 'Allow OEM Unlock' in Android Settings > Developer Options....fastboot oem unlock [ unlock
+
+0x0000000048106d14  off=0x106d14  target='fastboot oem unlock'
+  string: 'fastboot oem unlock [ unlock code ]'
+  context: boot state for unlocking....Check 'Allow OEM Unlock' in Android Settings > Developer Options....fastboot oem unlock [ unlock code ].Code validation failure.....Failed to erase metadata....Fail
+
+0x0000000048106d38  off=0x106d38  target='Code validation failure'
+  string: 'Code validation failure.\n'
+  context: llow OEM Unlock' in Android Settings > Developer Options....fastboot oem unlock [ unlock code ].Code validation failure.....Failed to erase metadata....Failed to erase userdata....warranty voi
+
+0x0000000048106d54  off=0x106d54  target='metadata'
+  string: 'Failed to erase metadata.'
+  context: Settings > Developer Options....fastboot oem unlock [ unlock code ].Code validation failure.....Failed to erase metadata....Failed to erase userdata....warranty void fuse fail.Failed to erase 
+
+0x0000000048106d64  off=0x106d64  target='metadata'
+  string: 'metadata.'
+  context: oper Options....fastboot oem unlock [ unlock code ].Code validation failure.....Failed to erase metadata....Failed to erase userdata....warranty void fuse fail.Failed to erase md_udc......Boot
+
+0x0000000048106d70  off=0x106d70  target='userdata'
+  string: 'Failed to erase userdata'
+  context: ....fastboot oem unlock [ unlock code ].Code validation failure.....Failed to erase metadata....Failed to erase userdata....warranty void fuse fail.Failed to erase md_udc......Bootloader is un
+
+0x0000000048106d80  off=0x106d80  target='userdata'
+  string: 'userdata'
+  context:  unlock [ unlock code ].Code validation failure.....Failed to erase metadata....Failed to erase userdata....warranty void fuse fail.Failed to erase md_udc......Bootloader is unlocked! Rebootin
+
+0x0000000048106da4  off=0x106da4  target='md_udc'
+  string: 'Failed to erase md_udc.\n'
+  context: ion failure.....Failed to erase metadata....Failed to erase userdata....warranty void fuse fail.Failed to erase md_udc......Bootloader is unlocked! Rebooting phone.....Already locked..Invalid 
+
+0x0000000048106db4  off=0x106db4  target='md_udc'
+  string: 'md_udc.\n'
+  context: Failed to erase metadata....Failed to erase userdata....warranty void fuse fail.Failed to erase md_udc......Bootloader is unlocked! Rebooting phone.....Already locked..Invalid boot state for l
+
+0x0000000048106dc0  off=0x106dc0  target='Bootloader is unlocked'
+  string: 'Bootloader is unlocked! Rebooting phone\n'
+  context: ase metadata....Failed to erase userdata....warranty void fuse fail.Failed to erase md_udc......Bootloader is unlocked! Rebooting phone.....Already locked..Invalid boot state for locking..Boot
+
+0x0000000048106e74  off=0x106e74  target="Check 'Allow OEM Unlock'"
+  string: "Check 'Allow OEM Unlock' in Android Settings > Developer Options."
+  context: ocking..Bootloader is now locked! Rebooting phone...Already flashing locked.....Invalid state...Check 'Allow OEM Unlock' in Android Settings > Developer Options....This creates a recovery to u
+
+0x0000000048106f18  off=0x106f18  target='Already unlocked'
+  string: 'Already unlocked for flashing.'
+  context: This creates a recovery to unlock if Android fails to boot..Phone is locked. Rebooting phone....Already unlocked for flashing...Failed to erase userdata....Now unlocked for flashing. Rebooting
+
+0x0000000048106f38  off=0x106f38  target='userdata'
+  string: 'Failed to erase userdata.'
+  context: k if Android fails to boot..Phone is locked. Rebooting phone....Already unlocked for flashing...Failed to erase userdata....Now unlocked for flashing. Rebooting phone..Not supported on ENG dev
+
+0x0000000048106f48  off=0x106f48  target='userdata'
+  string: 'userdata.'
+  context: ls to boot..Phone is locked. Rebooting phone....Already unlocked for flashing...Failed to erase userdata....Now unlocked for flashing. Rebooting phone..Not supported on ENG devices....This com
+
+0x0000000048106f54  off=0x106f54  target='Now unlocked for flashing'
+  string: 'Now unlocked for flashing. Rebooting phone.'
+  context: Phone is locked. Rebooting phone....Already unlocked for flashing...Failed to erase userdata....Now unlocked for flashing. Rebooting phone..Not supported on ENG devices....This command require
+
+0x0000000048106fa0  off=0x106fa0  target='This command requires you to first unlock the bootloader'
+  string: 'This command requires you to first unlock the bootloader.'
+  context: o erase userdata....Now unlocked for flashing. Rebooting phone..Not supported on ENG devices....This command requires you to first unlock the bootloader....A unlock code may be required...get_
+
+0x0000000048106fdc  off=0x106fdc  target='A unlock code may be required'
+  string: 'A unlock code may be required.'
+  context: ne..Not supported on ENG devices....This command requires you to first unlock the bootloader....A unlock code may be required...get_unlock_ability..Flashing Android images not permitted...Flas
+
+0x0000000048107278  off=0x107278  target='userdata'
+  string: '  4 - Force userdata use production key'
+  context: inue....  1 - Dump SSM states...  2 - Enable ADB root on bootup.  3 - Enable SELinux permissive.  4 - Force userdata use production key.  5 - Reset default security state..  6 - Enable write p
+
+0x0000000048107284  off=0x107284  target='userdata'
+  string: 'userdata use production key'
+  context: - Dump SSM states...  2 - Enable ADB root on bootup.  3 - Enable SELinux permissive.  4 - Force userdata use production key.  5 - Reset default security state..  6 - Enable write protection te
+
+0x0000000048107730  off=0x107730  target='nvdata'
+  string: "mot_sec: Locate 'nvdata-erase' cmd string in sec partition\n"
+  context: mot_sec: get invalid Secure UID.....mot_sec: Invalid partition name buff to be used.....sec1....mot_sec: Locate 'nvdata-erase' cmd string in sec partition..mot_sec: No place is found to decide
+
+0x0000000048107741  off=0x107741  target='nvdata'
+  string: "nvdata-erase' cmd string in sec partition\n"
+  context: lid Secure UID.....mot_sec: Invalid partition name buff to be used.....sec1....mot_sec: Locate 'nvdata-erase' cmd string in sec partition..mot_sec: No place is found to decide erase nvdata...m
+
+0x000000004810776c  off=0x10776c  target='nvdata'
+  string: 'mot_sec: No place is found to decide erase nvdata\n'
+  context: on name buff to be used.....sec1....mot_sec: Locate 'nvdata-erase' cmd string in sec partition..mot_sec: No place is found to decide erase nvdata...mot_sec: Invalid partition name when clear '
+
+0x0000000048107797  off=0x107797  target='nvdata'
+  string: 'nvdata\n'
+  context: : Locate 'nvdata-erase' cmd string in sec partition..mot_sec: No place is found to decide erase nvdata...mot_sec: Invalid partition name when clear 'nvdata-erase'...mot_sec: Failed to clear 'n
+
+0x00000000481077a0  off=0x1077a0  target='nvdata'
+  string: "mot_sec: Invalid partition name when clear 'nvdata-erase'\n"
+  context: 'nvdata-erase' cmd string in sec partition..mot_sec: No place is found to decide erase nvdata...mot_sec: Invalid partition name when clear 'nvdata-erase'...mot_sec: Failed to clear 'nvdata-era
+
+0x00000000481077cc  off=0x1077cc  target='nvdata'
+  string: "nvdata-erase'\n"
+  context: mot_sec: No place is found to decide erase nvdata...mot_sec: Invalid partition name when clear 'nvdata-erase'...mot_sec: Failed to clear 'nvdata-erase' command in: %s!.....gvb_unlocked....gvb_
+
+0x00000000481077dc  off=0x1077dc  target='nvdata'
+  string: "mot_sec: Failed to clear 'nvdata-erase' command in: %s!\n"
+  context: e is found to decide erase nvdata...mot_sec: Invalid partition name when clear 'nvdata-erase'...mot_sec: Failed to clear 'nvdata-erase' command in: %s!.....gvb_unlocked....gvb_locked..verity_d
+
+0x00000000481077f6  off=0x1077f6  target='nvdata'
+  string: "nvdata-erase' command in: %s!\n"
+  context:  nvdata...mot_sec: Invalid partition name when clear 'nvdata-erase'...mot_sec: Failed to clear 'nvdata-erase' command in: %s!.....gvb_unlocked....gvb_locked..verity_disabled.verity_failure..er
+
+0x00000000481078b0  off=0x1078b0  target='Invalid partition table!'
+  string: 'mot_sec: Invalid partition table!\n'
+  context: re..err.mot_sec: setting prop %s....mot_sec: Failed to update sp....mot_sec: clearing prop %s...mot_sec: Invalid partition table!...mot_sec: FRP partition is invalid, lock anyway!.....mot_sec:
+
+0x00000000481078b0  off=0x1078b0  target='mot_sec: Invalid partition table!'
+  string: 'mot_sec: Invalid partition table!\n'
+  context: re..err.mot_sec: setting prop %s....mot_sec: Failed to update sp....mot_sec: clearing prop %s...mot_sec: Invalid partition table!...mot_sec: FRP partition is invalid, lock anyway!.....mot_sec:
+
+0x00000000481078b9  off=0x1078b9  target='Invalid partition table!'
+  string: 'Invalid partition table!\n'
+  context: ot_sec: setting prop %s....mot_sec: Failed to update sp....mot_sec: clearing prop %s...mot_sec: Invalid partition table!...mot_sec: FRP partition is invalid, lock anyway!.....mot_sec: Couldn't
+
+0x00000000481078d4  off=0x1078d4  target='FRP partition is invalid, lock anyway!'
+  string: 'mot_sec: FRP partition is invalid, lock anyway!\n'
+  context: mot_sec: Failed to update sp....mot_sec: clearing prop %s...mot_sec: Invalid partition table!...mot_sec: FRP partition is invalid, lock anyway!.....mot_sec: Couldn't read from %llx....FDR_DISA
+
+0x00000000481078d4  off=0x1078d4  target='frp'
+  string: 'mot_sec: FRP partition is invalid, lock anyway!\n'
+  context: mot_sec: Failed to update sp....mot_sec: clearing prop %s...mot_sec: Invalid partition table!...mot_sec: FRP partition is invalid, lock anyway!.....mot_sec: Couldn't read from %llx....FDR_DISA
+
+0x00000000481078d4  off=0x1078d4  target='mot_sec: FRP partition is invalid, lock anyway!'
+  string: 'mot_sec: FRP partition is invalid, lock anyway!\n'
+  context: mot_sec: Failed to update sp....mot_sec: clearing prop %s...mot_sec: Invalid partition table!...mot_sec: FRP partition is invalid, lock anyway!.....mot_sec: Couldn't read from %llx....FDR_DISA
+
+0x00000000481078dd  off=0x1078dd  target='FRP partition is invalid, lock anyway!'
+  string: 'FRP partition is invalid, lock anyway!\n'
+  context: Failed to update sp....mot_sec: clearing prop %s...mot_sec: Invalid partition table!...mot_sec: FRP partition is invalid, lock anyway!.....mot_sec: Couldn't read from %llx....FDR_DISABLED=1..m
+
+0x00000000481078dd  off=0x1078dd  target='frp'
+  string: 'FRP partition is invalid, lock anyway!\n'
+  context: Failed to update sp....mot_sec: clearing prop %s...mot_sec: Invalid partition table!...mot_sec: FRP partition is invalid, lock anyway!.....mot_sec: Couldn't read from %llx....FDR_DISABLED=1..m
+
+0x0000000048107908  off=0x107908  target="Couldn't read from %llx"
+  string: "mot_sec: Couldn't read from %llx\n"
+  context: op %s...mot_sec: Invalid partition table!...mot_sec: FRP partition is invalid, lock anyway!.....mot_sec: Couldn't read from %llx....FDR_DISABLED=1..mot_sec: FDR disabled...FOTA_DISABLED=1.mot_
+
+0x0000000048107908  off=0x107908  target="mot_sec: Couldn't read from %llx"
+  string: "mot_sec: Couldn't read from %llx\n"
+  context: op %s...mot_sec: Invalid partition table!...mot_sec: FRP partition is invalid, lock anyway!.....mot_sec: Couldn't read from %llx....FDR_DISABLED=1..mot_sec: FDR disabled...FOTA_DISABLED=1.mot_
+
+0x0000000048107911  off=0x107911  target="Couldn't read from %llx"
+  string: "Couldn't read from %llx\n"
+  context: ot_sec: Invalid partition table!...mot_sec: FRP partition is invalid, lock anyway!.....mot_sec: Couldn't read from %llx....FDR_DISABLED=1..mot_sec: FDR disabled...FOTA_DISABLED=1.mot_sec: FOTA
+
+0x0000000048107bf4  off=0x107bf4  target='flashing_unlocked'
+  string: 'flashing_unlocked'
+  context: mot_sec: update fota_flag failed!...mot_sec: update poweroff_flag failed!...yellow..orange..?...flashing_unlocked...flashing_locked.brom-disable-error..oem_locked..:DEBUG TOKEN....engineering.
+
+0x0000000048107c08  off=0x107c08  target='flashing_locked'
+  string: 'flashing_locked'
+  context: _flag failed!...mot_sec: update poweroff_flag failed!...yellow..orange..?...flashing_unlocked...flashing_locked.brom-disable-error..oem_locked..:DEBUG TOKEN....engineering. cid:...WARNING: Thi
+
+0x0000000048108f0c  off=0x108f0c  target='nvdata'
+  string: 'nvdata-erase'
+  context: ....mot_sec: Error: %s is not allowed to be erased..mot_sec: Failed to read bl_notify status....nvdata-erase....mot_sec: read: %s...mot_sec: %s Failed to read nvdata-erase string..mot_sec: Cou
+
+0x0000000048108f30  off=0x108f30  target='nvdata'
+  string: 'mot_sec: %s Failed to read nvdata-erase string\n'
+  context: d to be erased..mot_sec: Failed to read bl_notify status....nvdata-erase....mot_sec: read: %s...mot_sec: %s Failed to read nvdata-erase string..mot_sec: Couldn't clear status..mot_sec: Running
+
+0x0000000048108f4b  off=0x108f4b  target='nvdata'
+  string: 'nvdata-erase string\n'
+  context: iled to read bl_notify status....nvdata-erase....mot_sec: read: %s...mot_sec: %s Failed to read nvdata-erase string..mot_sec: Couldn't clear status..mot_sec: Running RPMB test case, please mak
+
+0x000000004810a890  off=0x10a890  target='metadata'
+  string: 'validate_metadata'
+  context: <`.9..`d..L....9fV4.O.{...y.Ov..ZQ.+N.......;."Ro9.p../...w.O...:...W...ERROR: out of memory....validate_metadata...Unsupported super image format, rejecting.......%s: null!...%s: magic 0x%x!.
+
+0x000000004810a899  off=0x10a899  target='metadata'
+  string: 'metadata'
+  context: .L....9fV4.O.{...y.Ov..ZQ.+N.......;."Ro9.p../...w.O...:...W...ERROR: out of memory....validate_metadata...Unsupported super image format, rejecting.......%s: null!...%s: magic 0x%x!.....%s: g
+
+0x00000000481168c4  off=0x1168c4  target='metadata'
+  string: 'ERROR_INVALID_METADATA'
+  context: ERROR_OOM...ERROR_IO....ERROR_VERIFICATION..ERROR_ROLLBACK_INDEX....ERROR_PUBLIC_KEY_REJECTED...ERROR_INVALID_METADATA..1720....Unknown AvbSlotVerifyResult value...1762....: FATAL: ...Unknown 
+
+0x00000000481168d2  off=0x1168d2  target='metadata'
+  string: 'METADATA'
+  context: ROR_IO....ERROR_VERIFICATION..ERROR_ROLLBACK_INDEX....ERROR_PUBLIC_KEY_REJECTED...ERROR_INVALID_METADATA..1720....Unknown AvbSlotVerifyResult value...1762....: FATAL: ...Unknown digest type.op
+
+0x0000000048117208  off=0x117208  target='metadata'
+  string: 'Public key metadata is not entirely in its block.\n'
+  context: Signature is not entirely in its block......132.Public key is not entirely in its block.....144.Public key metadata is not entirely in its block....158.Invalid or unknown algorithm....164.Embe
+
+0x0000000048117213  off=0x117213  target='metadata'
+  string: 'metadata is not entirely in its block.\n'
+  context: s not entirely in its block......132.Public key is not entirely in its block.....144.Public key metadata is not entirely in its block....158.Invalid or unknown algorithm....164.Embedded hash h
+
+0x000000004811e304  off=0x11e304  target='frp'
+  string: 'frp'
+  context: ....expdb...........................expdb............................B.H........................frp.............................frp..............................B.H........................vbme
+
+0x000000004811e324  off=0x11e324  target='frp'
+  string: 'frp'
+  context: ....expdb............................B.H........................frp.............................frp..............................B.H........................vbmeta..........................vbme
+
+0x000000004811e418  off=0x11e418  target='nvdata'
+  string: 'nvdata'
+  context: ....nvcfg...........................nvcfg...........................p%.H........................nvdata..........................nvdata..........................p%.H........................meta
+
+0x000000004811e438  off=0x11e438  target='nvdata'
+  string: 'nvdata'
+  context: ....nvcfg...........................p%.H........................nvdata..........................nvdata..........................p%.H........................metadata........................meta
+
+0x000000004811e474  off=0x11e474  target='metadata'
+  string: 'metadata'
+  context: ....nvdata..........................nvdata..........................p%.H........................metadata........................metadata.........................B.H........................prot
+
+0x000000004811e494  off=0x11e494  target='metadata'
+  string: 'metadata'
+  context: ....nvdata..........................p%.H........................metadata........................metadata.........................B.H........................protect1........................prot
+
+0x000000004811f0ac  off=0x11f0ac  target='cache'
+  string: 'cache'
+  context: ....system..........................system..........................p%.H+.......................cache...........................cache...........................p%.H,.......................prod
+
+0x000000004811f0cc  off=0x11f0cc  target='cache'
+  string: 'cache'
+  context: ....system..........................p%.H+.......................cache...........................cache...........................p%.H,.......................prodpersist.....................prod
+
+0x000000004811f2d4  off=0x11f2d4  target='userdata'
+  string: 'userdata'
+  context: ....kpan............................kpan.............................B.H1.......................userdata........................userdata........................x%.H2.......................ints
+
+0x000000004811f2f4  off=0x11f2f4  target='userdata'
+  string: 'userdata'
+  context: ....kpan.............................B.H1.......................userdata........................userdata........................x%.H2.......................intsd...........................ints
+
+0x000000004811f894  off=0x11f894  target='md_udc'
+  string: 'md_udc'
+  context: ....audio_dsp.......................audio_dsp........................%.HA.......................md_udc..........................md_udc...........................B.HB.......................vend
+
+0x000000004811f8b4  off=0x11f8b4  target='md_udc'
+  string: 'md_udc'
+  context: ....audio_dsp........................%.HA.......................md_udc..........................md_udc...........................B.HB.......................vendor_boot.....................vend
+
+0x000000004812282c  off=0x12282c  target='barcode'
+  string: '    Barcodes'
+  context: ........Boot Mode Selection Menu................................................................    Barcodes................................................................................    
+
+0x0000000048122830  off=0x122830  target='barcode'
+  string: 'Barcodes'
+  context: ....Boot Mode Selection Menu................................................................    Barcodes................................................................................    Fact
+
+0x00000000481481c0  off=0x1481c0  target='barcode'
+  string: 'barcode_screen'
+  context: H.......................fastboot_screen..................).H.......H...H...H...H]..Hm..H........barcode_screen..........................1..H...H...HY..HA..H............unlock_screen...........
+
+0x0000000048148298  off=0x148298  target='barcode'
+  string: 'barcode_screen'
+  context: ...H)..He..H...H........fastboot_screen............................H...H...H1..H...Hu..H........barcode_screen...........................$.HI$.H1$.H.-.H.$.H............gvb_screen..............
+

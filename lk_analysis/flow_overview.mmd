@@ -1,0 +1,96 @@
+flowchart LR
+  F1["#1 score 82<br/>0x0000000048082974<br/>xrefs 17 calls 16"]
+  T1["Already unlocked"]
+  F1 --> T1
+  T2["Bootloader is unlocked"]
+  F1 --> T2
+  T3["Check 'Allow OEM Unlock'"]
+  F1 --> T3
+  T4["Code validation failure"]
+  F1 --> T4
+  T5["Invalid boot state for unlocking"]
+  F1 --> T5
+  T6["fastboot oem unlock"]
+  F1 --> T6
+  T7["md_udc"]
+  F1 --> T7
+  T8["metadata"]
+  F1 --> T8
+  T9["userdata"]
+  F1 --> T9
+  F2["#2 score 80<br/>0x0000000048082bee<br/>xrefs 26 calls 10"]
+  T10["A unlock code may be required"]
+  F2 --> T10
+  F2 --> T1
+  F2 --> T3
+  T11["Now unlocked for flashing"]
+  F2 --> T11
+  T12["This command requires you to first unlock the..."]
+  F2 --> T12
+  F2 --> T7
+  F2 --> T8
+  F2 --> T9
+  F3["#3 score 62<br/>0x0000000048067da2<br/>xrefs 6 calls 13"]
+  T13["Disallow to erase partition %s on oem_locked ..."]
+  F3 --> T13
+  T14["avb_custom_key"]
+  F3 --> T14
+  T15["debug_token"]
+  F3 --> T15
+  T16["erase permission denied"]
+  F3 --> T16
+  T17["fboot_cmd_erase_permission_validate"]
+  F3 --> T17
+  F4["#4 score 48<br/>0x0000000048077fe0<br/>xrefs 7 calls 9"]
+  T18["mot_sec: hash at offset i:"]
+  F4 --> T18
+  T19["mot_sec: hash calculation failure!"]
+  F4 --> T19
+  T20["mot_sec: validate_hash_password: Unsupported ..."]
+  F4 --> T20
+  T21["validate_hash_password: Unsupported datablock"]
+  F4 --> T21
+  T22["validate_hash_password: Version 1 datablock"]
+  F4 --> T22
+  T23["validate_hash_password: Version 2 datablock"]
+  F4 --> T23
+  F5["#5 score 39<br/>0x000000004808380c<br/>xrefs 6 calls 6"]
+  T24["Invalid partition table!"]
+  F5 --> T24
+  T25["frp"]
+  F5 --> T25
+  T26["mot_sec: Couldn't read from %llx"]
+  F5 --> T26
+  T27["mot_sec: FRP partition is invalid, lock anyway!"]
+  F5 --> T27
+  T28["mot_sec: Invalid partition table!"]
+  F5 --> T28
+  F6["#6 score 31<br/>0x0000000048067f10<br/>xrefs 3 calls 6"]
+  T29["Invalid partition name %s"]
+  F6 --> T29
+  F6 --> T14
+  F6 --> T15
+  F7["#7 score 20<br/>0x000000004805a844<br/>xrefs 20 calls 3"]
+  T30["barcode"]
+  F7 --> T30
+  T31["battid"]
+  F7 --> T31
+  T32["esimid"]
+  F7 --> T32
+  T33["iccid"]
+  F7 --> T33
+  T34["imei"]
+  F7 --> T34
+  T35["imei2"]
+  F7 --> T35
+  T36["meid"]
+  F7 --> T36
+  T37["serialno"]
+  F7 --> T37
+  T38["sku"]
+  F7 --> T38
+  F8["#8 score 20<br/>0x000000004805be08<br/>xrefs 6 calls 17"]
+  F8 --> T14
+  F8 --> T15
+  F8 --> T7
+  F8 --> T8

@@ -1,0 +1,122 @@
+flowchart TD
+  B0["0x0000000048082974<br/>- 0x000000004808297c"]
+  B1["0x000000004808297e<br/>- 0x0000000048082984"]
+  B2["0x0000000048082986<br/>- 0x0000000048082990"]
+  B3["0x0000000048082992<br/>- 0x0000000048082994"]
+  B4["0x0000000048082996<br/>- 0x00000000480829a4"]
+  B5["0x00000000480829a6<br/>- 0x00000000480829b6"]
+  B6["0x00000000480829b8<br/>- 0x00000000480829c6"]
+  B7["0x00000000480829c8<br/>- 0x00000000480829e8"]
+  B8["0x00000000480829ea<br/>- 0x00000000480829f0"]
+  B9["0x00000000480829f2<br/>- 0x00000000480829f8"]
+  B10["0x00000000480829fa<br/>- 0x0000000048082a02<br/>Invalid boot state for unlocking"]
+  B11["0x0000000048082a04<br/>- 0x0000000048082a04"]
+  B12["0x0000000048082a06<br/>- 0x0000000048082a0e"]
+  B13["0x0000000048082a10<br/>- 0x0000000048082a16"]
+  B14["0x0000000048082a18<br/>- 0x0000000048082a1c"]
+  B15["0x0000000048082a1e<br/>- 0x0000000048082a1e"]
+  B16["0x0000000048082a20<br/>- 0x0000000048082a28"]
+  B17["0x0000000048082a2a<br/>- 0x0000000048082a2a"]
+  B18["0x0000000048082a2c<br/>- 0x0000000048082a30"]
+  B19["0x0000000048082a32<br/>- 0x0000000048082a34"]
+  B20["0x0000000048082a36<br/>- 0x0000000048082a40"]
+  B21["0x0000000048082a42<br/>- 0x0000000048082a46"]
+  B22["0x0000000048082a48<br/>- 0x0000000048082a4e"]
+  B23["0x0000000048082a50<br/>- 0x0000000048082a5c<br/>Code validation failure"]
+  B24["0x0000000048082a5e<br/>- 0x0000000048082a5e"]
+  B25["0x0000000048082a60<br/>- 0x0000000048082a6a<br/>metadata"]
+  B26["0x0000000048082a6c<br/>- 0x0000000048082a76<br/>md_udc<br/>userdata"]
+  B27["0x0000000048082a78<br/>- 0x0000000048082a7e"]
+  B28["0x0000000048082a80<br/>- 0x0000000048082a8c<br/>md_udc"]
+  B29["0x0000000048082a8e<br/>- 0x0000000048082ab8<br/>Bootloader is unlocked"]
+  B30["0x0000000048082aba<br/>- 0x0000000048082aba"]
+  B31["0x0000000048082abc<br/>- 0x0000000048082ac4<br/>Already unlocked"]
+  B32["0x0000000048082ac6<br/>- 0x0000000048082ac6"]
+  B33["0x0000000048082ac8<br/>- 0x0000000048082ace"]
+  B34["0x0000000048082ad0<br/>- 0x0000000048082adc<br/>Check 'Allow OEM Unlock'"]
+  B35["0x0000000048082ade<br/>- 0x0000000048082ade"]
+  B36["0x0000000048082ae0<br/>- 0x0000000048082aec<br/>Check 'Allow OEM Unlock'<br/>fastboot oem unlock"]
+  B37["0x0000000048082aee<br/>- 0x0000000048082aee"]
+  B38["0x0000000048082af0<br/>- 0x0000000048082afc<br/>fastboot oem unlock<br/>metadata"]
+  B39["0x0000000048082afe<br/>- 0x0000000048082afe"]
+  B40["0x0000000048082b00<br/>- 0x0000000048082b0c<br/>metadata<br/>userdata"]
+  B41["0x0000000048082b0e<br/>- 0x0000000048082b0e"]
+  B42["0x0000000048082b10<br/>- 0x0000000048082b1c<br/>userdata"]
+  B43["0x0000000048082b1e<br/>- 0x0000000048082b1e"]
+  B44["0x0000000048082b20<br/>- 0x0000000048082b28"]
+  B45["0x0000000048082b2a<br/>- 0x0000000048082b36<br/>md_udc"]
+  B46["0x0000000048082b38<br/>- 0x0000000048082bb4"]
+  B47["0x0000000048082bb6<br/>- 0x0000000048082bc0"]
+  B48["0x0000000048082bc2<br/>- 0x0000000048082bc8"]
+  B49["0x0000000048082bca<br/>- 0x0000000048082bd2"]
+  B50["0x0000000048082bd4<br/>- 0x0000000048082bd4"]
+  B0 -->|"cbnz"| B5
+  B0 -->|"fallthrough"| B1
+  B1 -->|"cbz"| B4
+  B1 -->|"fallthrough"| B2
+  B2 -->|"beq"| B6
+  B2 -->|"fallthrough"| B3
+  B3 -->|"next"| B4
+  B4 -->|"next"| B5
+  B5 -->|"next"| B6
+  B6 -->|"b"| B3
+  B7 -->|"beq"| B12
+  B7 -->|"fallthrough"| B8
+  B8 -->|"beq"| B31
+  B8 -->|"fallthrough"| B9
+  B9 -->|"beq"| B16
+  B9 -->|"fallthrough"| B10
+  B10 -->|"fallthrough"| B11
+  B11 -->|"next"| B12
+  B12 -->|"cbz"| B14
+  B12 -->|"fallthrough"| B13
+  B13 -->|"beq"| B33
+  B13 -->|"fallthrough"| B14
+  B14 -->|"cbnz"| B18
+  B14 -->|"fallthrough"| B15
+  B15 -->|"next"| B16
+  B16 -->|"fallthrough"| B17
+  B17 -->|"next"| B18
+  B18 -->|"cbnz"| B21
+  B18 -->|"fallthrough"| B19
+  B19 -->|"beq"| B36
+  B19 -->|"fallthrough"| B20
+  B20 -->|"bhi"| B36
+  B20 -->|"fallthrough"| B21
+  B21 -->|"cbnz"| B25
+  B21 -->|"fallthrough"| B22
+  B22 -->|"cbnz"| B25
+  B22 -->|"fallthrough"| B23
+  B23 -->|"fallthrough"| B24
+  B24 -->|"next"| B25
+  B25 -->|"bne"| B38
+  B25 -->|"fallthrough"| B26
+  B26 -->|"bne"| B40
+  B26 -->|"fallthrough"| B27
+  B27 -->|"beq"| B42
+  B27 -->|"fallthrough"| B28
+  B28 -->|"beq"| B44
+  B28 -->|"fallthrough"| B29
+  B29 -->|"fallthrough"| B30
+  B30 -->|"next"| B31
+  B31 -->|"fallthrough"| B32
+  B32 -->|"next"| B33
+  B33 -->|"bne"| B14
+  B33 -->|"fallthrough"| B34
+  B34 -->|"fallthrough"| B35
+  B35 -->|"next"| B36
+  B36 -->|"fallthrough"| B37
+  B37 -->|"next"| B38
+  B38 -->|"fallthrough"| B39
+  B39 -->|"next"| B40
+  B40 -->|"fallthrough"| B41
+  B41 -->|"next"| B42
+  B42 -->|"fallthrough"| B43
+  B43 -->|"next"| B44
+  B44 -->|"beq"| B29
+  B44 -->|"fallthrough"| B45
+  B45 -->|"b"| B29
+  B46 -->|"fallthrough"| B47
+  B47 -->|"fallthrough"| B48
+  B48 -->|"fallthrough"| B49
+  B49 -->|"fallthrough"| B50

@@ -1,0 +1,293 @@
+LK static analysis summary
+==========================
+
+Source       : /home/cameron/val-protocol/lk.img
+Input type   : lk partition from container
+LK base      : 0x0000000048000000
+LK size      : 1346280 bytes
+LK VA range  : 0x0000000048000000-0x0000000048148ae7
+Architecture : arm32_thumb
+Instructions : 659054
+String hits  : 214
+String xrefs : 205
+
+Flow candidates: 51
+Best flow    : 0x0000000048082974-0x0000000048082bd4 (score 82)
+FRP checkers : 1
+Best FRP     : 0x000000004808380c-0x00000000480838f4 (confidence 70)
+KEY validators: 1
+Best KEY     : 0x0000000048077fe0-0x00000000480781c4 (confidence 62)
+Erase permission checks: 1
+Best erase permission: 0x0000000048067da2-0x0000000048067ed4 (confidence 68)
+Partition erase ops: 4
+
+Address mapping
+---------------
+  file_offset = virtual_address - LK base
+  virtual_address = LK base + file_offset
+
+  HxD/File offset values are relative to the extracted lk.bin written in the output folder.
+  If you open that lk.bin in HxD, use the HxD offset directly with Go to / Ctrl+G.
+
+Interesting xrefs
+-----------------
+  0x0000000048003da8 -> 0x00000000480b2550 'serialno' [thumb ldr/add-pc r2]
+  0x000000004801c534 -> 0x0000000048104bb0 'imei' [thumb ldr/add-pc r3]
+  0x000000004801c53a -> 0x0000000048104bec 'imei' [thumb ldr/add-pc r3]
+  0x000000004801c540 -> 0x0000000048104bec 'imei' [thumb ldr/add-pc r3]
+  0x000000004801c546 -> 0x0000000048104bec 'imei' [thumb ldr/add-pc r3]
+  0x0000000048023d2a -> 0x00000000480cdd40 'serialno' [thumb ldr/add-pc r7]
+  0x0000000048023d80 -> 0x00000000480cdd40 'serialno' [thumb ldr/add-pc r5]
+  0x000000004802594e -> 0x0000000048106d80 'userdata' [thumb ldr/add-pc r0]
+  0x000000004802fa92 -> 0x00000000480d2dac 'barcode' [thumb ldr/add-pc r0]
+  0x0000000048030244 -> 0x00000000480d2e1c 'barcode' [thumb ldr/add-pc r1]
+  0x000000004803029a -> 0x00000000480d2e44 'meid' [thumb ldr/add-pc r2]
+  0x0000000048030308 -> 0x00000000480d2e54 'sku' [thumb ldr/add-pc r2]
+  0x0000000048030bde -> 0x00000000480d2dac 'barcode' [thumb ldr/add-pc r0]
+  0x0000000048031fb6 -> 0x00000000480d3440 'barcode' [thumb ldr/add-pc r0]
+  0x0000000048031fca -> 0x00000000480d344c 'barcode' [thumb ldr/add-pc r0]
+  0x00000000480328ae -> 0x00000000480d2e1c 'barcode' [thumb ldr/add-pc r1]
+  0x0000000048032cb8 -> 0x00000000480d3650 'esimid' [thumb ldr/add-pc r1]
+  0x0000000048032cd6 -> 0x00000000480d3658 'esimid' [thumb ldr/add-pc r2]
+  0x0000000048032d5e -> 0x00000000480d2e44 'meid' [thumb ldr/add-pc r2]
+  0x0000000048032dcc -> 0x00000000480d2e54 'sku' [thumb ldr/add-pc r2]
+  0x00000000480589ec -> 0x00000000480b2550 'serialno' [thumb ldr/add-pc r1]
+  0x00000000480589fc -> 0x00000000480e172c 'barcode' [thumb ldr/add-pc r1]
+  0x000000004805a260 -> 0x00000000480e2248 'barcode' [thumb ldr/add-pc r0]
+  0x000000004805a294 -> 0x00000000480e2258 'barcode' [thumb ldr/add-pc r1]
+  0x000000004805a2c4 -> 0x00000000480e2248 'barcode' [thumb ldr/add-pc r0]
+  0x000000004805a2f8 -> 0x00000000480e2294 'barcode' [thumb ldr/add-pc r1]
+  0x000000004805a87a -> 0x00000000480e172c 'barcode' [thumb ldr/add-pc r1]
+  0x000000004805a87e -> 0x00000000480f2b5c 'serialno' [thumb ldr/add-pc r2]
+  0x000000004805a8d0 -> 0x00000000480f94dc 'battid' [thumb ldr/add-pc r1]
+  0x000000004805a960 -> 0x00000000480f2e40 'sku' [thumb ldr/add-pc r1]
+  0x000000004805aa4a -> 0x00000000480d3650 'esimid' [thumb ldr/add-pc r1]
+  0x000000004805aa50 -> 0x00000000480f327c 'esimid' [thumb ldr/add-pc r2]
+  0x000000004805ab36 -> 0x00000000480f3478 'iccid' [thumb ldr/add-pc r1]
+  0x000000004805ab38 -> 0x00000000480f3480 'iccid' [thumb ldr/add-pc r2]
+  0x000000004805ab50 -> 0x00000000480f3490 'imei' [thumb ldr/add-pc r1]
+  0x000000004805ab52 -> 0x00000000480f3498 'imei' [thumb ldr/add-pc r2]
+  0x000000004805ab68 -> 0x00000000480f34d8 'imei2' [thumb ldr/add-pc r1]
+  0x000000004805ab6a -> 0x00000000480f34e0 'imei2' [thumb ldr/add-pc r2]
+  0x000000004805abd2 -> 0x00000000480f380c 'meid' [thumb ldr/add-pc r1]
+  0x000000004805abd6 -> 0x00000000480f3814 'meid' [thumb ldr/add-pc r2]
+  0x000000004805abea -> 0x00000000480f3814 'meid' [thumb ldr/add-pc r2]
+  0x000000004805ace6 -> 0x00000000480b2550 'serialno' [thumb ldr/add-pc r1]
+  0x000000004805acea -> 0x00000000480f3be4 'barcode' [thumb ldr/add-pc r2]
+  0x000000004805acfa -> 0x00000000480f3be4 'barcode' [thumb ldr/add-pc r2]
+  0x000000004805acfe -> 0x00000000480f2e48 'sku' [thumb ldr/add-pc r1]
+  0x000000004805ad02 -> 0x00000000480f3be4 'barcode' [thumb ldr/add-pc r2]
+  0x000000004805be20 -> 0x00000000480f4784 'avb_custom_key' [thumb ldr/add-pc r1]
+  0x000000004805be2c -> 0x00000000480f4784 'avb_custom_key' [thumb ldr/add-pc r1]
+  0x000000004805be2c -> 0x00000000480f4794 'debug_token' [thumb ldr/add-pc r1]
+  0x000000004805be46 -> 0x00000000480f47c0 'metadata' [thumb ldr/add-pc r1]
+  0x000000004805be54 -> 0x00000000480f47cc 'md_udc' [thumb ldr/add-pc r1]
+  0x000000004805bece -> 0x00000000480f47cc 'md_udc' [thumb ldr/add-pc r5]
+  0x000000004805c0c2 -> 0x00000000480f4794 'debug_token' [thumb ldr/add-pc r1]
+  0x000000004805c0e6 -> 0x00000000480f4784 'avb_custom_key' [thumb ldr/add-pc r1]
+  0x0000000048063040 -> 0x00000000480f7e38 'frp' [thumb ldr/add-pc r0]
+  0x00000000480641b8 -> 0x00000000480f2e48 'sku' [thumb ldr/add-pc r1]
+  0x00000000480641cc -> 0x00000000480f8340 'sku' [thumb ldr/add-pc r1]
+  0x00000000480644f0 -> 0x00000000480f8388 'serialno' [thumb ldr/add-pc r0]
+  0x0000000048064740 -> 0x00000000480f857c 'sku' [thumb ldr/add-pc r0]
+  0x00000000480647d8 -> 0x00000000480f8388 'serialno' [thumb ldr/add-pc r1]
+  0x0000000048064afe -> 0x00000000480f857c 'sku' [thumb ldr/add-pc r1]
+  0x00000000480656d0 -> 0x00000000480f898c 'barcode' [thumb ldr/add-pc r0]
+  0x00000000480656d8 -> 0x00000000480d2dac 'barcode' [thumb ldr/add-pc r0]
+  0x00000000480656d8 -> 0x00000000480f898c 'barcode' [thumb ldr/add-pc r0]
+  0x0000000048065846 -> 0x00000000480f8a38 'nvdata' [thumb ldr/add-pc r1]
+  0x000000004806585a -> 0x00000000480f8a38 'nvdata' [thumb ldr/add-pc r1]
+  0x000000004806589a -> 0x00000000480f8a6c 'nvdata' [thumb ldr/add-pc r7]
+  0x00000000480658ae -> 0x00000000480f8a74 'nvdata' [thumb ldr/add-pc r1]
+  0x00000000480658bc -> 0x00000000480f8a74 'nvdata' [thumb ldr/add-pc r1]
+  0x00000000480658ec -> 0x00000000480f8aac 'nvdata' [thumb ldr/add-pc r1]
+  0x000000004806613e -> 0x00000000480f2e40 'sku' [thumb ldr/add-pc r1]
+  0x000000004806618a -> 0x00000000480f3490 'imei' [thumb ldr/add-pc r1]
+  0x000000004806619a -> 0x00000000480f3498 'imei' [thumb ldr/add-pc r1]
+  0x000000004806619a -> 0x00000000480f8d04 'meid' [thumb ldr/add-pc r1]
+  0x00000000480661aa -> 0x00000000480f2e48 'sku' [thumb ldr/add-pc r1]
+  0x00000000480661ba -> 0x00000000480f8340 'sku' [thumb ldr/add-pc r1]
+  0x000000004806620e -> 0x00000000480f8d54 'sku' [thumb ldr/add-pc r1]
+  0x000000004806621c -> 0x00000000480f8d54 'sku' [thumb ldr/add-pc r1]
+  0x0000000048066226 -> 0x00000000480f8d24 'imei' [thumb ldr/add-pc r1]
+  0x0000000048066db0 -> 0x00000000480f94dc 'battid' [thumb ldr/add-pc r1]
+  0x0000000048066dcc -> 0x00000000480f94d8 'battid' [thumb ldr/add-pc r2]
+  0x0000000048066de2 -> 0x00000000480f9508 'battid' [thumb ldr/add-pc r1]
+  0x00000000480671e4 -> 0x00000000480f94e4 'battid' [thumb ldr/add-pc r1]
+  0x0000000048067daa -> 0x00000000480f9ab8 'fboot_cmd_erase_permission_validate' [thumb ldr/add-pc r1]
+  0x0000000048067db8 -> 0x00000000480f4784 'avb_custom_key' [thumb ldr/add-pc r1]
+  0x0000000048067db8 -> 0x00000000480f9ab8 'fboot_cmd_erase_permission_validate' [thumb ldr/add-pc r1]
+  0x0000000048067dca -> 0x00000000480f4794 'debug_token' [thumb ldr/add-pc r1]
+  0x0000000048067e52 -> 0x00000000480f9ae0 'Disallow to erase partition %s on oem_locked device' [thumb ldr/add-pc r1]
+  0x0000000048067e84 -> 0x00000000480f9b44 'erase permission denied' [thumb ldr/add-pc r1]
+  0x0000000048067f2a -> 0x00000000480f4794 'debug_token' [thumb ldr/add-pc r1]
+  0x0000000048067f38 -> 0x00000000480f4784 'avb_custom_key' [thumb ldr/add-pc r1]
+  0x0000000048067fa4 -> 0x00000000480f9b64 'Invalid partition name %s' [thumb ldr/add-pc r1]
+  0x000000004806b28a -> 0x00000000480faa20 'metadata' [thumb ldr/add-pc r8]
+  0x000000004806b290 -> 0x00000000480fa7ac 'metadata' [thumb ldr/add-pc r1]
+  0x000000004806b31a -> 0x00000000480fa970 'metadata' [thumb ldr/add-pc r1]
+  0x000000004806b428 -> 0x00000000480faa20 'metadata' [thumb ldr/add-pc r2]
+  0x000000004806b46c -> 0x00000000480fa7d8 'metadata' [thumb ldr/add-pc r1]
+  0x000000004806b70a -> 0x00000000480fa788 'metadata' [thumb ldr/add-pc r1]
+  0x000000004806b70c -> 0x00000000480faa38 'metadata' [thumb ldr/add-pc r2]
+  0x000000004806d404 -> 0x0000000048106d80 'userdata' [thumb ldr/add-pc r3]
+  0x000000004806d5a2 -> 0x00000000481007d4 'userdata' [thumb ldr/add-pc r3]
+  0x000000004806d5a8 -> 0x00000000481007d4 'userdata' [thumb ldr/add-pc r3]
+  0x000000004806d5ae -> 0x00000000481007d4 'userdata' [thumb ldr/add-pc r3]
+  0x000000004806d66a -> 0x00000000481007d4 'userdata' [thumb ldr/add-pc r3]
+  0x000000004806d672 -> 0x00000000481007d4 'userdata' [thumb ldr/add-pc r3]
+  0x0000000048078058 -> 0x000000004810336c 'validate_hash_password: Unsupported datablock' [thumb ldr/add-pc r1]
+  0x0000000048078064 -> 0x000000004810336c 'mot_sec: validate_hash_password: Unsupported datablock' [thumb ldr/add-pc r1]
+  0x000000004807806e -> 0x000000004810336c 'mot_sec: validate_hash_password: Unsupported datablock' [thumb ldr/add-pc r1]
+  0x0000000048078080 -> 0x0000000048103334 'validate_hash_password: Version 1 datablock' [thumb ldr/add-pc r1]
+  0x00000000480780c0 -> 0x00000000481032fc 'validate_hash_password: Version 2 datablock' [thumb ldr/add-pc r1]
+  0x00000000480780e8 -> 0x00000000481033c8 'mot_sec: hash calculation failure!' [thumb ldr/add-pc r1]
+  0x0000000048078124 -> 0x00000000481033ec 'mot_sec: hash at offset i:' [thumb ldr/add-pc r1]
+  0x00000000480784e2 -> 0x0000000048106d80 'userdata' [thumb ldr/add-pc r1]
+  0x00000000480784f2 -> 0x00000000481036a8 'cache' [thumb ldr/add-pc r1]
+  0x0000000048078500 -> 0x00000000480f47c0 'metadata' [thumb ldr/add-pc r1]
+  0x0000000048078e8a -> 0x000000004810488f 'imei' [thumb ldr/add-pc r0]
+  0x0000000048079242 -> 0x0000000048104c58 'imei' [thumb ldr/add-pc r0]
+  0x00000000480792f6 -> 0x0000000048104bb0 'imei' [thumb ldr/add-pc r0]
+  0x000000004807930e -> 0x0000000048104bb0 'imei' [thumb ldr/add-pc r0]
+  0x000000004807930e -> 0x0000000048104bec 'imei' [thumb ldr/add-pc r0]
+  0x0000000048079318 -> 0x0000000048104bec 'imei' [thumb ldr/add-pc r0]
+  0x0000000048079322 -> 0x0000000048104bec 'imei' [thumb ldr/add-pc r0]
+  0x0000000048079322 -> 0x0000000048104c10 'imei' [thumb ldr/add-pc r0]
+  0x00000000480812ce -> 0x0000000048105d34 'metadata' [thumb ldr/add-pc r1]
+  0x0000000048081b9e -> 0x00000000480f4794 'debug_token' [thumb ldr/add-pc r1]
+  0x0000000048081bb8 -> 0x00000000480f4784 'avb_custom_key' [thumb ldr/add-pc r1]
+  0x0000000048082a00 -> 0x0000000048106cac 'Invalid boot state for unlocking' [thumb ldr/add-pc r1]
+  0x0000000048082a5a -> 0x0000000048106d38 'Code validation failure' [thumb ldr/add-pc r1]
+  0x0000000048082a62 -> 0x00000000480f47c0 'metadata' [thumb ldr/add-pc r0]
+  0x0000000048082a6e -> 0x00000000480f47cc 'md_udc' [thumb ldr/add-pc r0]
+  0x0000000048082a6e -> 0x0000000048106d80 'userdata' [thumb ldr/add-pc r0]
+  0x0000000048082a82 -> 0x00000000480f47cc 'md_udc' [thumb ldr/add-pc r4]
+  0x0000000048082a94 -> 0x0000000048106dc0 'Bootloader is unlocked' [thumb ldr/add-pc r1]
+  0x0000000048082ac2 -> 0x0000000048106c74 'Already unlocked' [thumb ldr/add-pc r1]
+  0x0000000048082ada -> 0x0000000048106cd0 "Check 'Allow OEM Unlock'" [thumb ldr/add-pc r1]
+  0x0000000048082aea -> 0x0000000048106cd0 "Check 'Allow OEM Unlock'" [thumb ldr/add-pc r1]
+  0x0000000048082aea -> 0x0000000048106d14 'fastboot oem unlock' [thumb ldr/add-pc r1]
+  0x0000000048082afa -> 0x0000000048106d14 'fastboot oem unlock' [thumb ldr/add-pc r1]
+  0x0000000048082afa -> 0x0000000048106d54 'metadata' [thumb ldr/add-pc r1]
+  0x0000000048082b0a -> 0x0000000048106d64 'metadata' [thumb ldr/add-pc r1]
+  0x0000000048082b0a -> 0x0000000048106d70 'userdata' [thumb ldr/add-pc r1]
+  0x0000000048082b1a -> 0x0000000048106d80 'userdata' [thumb ldr/add-pc r1]
+  0x0000000048082b30 -> 0x0000000048106da4 'md_udc' [thumb ldr/add-pc r1]
+  0x0000000048082bfa -> 0x00000000480f47c0 'metadata' [thumb ldr/add-pc r0]
+  0x0000000048082c04 -> 0x00000000480f47cc 'md_udc' [thumb ldr/add-pc r0]
+  0x0000000048082c04 -> 0x0000000048106d80 'userdata' [thumb ldr/add-pc r0]
+  0x0000000048082c0e -> 0x00000000480f47cc 'md_udc' [thumb ldr/add-pc r4]
+  0x0000000048082c50 -> 0x0000000048106d54 'metadata' [thumb ldr/add-pc r1]
+  0x0000000048082c60 -> 0x0000000048106d64 'metadata' [thumb ldr/add-pc r1]
+  0x0000000048082c60 -> 0x0000000048106d70 'userdata' [thumb ldr/add-pc r1]
+  0x0000000048082c76 -> 0x0000000048106da4 'md_udc' [thumb ldr/add-pc r1]
+  0x0000000048082d38 -> 0x0000000048106e74 "Check 'Allow OEM Unlock'" [thumb ldr/add-pc r1]
+  0x0000000048082d46 -> 0x0000000048106e74 "Check 'Allow OEM Unlock'" [thumb ldr/add-pc r1]
+  0x0000000048082dc4 -> 0x00000000480f47c0 'metadata' [thumb ldr/add-pc r0]
+  0x0000000048082dce -> 0x00000000480f47cc 'md_udc' [thumb ldr/add-pc r0]
+  0x0000000048082dce -> 0x0000000048106d80 'userdata' [thumb ldr/add-pc r0]
+  0x0000000048082de6 -> 0x0000000048106f54 'Now unlocked for flashing' [thumb ldr/add-pc r1]
+  0x0000000048082df2 -> 0x0000000048106f54 'Now unlocked for flashing' [thumb ldr/add-pc r1]
+  0x0000000048082e0c -> 0x0000000048106f18 'Already unlocked' [thumb ldr/add-pc r1]
+  0x0000000048082e1c -> 0x0000000048106e74 "Check 'Allow OEM Unlock'" [thumb ldr/add-pc r1]
+  0x0000000048082e1c -> 0x0000000048106f18 'Already unlocked' [thumb ldr/add-pc r1]
+  0x0000000048082e2c -> 0x0000000048106d54 'metadata' [thumb ldr/add-pc r1]
+  0x0000000048082e2c -> 0x0000000048106e74 "Check 'Allow OEM Unlock'" [thumb ldr/add-pc r1]
+  0x0000000048082e3c -> 0x0000000048106d64 'metadata' [thumb ldr/add-pc r1]
+  0x0000000048082e3c -> 0x0000000048106f38 'userdata' [thumb ldr/add-pc r1]
+  0x0000000048082efc -> 0x0000000048106fa0 'This command requires you to first unlock the bootloader' [thumb ldr/add-pc r1]
+  0x0000000048082f06 -> 0x0000000048106fa0 'This command requires you to first unlock the bootloader' [thumb ldr/add-pc r1]
+  0x0000000048082f06 -> 0x0000000048106fdc 'A unlock code may be required' [thumb ldr/add-pc r1]
+  0x0000000048082f16 -> 0x0000000048106fdc 'A unlock code may be required' [thumb ldr/add-pc r1]
+  0x00000000480831bc -> 0x0000000048107278 'userdata' [thumb ldr/add-pc r1]
+  0x00000000480831c6 -> 0x0000000048107278 'userdata' [thumb ldr/add-pc r1]
+  0x00000000480831d0 -> 0x0000000048107278 'userdata' [thumb ldr/add-pc r1]
+  0x00000000480835c6 -> 0x000000004810776c 'nvdata' [thumb ldr/add-pc r1]
+  0x00000000480835d2 -> 0x0000000048107730 'nvdata' [thumb ldr/add-pc r1]
+  0x00000000480835d2 -> 0x000000004810776c 'nvdata' [thumb ldr/add-pc r1]
+  0x0000000048083622 -> 0x00000000481077dc 'nvdata' [thumb ldr/add-pc r1]
+  0x000000004808362e -> 0x00000000481077a0 'nvdata' [thumb ldr/add-pc r1]
+  0x000000004808362e -> 0x00000000481077dc 'nvdata' [thumb ldr/add-pc r1]
+  0x0000000048083820 -> 0x00000000480f7e38 'frp' [thumb ldr/add-pc r0]
+  0x0000000048083850 -> 0x00000000480f7e38 'frp' [thumb ldr/add-pc r0]
+  0x000000004808386e -> 0x00000000481078d4 'mot_sec: FRP partition is invalid, lock anyway!' [thumb ldr/add-pc r1]
+  0x0000000048083886 -> 0x00000000481078b0 'mot_sec: Invalid partition table!' [thumb ldr/add-pc r1]
+  0x000000004808389a -> 0x00000000481078b0 'Invalid partition table!' [thumb ldr/add-pc r1]
+  0x000000004808389a -> 0x0000000048107908 "mot_sec: Couldn't read from %llx" [thumb ldr/add-pc r1]
+  0x0000000048083d94 -> 0x0000000048107bf4 'flashing_unlocked' [thumb ldr/add-pc r1]
+  0x0000000048083dee -> 0x0000000048107c08 'flashing_locked' [thumb ldr/add-pc r1]
+  0x000000004808411c -> 0x00000000480e172c 'barcode' [thumb ldr/add-pc r1]
+  0x000000004808575e -> 0x0000000048108f0c 'nvdata' [thumb ldr/add-pc r0]
+  0x000000004808577e -> 0x0000000048108f30 'nvdata' [thumb ldr/add-pc r1]
+  0x00000000480857e8 -> 0x0000000048108f30 'nvdata' [thumb ldr/add-pc r1]
+  0x00000000480857f8 -> 0x0000000048108f30 'nvdata' [thumb ldr/add-pc r1]
+  0x000000004808741c -> 0x000000004810a890 'metadata' [thumb ldr/add-pc r2]
+  0x000000004808746c -> 0x000000004810a890 'metadata' [thumb ldr/add-pc r2]
+  0x0000000048087480 -> 0x000000004810a890 'metadata' [thumb ldr/add-pc r2]
+  0x0000000048098994 -> 0x00000000480f47c0 'metadata' [thumb ldr/add-pc r1]
+  0x00000000480989a0 -> 0x00000000480f47cc 'md_udc' [thumb ldr/add-pc r1]
+  0x00000000480989a0 -> 0x0000000048106d80 'userdata' [thumb ldr/add-pc r1]
+  0x00000000480995fa -> 0x0000000048106c74 'Already unlocked' [thumb ldr/add-pc r2]
+  0x000000004809e776 -> 0x0000000048117208 'metadata' [thumb ldr/add-pc r3]
+  0x000000004809e780 -> 0x0000000048117208 'metadata' [thumb ldr/add-pc r2]
+  0x000000004809e782 -> 0x0000000048117208 'metadata' [thumb ldr/add-pc r3]
+  0x000000004809eb8a -> 0x00000000481077a0 'nvdata' [thumb ldr/add-pc r3]
+  0x000000004809eb9a -> 0x00000000481077dc 'nvdata' [thumb ldr/add-pc r3]
+  0x000000004809ec1a -> 0x00000000481077a0 'nvdata' [thumb ldr/add-pc r3]
+  0x000000004809ec2a -> 0x00000000481077dc 'nvdata' [thumb ldr/add-pc r3]
+
+Top flow candidates
+-------------------
+  #01 score=82 0x0000000048082974-0x0000000048082bd4 xrefs=17 calls=16
+      targets: Already unlocked, Bootloader is unlocked, Check 'Allow OEM Unlock', Code validation failure, Invalid boot state for unlocking, fastboot oem unlock, md_udc, metadata, userdata
+  #02 score=80 0x0000000048082bee-0x0000000048082f1e xrefs=26 calls=10
+      targets: A unlock code may be required, Already unlocked, Check 'Allow OEM Unlock', Now unlocked for flashing, This command requires you to first unlock the bootloader, md_udc, metadata, userdata
+  #03 score=62 0x0000000048067da2-0x0000000048067ed4 xrefs=6 calls=13
+      targets: Disallow to erase partition %s on oem_locked device, avb_custom_key, debug_token, erase permission denied, fboot_cmd_erase_permission_validate
+  #04 score=48 0x0000000048077fe0-0x00000000480781c4 xrefs=7 calls=9
+      targets: mot_sec: hash at offset i:, mot_sec: hash calculation failure!, mot_sec: validate_hash_password: Unsupported datablock, validate_hash_password: Unsupported datablock, validate_hash_password: Version 1 datablock, validate_hash_password: Version 2 datablock
+  #05 score=39 0x000000004808380c-0x00000000480838f4 xrefs=6 calls=6
+      targets: Invalid partition table!, frp, mot_sec: Couldn't read from %llx, mot_sec: FRP partition is invalid, lock anyway!, mot_sec: Invalid partition table!
+  #06 score=31 0x0000000048067f10-0x0000000048067fac xrefs=3 calls=6
+      targets: Invalid partition name %s, avb_custom_key, debug_token
+  #07 score=20 0x000000004805a844-0x000000004805add6 xrefs=20 calls=3
+      targets: barcode, battid, esimid, iccid, imei, imei2, meid, serialno, sku
+  #08 score=20 0x000000004805be08-0x000000004805bfee xrefs=6 calls=17
+      targets: avb_custom_key, debug_token, md_udc, metadata
+  #09 score=12 0x000000004805c090-0x000000004805c1c6 xrefs=2 calls=12
+      targets: avb_custom_key, debug_token
+  #10 score=12 0x0000000048081b54-0x0000000048081db8 xrefs=2 calls=18
+      targets: avb_custom_key, debug_token
+
+FRP checker candidates
+----------------------
+  #01 confidence=70 0x000000004808380c-0x00000000480838f4
+      evidence: string target: frp, string target: Invalid partition table!, string target: mot_sec: Invalid partition table!, string target: mot_sec: FRP partition is invalid, lock anyway!, string target: mot_sec: Couldn't read from %llx, uses 0x100 byte window, subtracts 0x100 from partition/end pointer, passes read length 0x100 in w3, loads last byte from stack buffer [r6,#0xff], returns equality result with ldrb/clz/lsrs, called by another flow candidate, called multiple times from unlock-related flow, caller contains Check 'Allow OEM Unlock' gate
+      callers: 0x0000000048082974@0x0000000048082a0a, 0x0000000048082bee@0x0000000048082cf8, 0x0000000048082bee@0x0000000048082dbc
+
+KEY validator candidates
+------------------------
+  #01 confidence=62 0x0000000048077fe0-0x00000000480781c4
+      evidence: string target: validate_hash_password: Version 2 datablock, string target: validate_hash_password: Version 1 datablock, string target: validate_hash_password: Unsupported datablock, string target: mot_sec: hash calculation failure!, string target: mot_sec: hash at offset i:, string target: mot_sec: validate_hash_password: Unsupported datablock, checks Motorola helper success value 0xf, uses hash-sized 0x20 byte buffer, contains multi-stage decode/hash call chain, called by another flow candidate, caller branches validator failure toward Code validation failure
+      callers: 0x0000000048082974@0x0000000048082a4a
+
+Erase permission candidates
+---------------------------
+  #01 confidence=68 0x0000000048067da2-0x0000000048067ed4
+      evidence: string target: fboot_cmd_erase_permission_validate, string target: erase permission denied, string target: Disallow to erase partition %s on oem_locked device, string target: debug_token, string target: avb_custom_key, debug tag names erase permission validator, contains calls whose boolean result gates erase flow, branch edge reaches erase permission denied message
+
+Partition erase operations
+--------------------------
+  metadata: xref=0x0000000048082a62 call=0x0000000048082a64->0x000000004805bd88 mode=direct_string
+      failure: 'Failed to erase metadata.'
+      failure edges: 0x0000000048082a4a->cbnz->0x0000000048082a60
+  md_udc: xref=0x0000000048082a6e call=0x0000000048082a70->0x000000004805bd88 mode=direct_string
+      failure: 'Failed to erase md_udc.\n'
+      failure edges: 0x0000000048082a4a->cbnz->0x0000000048082a60
+  userdata: xref=0x0000000048082a6e call=0x0000000048082a70->0x000000004805bd88 mode=direct_string
+      failure: 'Failed to erase userdata'
+      failure edges: 0x0000000048082a4a->cbnz->0x0000000048082a60
+  md_udc: xref=0x0000000048082a82 call=0x0000000048082a86->0x0000000048052000 mode=direct_string
+      failure: 'Failed to erase md_udc.\n'
+      failure edges: 0x0000000048082a4a->cbnz->0x0000000048082a60

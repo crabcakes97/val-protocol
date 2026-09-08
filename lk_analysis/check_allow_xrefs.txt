@@ -1,0 +1,214 @@
+Flow #01 score=82 range=0x0000000048082974-0x0000000048082bd4
+  matched targets: Already unlocked, Bootloader is unlocked, Check 'Allow OEM Unlock', Code validation failure, Invalid boot state for unlocking, fastboot oem unlock, md_udc, metadata, userdata
+  XREF 0x0000000048082ada: add r1, pc -> 0x0000000048106cd0
+   0x0000000048082ab8: b.w      #0x4801a504
+   0x0000000048082aba: pop      {r2, r5, pc}
+   0x0000000048082abc: ldr      r0, [pc, #0xb0]
+   0x0000000048082abe: ldr      r1, [pc, #0xb4]
+   0x0000000048082ac0: add      r0, pc
+   0x0000000048082ac2: add      r1, pc
+   0x0000000048082ac4: b.w      #0x4805b64c
+   0x0000000048082ac6: pop      {r1, r6, r7, pc}
+   0x0000000048082ac8: bl       #0x48081f0c
+   0x0000000048082acc: cmp      r0, #0
+   0x0000000048082ace: bne      #0x48082a18
+   0x0000000048082ad0: ldr      r0, [pc, #0xa4]
+   0x0000000048082ad2: ldr      r1, [pc, #0xa8]
+   0x0000000048082ad4: pop.w    {r4, lr}
+   0x0000000048082ad6: ands     r0, r2
+   0x0000000048082ad8: add      r0, pc
+>> 0x0000000048082ada: add      r1, pc
+   0x0000000048082adc: b.w      #0x4805b64c
+   0x0000000048082ade: pop      {r1, r2, r4, r5, r7, pc}
+   0x0000000048082ae0: ldr      r0, [pc, #0x9c]
+   0x0000000048082ae2: ldr      r1, [pc, #0xa0]
+   0x0000000048082ae4: pop.w    {r4, lr}
+   0x0000000048082ae6: ands     r0, r2
+   0x0000000048082ae8: add      r0, pc
+   0x0000000048082aea: add      r1, pc
+   0x0000000048082aec: b.w      #0x4805b64c
+   0x0000000048082aee: pop      {r1, r2, r3, r5, r7, pc}
+   0x0000000048082af0: ldr      r0, [pc, #0x94]
+   0x0000000048082af2: ldr      r1, [pc, #0x98]
+   0x0000000048082af4: pop.w    {r4, lr}
+   0x0000000048082af6: ands     r0, r2
+   0x0000000048082af8: add      r0, pc
+   0x0000000048082afa: add      r1, pc
+
+  XREF 0x0000000048082aea: add r1, pc -> 0x0000000048106cd0
+   0x0000000048082ac8: bl       #0x48081f0c
+   0x0000000048082acc: cmp      r0, #0
+   0x0000000048082ace: bne      #0x48082a18
+   0x0000000048082ad0: ldr      r0, [pc, #0xa4]
+   0x0000000048082ad2: ldr      r1, [pc, #0xa8]
+   0x0000000048082ad4: pop.w    {r4, lr}
+   0x0000000048082ad6: ands     r0, r2
+   0x0000000048082ad8: add      r0, pc
+   0x0000000048082ada: add      r1, pc
+   0x0000000048082adc: b.w      #0x4805b64c
+   0x0000000048082ade: pop      {r1, r2, r4, r5, r7, pc}
+   0x0000000048082ae0: ldr      r0, [pc, #0x9c]
+   0x0000000048082ae2: ldr      r1, [pc, #0xa0]
+   0x0000000048082ae4: pop.w    {r4, lr}
+   0x0000000048082ae6: ands     r0, r2
+   0x0000000048082ae8: add      r0, pc
+>> 0x0000000048082aea: add      r1, pc
+   0x0000000048082aec: b.w      #0x4805b64c
+   0x0000000048082aee: pop      {r1, r2, r3, r5, r7, pc}
+   0x0000000048082af0: ldr      r0, [pc, #0x94]
+   0x0000000048082af2: ldr      r1, [pc, #0x98]
+   0x0000000048082af4: pop.w    {r4, lr}
+   0x0000000048082af6: ands     r0, r2
+   0x0000000048082af8: add      r0, pc
+   0x0000000048082afa: add      r1, pc
+   0x0000000048082afc: b.w      #0x4805b64c
+   0x0000000048082afe: pop      {r1, r2, r5, r7, pc}
+   0x0000000048082b00: ldr      r0, [pc, #0x8c]
+   0x0000000048082b02: ldr      r1, [pc, #0x90]
+   0x0000000048082b04: pop.w    {r4, lr}
+   0x0000000048082b06: ands     r0, r2
+   0x0000000048082b08: add      r0, pc
+   0x0000000048082b0a: add      r1, pc
+
+Flow #02 score=80 range=0x0000000048082bee-0x0000000048082f1e
+  matched targets: A unlock code may be required, Already unlocked, Check 'Allow OEM Unlock', Now unlocked for flashing, This command requires you to first unlock the bootloader, md_udc, metadata, userdata
+  XREF 0x0000000048082d38: add r1, pc -> 0x0000000048106e74
+   0x0000000048082d18: ldc2     p8, c4, [sb], {0x15}
+   0x0000000048082d1a: ldr      r0, [pc, #0x54]
+   0x0000000048082d1c: ldr      r1, [pc, #0x54]
+   0x0000000048082d1e: add      r0, pc
+   0x0000000048082d20: add      r1, pc
+   0x0000000048082d22: bl       #0x4805b0f8
+   0x0000000048082d24: vld1.8   {d18[1]}, [sb], r0
+   0x0000000048082d26: movs     r0, #0x20
+   0x0000000048082d28: pop.w    {r4, r5, r6, lr}
+   0x0000000048082d2a: eors     r0, r6
+   0x0000000048082d2c: b.w      #0x4801a504
+   0x0000000048082d2e: cbnz     r2, #0x48082dac
+   0x0000000048082d30: ldr      r4, [pc, #0x44]
+   0x0000000048082d32: ldr      r1, [pc, #0x48]
+   0x0000000048082d34: add      r4, pc
+   0x0000000048082d36: mov      r0, r4
+>> 0x0000000048082d38: add      r1, pc
+   0x0000000048082d3a: bl       #0x4805b64c
+   0x0000000048082d3c: stc2     p9, c4, [r7], {0x10}
+   0x0000000048082d3e: ldr      r1, [pc, #0x40]
+   0x0000000048082d40: mov      r0, r4
+   0x0000000048082d42: pop.w    {r4, r5, r6, lr}
+   0x0000000048082d44: eors     r0, r6
+   0x0000000048082d46: add      r1, pc
+   0x0000000048082d48: b.w      #0x4805b64c
+   0x0000000048082d4a: pop      {r7}
+   0x0000000048082d4c: ldr      r0, [pc, #0x34]
+   0x0000000048082d4e: ldr      r1, [pc, #0x38]
+   0x0000000048082d50: pop.w    {r4, r5, r6, lr}
+   0x0000000048082d52: eors     r0, r6
+   0x0000000048082d54: add      r0, pc
+   0x0000000048082d56: add      r1, pc
+   0x0000000048082d58: b.w      #0x4805b64c
+
+  XREF 0x0000000048082d46: add r1, pc -> 0x0000000048106e74
+   0x0000000048082d26: movs     r0, #0x20
+   0x0000000048082d28: pop.w    {r4, r5, r6, lr}
+   0x0000000048082d2a: eors     r0, r6
+   0x0000000048082d2c: b.w      #0x4801a504
+   0x0000000048082d2e: cbnz     r2, #0x48082dac
+   0x0000000048082d30: ldr      r4, [pc, #0x44]
+   0x0000000048082d32: ldr      r1, [pc, #0x48]
+   0x0000000048082d34: add      r4, pc
+   0x0000000048082d36: mov      r0, r4
+   0x0000000048082d38: add      r1, pc
+   0x0000000048082d3a: bl       #0x4805b64c
+   0x0000000048082d3c: stc2     p9, c4, [r7], {0x10}
+   0x0000000048082d3e: ldr      r1, [pc, #0x40]
+   0x0000000048082d40: mov      r0, r4
+   0x0000000048082d42: pop.w    {r4, r5, r6, lr}
+   0x0000000048082d44: eors     r0, r6
+>> 0x0000000048082d46: add      r1, pc
+   0x0000000048082d48: b.w      #0x4805b64c
+   0x0000000048082d4a: pop      {r7}
+   0x0000000048082d4c: ldr      r0, [pc, #0x34]
+   0x0000000048082d4e: ldr      r1, [pc, #0x38]
+   0x0000000048082d50: pop.w    {r4, r5, r6, lr}
+   0x0000000048082d52: eors     r0, r6
+   0x0000000048082d54: add      r0, pc
+   0x0000000048082d56: add      r1, pc
+   0x0000000048082d58: b.w      #0x4805b64c
+   0x0000000048082d5a: pop      {r3, r4, r5, r6}
+   0x0000000048082d5c: ldr      r6, [pc, #0xb0]
+   0x0000000048082d5e: movs     r6, r2
+   0x0000000048082d60: asrs     r0, r6, #0x13
+   0x0000000048082d62: movs     r7, r0
+   0x0000000048082d64: adcs     r6, r5
+   0x0000000048082d66: movs     r0, r1
+
+  XREF 0x0000000048082e1c: add r1, pc -> 0x0000000048106e74
+   0x0000000048082dfc: ands     r0, r1
+   0x0000000048082dfe: b.w      #0x4801a504
+   0x0000000048082e00: cbnz     r1, #0x48082e64
+   0x0000000048082e02: ldr      r0, [pc, #0x64]
+   0x0000000048082e04: ldr      r1, [pc, #0x64]
+   0x0000000048082e06: pop.w    {r3, lr}
+   0x0000000048082e08: ands     r0, r1
+   0x0000000048082e0a: add      r0, pc
+   0x0000000048082e0c: add      r1, pc
+   0x0000000048082e0e: b.w      #0x4805b64c
+   0x0000000048082e10: pop      {r0, r2, r3, r4}
+   0x0000000048082e12: ldr      r0, [pc, #0x5c]
+   0x0000000048082e14: ldr      r1, [pc, #0x5c]
+   0x0000000048082e16: pop.w    {r3, lr}
+   0x0000000048082e18: ands     r0, r1
+   0x0000000048082e1a: add      r0, pc
+>> 0x0000000048082e1c: add      r1, pc
+   0x0000000048082e1e: b.w      #0x4805b64c
+   0x0000000048082e20: pop      {r0, r2, r4}
+   0x0000000048082e22: ldr      r0, [pc, #0x54]
+   0x0000000048082e24: ldr      r1, [pc, #0x54]
+   0x0000000048082e26: pop.w    {r3, lr}
+   0x0000000048082e28: ands     r0, r1
+   0x0000000048082e2a: add      r0, pc
+   0x0000000048082e2c: add      r1, pc
+   0x0000000048082e2e: b.w      #0x4805b64c
+   0x0000000048082e30: pop      {r0, r2, r3}
+   0x0000000048082e32: ldr      r0, [pc, #0x4c]
+   0x0000000048082e34: ldr      r1, [pc, #0x4c]
+   0x0000000048082e36: pop.w    {r3, lr}
+   0x0000000048082e38: ands     r0, r1
+   0x0000000048082e3a: add      r0, pc
+   0x0000000048082e3c: add      r1, pc
+
+  XREF 0x0000000048082e2c: add r1, pc -> 0x0000000048106e74
+   0x0000000048082e0c: add      r1, pc
+   0x0000000048082e0e: b.w      #0x4805b64c
+   0x0000000048082e10: pop      {r0, r2, r3, r4}
+   0x0000000048082e12: ldr      r0, [pc, #0x5c]
+   0x0000000048082e14: ldr      r1, [pc, #0x5c]
+   0x0000000048082e16: pop.w    {r3, lr}
+   0x0000000048082e18: ands     r0, r1
+   0x0000000048082e1a: add      r0, pc
+   0x0000000048082e1c: add      r1, pc
+   0x0000000048082e1e: b.w      #0x4805b64c
+   0x0000000048082e20: pop      {r0, r2, r4}
+   0x0000000048082e22: ldr      r0, [pc, #0x54]
+   0x0000000048082e24: ldr      r1, [pc, #0x54]
+   0x0000000048082e26: pop.w    {r3, lr}
+   0x0000000048082e28: ands     r0, r1
+   0x0000000048082e2a: add      r0, pc
+>> 0x0000000048082e2c: add      r1, pc
+   0x0000000048082e2e: b.w      #0x4805b64c
+   0x0000000048082e30: pop      {r0, r2, r3}
+   0x0000000048082e32: ldr      r0, [pc, #0x4c]
+   0x0000000048082e34: ldr      r1, [pc, #0x4c]
+   0x0000000048082e36: pop.w    {r3, lr}
+   0x0000000048082e38: ands     r0, r1
+   0x0000000048082e3a: add      r0, pc
+   0x0000000048082e3c: add      r1, pc
+   0x0000000048082e3e: b.w      #0x4805b64c
+   0x0000000048082e40: pop      {r0, r2}
+   0x0000000048082e42: nop      
+   0x0000000048082e44: ldr      r5, [pc, #0x1c0]
+   0x0000000048082e46: movs     r6, r2
+   0x0000000048082e48: asrs     r4, r6, #0x10
+   0x0000000048082e4a: movs     r7, r0
+   0x0000000048082e4c: lsls     r2, r6
+

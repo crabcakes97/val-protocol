@@ -1,0 +1,7337 @@
+[
+  {
+    "start_address": "0x0000000048082974",
+    "end_address": "0x0000000048082bd4",
+    "score": 82,
+    "matched_targets": [
+      "Already unlocked",
+      "Bootloader is unlocked",
+      "Check 'Allow OEM Unlock'",
+      "Code validation failure",
+      "Invalid boot state for unlocking",
+      "fastboot oem unlock",
+      "md_udc",
+      "metadata",
+      "userdata"
+    ],
+    "calls": [
+      "0x0000000048081ec0",
+      "0x00000000480853d0",
+      "0x000000004806ff38",
+      "0x000000004808380c",
+      "0x0000000048081ee4",
+      "0x0000000048033694",
+      "0x0000000048081f0c",
+      "0x000000004803820c",
+      "0x0000000048077fe0",
+      "0x000000004805bd88",
+      "0x0000000048083ea0",
+      "0x0000000048052000",
+      "0x000000004805b64c",
+      "0x000000004808363c",
+      "0x00000000480836dc",
+      "0x000000004805b0f8"
+    ],
+    "branches": [
+      {
+        "from": "0x000000004808297c",
+        "to": "0x00000000480829a6",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048082984",
+        "to": "0x0000000048082996",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048082990",
+        "to": "0x00000000480829b8",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480829c6",
+        "to": "0x0000000048082992",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480829e8",
+        "to": "0x0000000048082a06",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480829f0",
+        "to": "0x0000000048082abc",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480829f8",
+        "to": "0x0000000048082a20",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082a02",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082a0e",
+        "to": "0x0000000048082a18",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048082a16",
+        "to": "0x0000000048082ac8",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082a1c",
+        "to": "0x0000000048082a2c",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048082a28",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082a30",
+        "to": "0x0000000048082a42",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048082a34",
+        "to": "0x0000000048082ae0",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082a40",
+        "to": "0x0000000048082ae0",
+        "mnemonic": "bhi"
+      },
+      {
+        "from": "0x0000000048082a46",
+        "to": "0x0000000048082a60",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048082a4e",
+        "to": "0x0000000048082a60",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048082a5c",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082a6a",
+        "to": "0x0000000048082af0",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048082a76",
+        "to": "0x0000000048082b00",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048082a7e",
+        "to": "0x0000000048082b10",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082a8c",
+        "to": "0x0000000048082b20",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082ab8",
+        "to": "0x000000004801a504",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082ac4",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082ace",
+        "to": "0x0000000048082a18",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048082adc",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082aec",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082afc",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082b0c",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082b1c",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082b28",
+        "to": "0x0000000048082a8e",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082b36",
+        "to": "0x0000000048082a8e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048082bb4",
+        "to": "0x0000000048082bee",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082bc0",
+        "to": "0x0000000048082be2",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082bc8",
+        "to": "0x0000000048082bd6",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082bd2",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048082a00",
+        "string_address": "0x0000000048106cac",
+        "target": "Invalid boot state for unlocking",
+        "string": "Invalid boot state for unlocking",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082a5a",
+        "string_address": "0x0000000048106d38",
+        "target": "Code validation failure",
+        "string": "Code validation failure.\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082a62",
+        "string_address": "0x00000000480f47c0",
+        "target": "metadata",
+        "string": "metadata",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x0000000048082a6e",
+        "string_address": "0x00000000480f47cc",
+        "target": "md_udc",
+        "string": "md_udc",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x0000000048082a6e",
+        "string_address": "0x0000000048106d80",
+        "target": "userdata",
+        "string": "userdata",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x0000000048082a82",
+        "string_address": "0x00000000480f47cc",
+        "target": "md_udc",
+        "string": "md_udc",
+        "via": "thumb ldr/add-pc r4",
+        "instruction": "add r4, pc"
+      },
+      {
+        "xref_address": "0x0000000048082a94",
+        "string_address": "0x0000000048106dc0",
+        "target": "Bootloader is unlocked",
+        "string": "Bootloader is unlocked! Rebooting phone\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082ac2",
+        "string_address": "0x0000000048106c74",
+        "target": "Already unlocked",
+        "string": "Already unlocked",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082ada",
+        "string_address": "0x0000000048106cd0",
+        "target": "Check 'Allow OEM Unlock'",
+        "string": "Check 'Allow OEM Unlock' in Android Settings > Developer Options",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082aea",
+        "string_address": "0x0000000048106cd0",
+        "target": "Check 'Allow OEM Unlock'",
+        "string": "Check 'Allow OEM Unlock' in Android Settings > Developer Options",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082aea",
+        "string_address": "0x0000000048106d14",
+        "target": "fastboot oem unlock",
+        "string": "fastboot oem unlock [ unlock code ]",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082afa",
+        "string_address": "0x0000000048106d14",
+        "target": "fastboot oem unlock",
+        "string": "fastboot oem unlock [ unlock code ]",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082afa",
+        "string_address": "0x0000000048106d54",
+        "target": "metadata",
+        "string": "Failed to erase metadata.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082b0a",
+        "string_address": "0x0000000048106d64",
+        "target": "metadata",
+        "string": "metadata.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082b0a",
+        "string_address": "0x0000000048106d70",
+        "target": "userdata",
+        "string": "Failed to erase userdata",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082b1a",
+        "string_address": "0x0000000048106d80",
+        "target": "userdata",
+        "string": "userdata",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082b30",
+        "string_address": "0x0000000048106da4",
+        "target": "md_udc",
+        "string": "Failed to erase md_udc.\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048082bee",
+    "end_address": "0x0000000048082f1e",
+    "score": 80,
+    "matched_targets": [
+      "A unlock code may be required",
+      "Already unlocked",
+      "Check 'Allow OEM Unlock'",
+      "Now unlocked for flashing",
+      "This command requires you to first unlock the bootloader",
+      "md_udc",
+      "metadata",
+      "userdata"
+    ],
+    "calls": [
+      "0x00000000480336d8",
+      "0x000000004805bd88",
+      "0x0000000048052000",
+      "0x000000004805b64c",
+      "0x000000004808363c",
+      "0x00000000480836dc",
+      "0x000000004805b0f8",
+      "0x000000004808380c",
+      "0x0000000048033694",
+      "0x0000000048037fa4"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048082bf4",
+        "to": "0x0000000048082bf8",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048082c00",
+        "to": "0x0000000048082c46",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048082c0a",
+        "to": "0x0000000048082c56",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048082c16",
+        "to": "0x0000000048082c66",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048082c42",
+        "to": "0x000000004801a504",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082c52",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082c62",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082c6e",
+        "to": "0x0000000048082c18",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082c7c",
+        "to": "0x0000000048082c18",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048082cde",
+        "to": "0x0000000048082d4c",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082ce6",
+        "to": "0x0000000048082cf8",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082cf4",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082cfe",
+        "to": "0x0000000048082d30",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048082d2c",
+        "to": "0x000000004801a504",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082d2e",
+        "to": "0x0000000048082dac",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048082d48",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082d58",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082d9a",
+        "to": "0x0000000048082e02",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082da2",
+        "to": "0x0000000048082db4",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082db0",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082db8",
+        "to": "0x0000000048082dbc",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048082dc0",
+        "to": "0x0000000048082e12",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048082dca",
+        "to": "0x0000000048082e22",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048082dd4",
+        "to": "0x0000000048082e32",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048082dfe",
+        "to": "0x000000004801a504",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082e00",
+        "to": "0x0000000048082e64",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048082e0e",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082e1e",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082e2e",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082e3e",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048082e92",
+        "to": "0x0000000048082e9c",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048082e9a",
+        "to": "0x0000000048082e94",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082ea8",
+        "to": "0x0000000048082f10",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082eaa",
+        "to": "0x0000000048082ef4",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048082eb8",
+        "to": "0x0000000048082f48",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082ec6",
+        "to": "0x0000000048082f50",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082ed2",
+        "to": "0x0000000048082f20",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048082eda",
+        "to": "0x0000000048082f78",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048082ee2",
+        "to": "0x0000000048082f68",
+        "mnemonic": "beq"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048082bfa",
+        "string_address": "0x00000000480f47c0",
+        "target": "metadata",
+        "string": "metadata",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x0000000048082c04",
+        "string_address": "0x00000000480f47cc",
+        "target": "md_udc",
+        "string": "md_udc",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x0000000048082c04",
+        "string_address": "0x0000000048106d80",
+        "target": "userdata",
+        "string": "userdata",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x0000000048082c0e",
+        "string_address": "0x00000000480f47cc",
+        "target": "md_udc",
+        "string": "md_udc",
+        "via": "thumb ldr/add-pc r4",
+        "instruction": "add r4, pc"
+      },
+      {
+        "xref_address": "0x0000000048082c50",
+        "string_address": "0x0000000048106d54",
+        "target": "metadata",
+        "string": "Failed to erase metadata.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082c60",
+        "string_address": "0x0000000048106d64",
+        "target": "metadata",
+        "string": "metadata.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082c60",
+        "string_address": "0x0000000048106d70",
+        "target": "userdata",
+        "string": "Failed to erase userdata",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082c76",
+        "string_address": "0x0000000048106da4",
+        "target": "md_udc",
+        "string": "Failed to erase md_udc.\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082d38",
+        "string_address": "0x0000000048106e74",
+        "target": "Check 'Allow OEM Unlock'",
+        "string": "Check 'Allow OEM Unlock' in Android Settings > Developer Options.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082d46",
+        "string_address": "0x0000000048106e74",
+        "target": "Check 'Allow OEM Unlock'",
+        "string": "Check 'Allow OEM Unlock' in Android Settings > Developer Options.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082dc4",
+        "string_address": "0x00000000480f47c0",
+        "target": "metadata",
+        "string": "metadata",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x0000000048082dce",
+        "string_address": "0x00000000480f47cc",
+        "target": "md_udc",
+        "string": "md_udc",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x0000000048082dce",
+        "string_address": "0x0000000048106d80",
+        "target": "userdata",
+        "string": "userdata",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x0000000048082de6",
+        "string_address": "0x0000000048106f54",
+        "target": "Now unlocked for flashing",
+        "string": "Now unlocked for flashing. Rebooting phone.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082df2",
+        "string_address": "0x0000000048106f54",
+        "target": "Now unlocked for flashing",
+        "string": "Now unlocked for flashing. Rebooting phone.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082e0c",
+        "string_address": "0x0000000048106f18",
+        "target": "Already unlocked",
+        "string": "Already unlocked for flashing.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082e1c",
+        "string_address": "0x0000000048106e74",
+        "target": "Check 'Allow OEM Unlock'",
+        "string": "Check 'Allow OEM Unlock' in Android Settings > Developer Options.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082e1c",
+        "string_address": "0x0000000048106f18",
+        "target": "Already unlocked",
+        "string": "Already unlocked for flashing.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082e2c",
+        "string_address": "0x0000000048106d54",
+        "target": "metadata",
+        "string": "Failed to erase metadata.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082e2c",
+        "string_address": "0x0000000048106e74",
+        "target": "Check 'Allow OEM Unlock'",
+        "string": "Check 'Allow OEM Unlock' in Android Settings > Developer Options.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082e3c",
+        "string_address": "0x0000000048106d64",
+        "target": "metadata",
+        "string": "metadata.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082e3c",
+        "string_address": "0x0000000048106f38",
+        "target": "userdata",
+        "string": "Failed to erase userdata.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082efc",
+        "string_address": "0x0000000048106fa0",
+        "target": "This command requires you to first unlock the bootloader",
+        "string": "This command requires you to first unlock the bootloader.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082f06",
+        "string_address": "0x0000000048106fa0",
+        "target": "This command requires you to first unlock the bootloader",
+        "string": "This command requires you to first unlock the bootloader.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082f06",
+        "string_address": "0x0000000048106fdc",
+        "target": "A unlock code may be required",
+        "string": "A unlock code may be required.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048082f16",
+        "string_address": "0x0000000048106fdc",
+        "target": "A unlock code may be required",
+        "string": "A unlock code may be required.",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048067da2",
+    "end_address": "0x0000000048067ed4",
+    "score": 62,
+    "matched_targets": [
+      "Disallow to erase partition %s on oem_locked device",
+      "avb_custom_key",
+      "debug_token",
+      "erase permission denied",
+      "fboot_cmd_erase_permission_validate"
+    ],
+    "calls": [
+      "0x000000004806ff38",
+      "0x000000004803816c",
+      "0x0000000048037fa4",
+      "0x000000004806ca94",
+      "0x000000004806cc04",
+      "0x000000004808288c",
+      "0x000000004805b64c",
+      "0x000000004805bd88",
+      "0x0000000048081f0c",
+      "0x0000000048081f78",
+      "0x000000004806cef8",
+      "0x0000000048098970",
+      "0x000000004806b834"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048067dc2",
+        "to": "0x0000000048067e34",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048067dd0",
+        "to": "0x0000000048067e3a",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048067dde",
+        "to": "0x0000000048067e5c",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048067df2",
+        "to": "0x0000000048067df6",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048067e02",
+        "to": "0x0000000048067e3e",
+        "mnemonic": "bhs"
+      },
+      {
+        "from": "0x0000000048067e0e",
+        "to": "0x0000000048067df4",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048067e22",
+        "to": "0x0000000048067df4",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048067e38",
+        "to": "0x0000000048067e42",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048067e48",
+        "to": "0x0000000048067e3a",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048067e68",
+        "to": "0x0000000048067e7c",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048067e8a",
+        "to": "0x0000000048067e6a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048067ecc",
+        "to": "0x0000000048067ed2",
+        "mnemonic": "cbnz"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048067daa",
+        "string_address": "0x00000000480f9ab8",
+        "target": "fboot_cmd_erase_permission_validate",
+        "string": "fboot_cmd_erase_permission_validate\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048067db8",
+        "string_address": "0x00000000480f4784",
+        "target": "avb_custom_key",
+        "string": "avb_custom_key",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048067db8",
+        "string_address": "0x00000000480f9ab8",
+        "target": "fboot_cmd_erase_permission_validate",
+        "string": "fboot_cmd_erase_permission_validate\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048067dca",
+        "string_address": "0x00000000480f4794",
+        "target": "debug_token",
+        "string": "debug_token",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048067e52",
+        "string_address": "0x00000000480f9ae0",
+        "target": "Disallow to erase partition %s on oem_locked device",
+        "string": "Disallow to erase partition %s on oem_locked device",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048067e84",
+        "string_address": "0x00000000480f9b44",
+        "target": "erase permission denied",
+        "string": "erase permission denied",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048077fe0",
+    "end_address": "0x00000000480781c4",
+    "score": 48,
+    "matched_targets": [
+      "mot_sec: hash at offset i:",
+      "mot_sec: hash calculation failure!",
+      "mot_sec: validate_hash_password: Unsupported datablock",
+      "validate_hash_password: Unsupported datablock",
+      "validate_hash_password: Version 1 datablock",
+      "validate_hash_password: Version 2 datablock"
+    ],
+    "calls": [
+      "0x0000000048077a2c",
+      "0x00000000480787a4",
+      "0x0000000048080870",
+      "0x000000004806ff38",
+      "0x00000000480794a4",
+      "0x0000000048079490",
+      "0x00000000480786b8",
+      "0x00000000480807cc",
+      "0x0000000048037f10"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048077ff4",
+        "to": "0x0000000048078026",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048077ffc",
+        "to": "0x0000000048078060",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048078006",
+        "to": "0x000000004807806c",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048078014",
+        "to": "0x0000000048078038",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048078018",
+        "to": "0x0000000048078076",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004807803c",
+        "to": "0x0000000048078020",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004807804e",
+        "to": "0x00000000480780ba",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048078052",
+        "to": "0x000000004807807a",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004807805e",
+        "to": "0x0000000048078016",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004807806a",
+        "to": "0x0000000048078030",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048078074",
+        "to": "0x0000000048078030",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048078078",
+        "to": "0x0000000048078020",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480780aa",
+        "to": "0x00000000480780c8",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480780b8",
+        "to": "0x0000000048078016",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480780c6",
+        "to": "0x0000000048078086",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480780e0",
+        "to": "0x00000000480780f0",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480780ee",
+        "to": "0x0000000048078016",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048078108",
+        "to": "0x000000004807811e",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004807810e",
+        "to": "0x00000000480780fe",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004807811c",
+        "to": "0x0000000048078016",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004807812a",
+        "to": "0x0000000048078016",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048078138",
+        "to": "0x0000000048078180",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004807818c",
+        "to": "0x00000000480781c0",
+        "mnemonic": "bls"
+      },
+      {
+        "from": "0x000000004807819c",
+        "to": "0x00000000480781c0",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x00000000480781ae",
+        "to": "0x00000000480781c0",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x00000000480781be",
+        "to": "0x00000000480781c6",
+        "mnemonic": "beq"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048078058",
+        "string_address": "0x000000004810336c",
+        "target": "validate_hash_password: Unsupported datablock",
+        "string": "mot_sec: validate_hash_password: Unsupported datablock\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048078064",
+        "string_address": "0x000000004810336c",
+        "target": "mot_sec: validate_hash_password: Unsupported datablock",
+        "string": "mot_sec: validate_hash_password: Unsupported datablock\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004807806e",
+        "string_address": "0x000000004810336c",
+        "target": "mot_sec: validate_hash_password: Unsupported datablock",
+        "string": "mot_sec: validate_hash_password: Unsupported datablock\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048078080",
+        "string_address": "0x0000000048103334",
+        "target": "validate_hash_password: Version 1 datablock",
+        "string": "mot_sec: validate_hash_password: Version 1 datablock\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x00000000480780c0",
+        "string_address": "0x00000000481032fc",
+        "target": "validate_hash_password: Version 2 datablock",
+        "string": "mot_sec: validate_hash_password: Version 2 datablock\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x00000000480780e8",
+        "string_address": "0x00000000481033c8",
+        "target": "mot_sec: hash calculation failure!",
+        "string": "mot_sec: hash calculation failure!\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048078124",
+        "string_address": "0x00000000481033ec",
+        "target": "mot_sec: hash at offset i:",
+        "string": "mot_sec: hash at offset i: %02d : %02x does not match\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004808380c",
+    "end_address": "0x00000000480838f4",
+    "score": 39,
+    "matched_targets": [
+      "Invalid partition table!",
+      "frp",
+      "mot_sec: Couldn't read from %llx",
+      "mot_sec: FRP partition is invalid, lock anyway!",
+      "mot_sec: Invalid partition table!"
+    ],
+    "calls": [
+      "0x00000000480516d8",
+      "0x0000000048051940",
+      "0x0000000048084d98",
+      "0x000000004806ff38",
+      "0x000000004806ca94",
+      "0x000000004803816c"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048083832",
+        "to": "0x000000004808387a",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048083838",
+        "to": "0x0000000048083868",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048083858",
+        "to": "0x0000000048083890",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048083880",
+        "to": "0x0000000048083834",
+        "mnemonic": "bls"
+      },
+      {
+        "from": "0x000000004808388e",
+        "to": "0x0000000048083864",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480838a2",
+        "to": "0x0000000048083864",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480838e0",
+        "to": "0x00000000480838f0",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480838ee",
+        "to": "0x00000000480838f6",
+        "mnemonic": "cbz"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048083820",
+        "string_address": "0x00000000480f7e38",
+        "target": "frp",
+        "string": "frp",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x0000000048083850",
+        "string_address": "0x00000000480f7e38",
+        "target": "frp",
+        "string": "frp",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x000000004808386e",
+        "string_address": "0x00000000481078d4",
+        "target": "mot_sec: FRP partition is invalid, lock anyway!",
+        "string": "mot_sec: FRP partition is invalid, lock anyway!\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048083886",
+        "string_address": "0x00000000481078b0",
+        "target": "mot_sec: Invalid partition table!",
+        "string": "mot_sec: Invalid partition table!\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004808389a",
+        "string_address": "0x00000000481078b0",
+        "target": "Invalid partition table!",
+        "string": "mot_sec: Invalid partition table!\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004808389a",
+        "string_address": "0x0000000048107908",
+        "target": "mot_sec: Couldn't read from %llx",
+        "string": "mot_sec: Couldn't read from %llx\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048067f10",
+    "end_address": "0x0000000048067fac",
+    "score": 31,
+    "matched_targets": [
+      "Invalid partition name %s",
+      "avb_custom_key",
+      "debug_token"
+    ],
+    "calls": [
+      "0x000000004803816c",
+      "0x00000000480380fc",
+      "0x00000000480516d8",
+      "0x000000004806cef8",
+      "0x00000000480828e4",
+      "0x000000004805b64c"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048067f22",
+        "to": "0x0000000048067f7a",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048067f30",
+        "to": "0x0000000048067f7a",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048067f3e",
+        "to": "0x0000000048067f7a",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048067f4e",
+        "to": "0x0000000048067f7a",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048067f5c",
+        "to": "0x0000000048067f7a",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048067f6e",
+        "to": "0x0000000048067f7e",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048067f78",
+        "to": "0x0000000048067f7e",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048067f84",
+        "to": "0x0000000048067f9c",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048067f8a",
+        "to": "0x0000000048067fae",
+        "mnemonic": "cbnz"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048067f2a",
+        "string_address": "0x00000000480f4794",
+        "target": "debug_token",
+        "string": "debug_token",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048067f38",
+        "string_address": "0x00000000480f4784",
+        "target": "avb_custom_key",
+        "string": "avb_custom_key",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048067fa4",
+        "string_address": "0x00000000480f9b64",
+        "target": "Invalid partition name %s",
+        "string": "Invalid partition name %s",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004805a844",
+    "end_address": "0x000000004805add6",
+    "score": 20,
+    "matched_targets": [
+      "barcode",
+      "battid",
+      "esimid",
+      "iccid",
+      "imei",
+      "imei2",
+      "meid",
+      "serialno",
+      "sku"
+    ],
+    "calls": [
+      "0x0000000048098188",
+      "0x00000000480380b4",
+      "0x00000000480380fc"
+    ],
+    "branches": [
+      {
+        "from": "0x000000004805ab28",
+        "to": "0x000000004805ab0c",
+        "mnemonic": "bne"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004805a87a",
+        "string_address": "0x00000000480e172c",
+        "target": "barcode",
+        "string": "barcode",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004805a87e",
+        "string_address": "0x00000000480f2b5c",
+        "target": "serialno",
+        "string": "Device serial number\n(used interchangably with 'serialno')",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      },
+      {
+        "xref_address": "0x000000004805a8d0",
+        "string_address": "0x00000000480f94dc",
+        "target": "battid",
+        "string": "battid",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004805a960",
+        "string_address": "0x00000000480f2e40",
+        "target": "sku",
+        "string": "carrier_sku",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004805aa4a",
+        "string_address": "0x00000000480d3650",
+        "target": "esimid",
+        "string": "esimid",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004805aa50",
+        "string_address": "0x00000000480f327c",
+        "target": "esimid",
+        "string": "Device ESIMID",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      },
+      {
+        "xref_address": "0x000000004805ab36",
+        "string_address": "0x00000000480f3478",
+        "target": "iccid",
+        "string": "iccid",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004805ab38",
+        "string_address": "0x00000000480f3480",
+        "target": "iccid",
+        "string": "Device ICCID",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      },
+      {
+        "xref_address": "0x000000004805ab50",
+        "string_address": "0x00000000480f3490",
+        "target": "imei",
+        "string": "imei",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004805ab52",
+        "string_address": "0x00000000480f3498",
+        "target": "imei",
+        "string": "Device IMEI\n(15 decimal digits including the correct checksum)",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      },
+      {
+        "xref_address": "0x000000004805ab68",
+        "string_address": "0x00000000480f34d8",
+        "target": "imei2",
+        "string": "imei2",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004805ab6a",
+        "string_address": "0x00000000480f34e0",
+        "target": "imei2",
+        "string": "Device IMEI2\n(15 decimal digits including the correct checksum)",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      },
+      {
+        "xref_address": "0x000000004805abd2",
+        "string_address": "0x00000000480f380c",
+        "target": "meid",
+        "string": "meid",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004805abd6",
+        "string_address": "0x00000000480f3814",
+        "target": "meid",
+        "string": "Device MEID\n(14 hexadecimal or 18 decimal digits)",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      },
+      {
+        "xref_address": "0x000000004805abea",
+        "string_address": "0x00000000480f3814",
+        "target": "meid",
+        "string": "Device MEID\n(14 hexadecimal or 18 decimal digits)",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      },
+      {
+        "xref_address": "0x000000004805ace6",
+        "string_address": "0x00000000480b2550",
+        "target": "serialno",
+        "string": "serialno",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004805acea",
+        "string_address": "0x00000000480f3be4",
+        "target": "barcode",
+        "string": "Device serial number\n(used interchangably with 'barcode')",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      },
+      {
+        "xref_address": "0x000000004805acfa",
+        "string_address": "0x00000000480f3be4",
+        "target": "barcode",
+        "string": "Device serial number\n(used interchangably with 'barcode')",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      },
+      {
+        "xref_address": "0x000000004805acfe",
+        "string_address": "0x00000000480f2e48",
+        "target": "sku",
+        "string": "sku",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004805ad02",
+        "string_address": "0x00000000480f3be4",
+        "target": "barcode",
+        "string": "Device serial number\n(used interchangably with 'barcode')",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004805be08",
+    "end_address": "0x000000004805bfee",
+    "score": 20,
+    "matched_targets": [
+      "avb_custom_key",
+      "debug_token",
+      "md_udc",
+      "metadata"
+    ],
+    "calls": [
+      "0x000000004805bdf8",
+      "0x0000000048037fa4",
+      "0x000000004805bd88",
+      "0x000000004806ff38",
+      "0x000000004805b64c",
+      "0x0000000048081750",
+      "0x0000000048082fdc",
+      "0x0000000048097c10",
+      "0x0000000048052000",
+      "0x00000000480380b4",
+      "0x0000000048038388",
+      "0x00000000480371c0",
+      "0x000000004806d0a0",
+      "0x0000000048051940",
+      "0x00000000480518e8",
+      "0x0000000048051864",
+      "0x000000004801f910"
+    ],
+    "branches": [
+      {
+        "from": "0x000000004805be1a",
+        "to": "0x000000004805be7a",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x000000004805be26",
+        "to": "0x000000004805be8a",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004805be36",
+        "to": "0x000000004805beac",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004805be40",
+        "to": "0x000000004805be9c",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004805be4e",
+        "to": "0x000000004805becc",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004805be5c",
+        "to": "0x000000004805bebc",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004805be68",
+        "to": "0x000000004805beb4",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004805beba",
+        "to": "0x000000004805be6a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004805beca",
+        "to": "0x000000004805be5e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004805beda",
+        "to": "0x000000004805be50",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004805beee",
+        "to": "0x000000004805be50",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004805bf60",
+        "to": "0x000000004805bff2",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004805bf7a",
+        "to": "0x000000004805c022",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004805bfa6",
+        "to": "0x000000004805bffc",
+        "mnemonic": "blo"
+      },
+      {
+        "from": "0x000000004805bfc0",
+        "to": "0x000000004805c044",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004805bfe8",
+        "to": "0x000000004805c030",
+        "mnemonic": "cbnz"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004805be20",
+        "string_address": "0x00000000480f4784",
+        "target": "avb_custom_key",
+        "string": "avb_custom_key",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004805be2c",
+        "string_address": "0x00000000480f4784",
+        "target": "avb_custom_key",
+        "string": "avb_custom_key",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004805be2c",
+        "string_address": "0x00000000480f4794",
+        "target": "debug_token",
+        "string": "debug_token",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004805be46",
+        "string_address": "0x00000000480f47c0",
+        "target": "metadata",
+        "string": "metadata",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004805be54",
+        "string_address": "0x00000000480f47cc",
+        "target": "md_udc",
+        "string": "md_udc",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004805bece",
+        "string_address": "0x00000000480f47cc",
+        "target": "md_udc",
+        "string": "md_udc",
+        "via": "thumb ldr/add-pc r5",
+        "instruction": "add r5, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004805c090",
+    "end_address": "0x000000004805c1c6",
+    "score": 12,
+    "matched_targets": [
+      "avb_custom_key",
+      "debug_token"
+    ],
+    "calls": [
+      "0x000000004805bdf8",
+      "0x0000000048037fa4",
+      "0x00000000480380fc",
+      "0x000000004803816c",
+      "0x0000000048024c0c",
+      "0x000000004806ff38",
+      "0x00000000480380b4",
+      "0x0000000048038388",
+      "0x00000000480371c0",
+      "0x00000000480a05d4",
+      "0x000000004805bf20",
+      "0x000000004805b64c"
+    ],
+    "branches": [
+      {
+        "from": "0x000000004805c10a",
+        "to": "0x000000004805c1d8",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004805c156",
+        "to": "0x000000004805c166",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004805c1b0",
+        "to": "0x000000004805c1c4",
+        "mnemonic": "b"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004805c0c2",
+        "string_address": "0x00000000480f4794",
+        "target": "debug_token",
+        "string": "debug_token",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004805c0e6",
+        "string_address": "0x00000000480f4784",
+        "target": "avb_custom_key",
+        "string": "avb_custom_key",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048081b54",
+    "end_address": "0x0000000048081db8",
+    "score": 12,
+    "matched_targets": [
+      "avb_custom_key",
+      "debug_token"
+    ],
+    "calls": [
+      "0x0000000048081f60",
+      "0x0000000048037fa4",
+      "0x0000000048081f0c",
+      "0x0000000048081f78",
+      "0x000000004805b64c",
+      "0x0000000048080f84",
+      "0x000000004808196c",
+      "0x0000000048080fa0",
+      "0x0000000048080fbc",
+      "0x0000000048080f54",
+      "0x0000000048081d2c",
+      "0x0000000048024c0c",
+      "0x00000000480516d8",
+      "0x0000000048051940",
+      "0x0000000048078490",
+      "0x0000000048085010",
+      "0x00000000480a8a64",
+      "0x000000004806ff38"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048081b60",
+        "to": "0x0000000048081b88",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048081b6e",
+        "to": "0x0000000048081b8e",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048081b7a",
+        "to": "0x0000000048081b88",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048081b86",
+        "to": "0x0000000048081b9a",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048081b96",
+        "to": "0x0000000048080b30",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048081ba6",
+        "to": "0x0000000048081b88",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048081bb2",
+        "to": "0x0000000048081be0",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048081bbe",
+        "to": "0x0000000048081bec",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048081bc6",
+        "to": "0x0000000048081b88",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048081bd0",
+        "to": "0x0000000048081b88",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048081bde",
+        "to": "0x0000000048081b8a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048081be8",
+        "to": "0x0000000048077894",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048081bf2",
+        "to": "0x0000000048081c06",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048081c04",
+        "to": "0x0000000048081b8a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048081c0e",
+        "to": "0x0000000048081c22",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048081c20",
+        "to": "0x0000000048081b8a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048081c28",
+        "to": "0x0000000048081c6a",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048081c30",
+        "to": "0x0000000048081c3c",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048081c3a",
+        "to": "0x0000000048081b88",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048081c68",
+        "to": "0x0000000048081b8a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048081c70",
+        "to": "0x0000000048081c80",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048081c7c",
+        "to": "0x0000000048081098",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048081ca8",
+        "to": "0x0000000048081ccc",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048081cca",
+        "to": "0x0000000048081b8a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048081cd8",
+        "to": "0x0000000048081caa",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048081d4a",
+        "to": "0x0000000048081de0",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048081d6e",
+        "to": "0x0000000048081d78",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048081d76",
+        "to": "0x0000000048081db4",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048081d84",
+        "to": "0x0000000048081d70",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048081d96",
+        "to": "0x0000000048081dbc",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048081db2",
+        "to": "0x0000000048081d78",
+        "mnemonic": "bne"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048081b9e",
+        "string_address": "0x00000000480f4794",
+        "target": "debug_token",
+        "string": "debug_token",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048081bb8",
+        "string_address": "0x00000000480f4784",
+        "target": "avb_custom_key",
+        "string": "avb_custom_key",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x00000000480784d8",
+    "end_address": "0x000000004807850c",
+    "score": 10,
+    "matched_targets": [
+      "cache",
+      "metadata",
+      "userdata"
+    ],
+    "calls": [
+      "0x0000000048078490",
+      "0x0000000048037fa4"
+    ],
+    "branches": [
+      {
+        "from": "0x00000000480784e8",
+        "to": "0x00000000480784ee",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x00000000480784fa",
+        "to": "0x00000000480784ea",
+        "mnemonic": "beq"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x00000000480784e2",
+        "string_address": "0x0000000048106d80",
+        "target": "userdata",
+        "string": "userdata",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x00000000480784f2",
+        "string_address": "0x00000000481036a8",
+        "target": "cache",
+        "string": "cache",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048078500",
+        "string_address": "0x00000000480f47c0",
+        "target": "metadata",
+        "string": "metadata",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048098970",
+    "end_address": "0x00000000480989c0",
+    "score": 9,
+    "matched_targets": [
+      "md_udc",
+      "metadata",
+      "userdata"
+    ],
+    "calls": [
+      "0x000000004809892c",
+      "0x0000000048071b5c",
+      "0x0000000048037fa4"
+    ],
+    "branches": [
+      {
+        "from": "0x000000004809897a",
+        "to": "0x00000000480989bc",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004809897c",
+        "to": "0x00000000480989be",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004809898e",
+        "to": "0x00000000480989c2",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004809899a",
+        "to": "0x00000000480989c2",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x00000000480989a6",
+        "to": "0x00000000480989c2",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x00000000480989b4",
+        "to": "0x00000000480989bc",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x00000000480989ba",
+        "to": "0x00000000480989e0",
+        "mnemonic": "bls"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048098994",
+        "string_address": "0x00000000480f47c0",
+        "target": "metadata",
+        "string": "metadata",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x00000000480989a0",
+        "string_address": "0x00000000480f47cc",
+        "target": "md_udc",
+        "string": "md_udc",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x00000000480989a0",
+        "string_address": "0x0000000048106d80",
+        "target": "userdata",
+        "string": "userdata",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004806580c",
+    "end_address": "0x0000000048065a4e",
+    "score": 8,
+    "matched_targets": [
+      "nvdata"
+    ],
+    "calls": [
+      "0x0000000048067a50",
+      "0x00000000480a8598",
+      "0x0000000048081fb4",
+      "0x00000000480835ac",
+      "0x000000004806ff38",
+      "0x0000000048067c5c",
+      "0x00000000480969e0",
+      "0x0000000048096bcc",
+      "0x0000000048096c2c",
+      "0x0000000048034f0c",
+      "0x0000000048054830",
+      "0x000000004806cd8c",
+      "0x000000004808288c",
+      "0x000000004801f940",
+      "0x000000004805bd88",
+      "0x0000000048083608",
+      "0x00000000480380fc",
+      "0x000000004803816c",
+      "0x000000004804a9a4",
+      "0x0000000048038150",
+      "0x000000004803826c",
+      "0x0000000048037fa4",
+      "0x000000004803820c",
+      "0x0000000048097704",
+      "0x0000000048097c8c",
+      "0x00000000480373c8",
+      "0x00000000480371c0"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048065824",
+        "to": "0x00000000480658d6",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048065840",
+        "to": "0x0000000048065898",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x000000004806584c",
+        "to": "0x00000000480658b8",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048065878",
+        "to": "0x000000004806588a",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480658a6",
+        "to": "0x00000000480658de",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x00000000480658b6",
+        "to": "0x000000004806584e",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x00000000480658ce",
+        "to": "0x00000000480658fc",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480658d4",
+        "to": "0x000000004806584e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480658dc",
+        "to": "0x0000000048065828",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480658e4",
+        "to": "0x00000000480658f4",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x00000000480658f2",
+        "to": "0x000000004806584c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480658fa",
+        "to": "0x000000004806584c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048065900",
+        "to": "0x00000000480658d0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806595a",
+        "to": "0x0000000048065a36",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048065974",
+        "to": "0x0000000048065a52",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x00000000480659ae",
+        "to": "0x00000000480659c0",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x00000000480659e0",
+        "to": "0x0000000048065ab2",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480659f2",
+        "to": "0x00000000480659fc",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480659fa",
+        "to": "0x0000000048065a36",
+        "mnemonic": "blt"
+      },
+      {
+        "from": "0x0000000048065a06",
+        "to": "0x00000000480659f4",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048065a0a",
+        "to": "0x0000000048065a36",
+        "mnemonic": "ble"
+      },
+      {
+        "from": "0x0000000048065a1c",
+        "to": "0x0000000048065a24",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048065a1e",
+        "to": "0x0000000048065cb2",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048065a22",
+        "to": "0x0000000048065a36",
+        "mnemonic": "blt"
+      },
+      {
+        "from": "0x0000000048065a2e",
+        "to": "0x0000000048065a20",
+        "mnemonic": "bne"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048065846",
+        "string_address": "0x00000000480f8a38",
+        "target": "nvdata",
+        "string": "No need to erase nvdata region on regular bootup\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004806585a",
+        "string_address": "0x00000000480f8a38",
+        "target": "nvdata",
+        "string": "No need to erase nvdata region on regular bootup\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004806589a",
+        "string_address": "0x00000000480f8a6c",
+        "target": "nvdata",
+        "string": "nvdata",
+        "via": "thumb ldr/add-pc r7",
+        "instruction": "add r7, pc"
+      },
+      {
+        "xref_address": "0x00000000480658ae",
+        "string_address": "0x00000000480f8a74",
+        "target": "nvdata",
+        "string": "Erasing nvdata is not allowed even if it requires to!",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x00000000480658bc",
+        "string_address": "0x00000000480f8a74",
+        "target": "nvdata",
+        "string": "Erasing nvdata is not allowed even if it requires to!",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x00000000480658ec",
+        "string_address": "0x00000000480f8aac",
+        "target": "nvdata",
+        "string": "Erase NVDATA partition failed.\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004806617c",
+    "end_address": "0x000000004806629a",
+    "score": 8,
+    "matched_targets": [
+      "imei",
+      "meid",
+      "sku"
+    ],
+    "calls": [
+      "0x00000000480982e0",
+      "0x000000004806ff38",
+      "0x00000000480380b4"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048066192",
+        "to": "0x0000000048066216",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480661b2",
+        "to": "0x00000000480661fe",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x00000000480661d2",
+        "to": "0x00000000480661e4",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x00000000480661e0",
+        "to": "0x000000004806ff38",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x00000000480661fa",
+        "to": "0x000000004806ff38",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048066214",
+        "to": "0x00000000480661c0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806622c",
+        "to": "0x00000000480661a0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048066234",
+        "to": "0x000000004806623c",
+        "mnemonic": "blo"
+      },
+      {
+        "from": "0x0000000048066280",
+        "to": "0x0000000048066292",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048066282",
+        "to": "0x000000004806629c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048066290",
+        "to": "0x000000004806629c",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048066296",
+        "to": "0x0000000048066284",
+        "mnemonic": "beq"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004806618a",
+        "string_address": "0x00000000480f3490",
+        "target": "imei",
+        "string": "imei",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004806619a",
+        "string_address": "0x00000000480f3498",
+        "target": "imei",
+        "string": "Device IMEI\n(15 decimal digits including the correct checksum)",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004806619a",
+        "string_address": "0x00000000480f8d04",
+        "target": "meid",
+        "string": "IMEI/MEID: %s\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x00000000480661aa",
+        "string_address": "0x00000000480f2e48",
+        "target": "sku",
+        "string": "sku",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x00000000480661ba",
+        "string_address": "0x00000000480f8340",
+        "target": "sku",
+        "string": "SKU: %s\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004806620e",
+        "string_address": "0x00000000480f8d54",
+        "target": "sku",
+        "string": "Failed to read UTAG SKU, using default SKU\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004806621c",
+        "string_address": "0x00000000480f8d54",
+        "target": "sku",
+        "string": "Failed to read UTAG SKU, using default SKU\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048066226",
+        "string_address": "0x00000000480f8d24",
+        "target": "imei",
+        "string": "Failed to read UTAG IMEI, using default IMEI\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004806d3f2",
+    "end_address": "0x000000004806d98a",
+    "score": 8,
+    "matched_targets": [
+      "userdata"
+    ],
+    "calls": [
+      "0x00000000480a0640",
+      "0x00000000480380fc",
+      "0x000000004803816c",
+      "0x000000004806c930",
+      "0x000000004806ff38",
+      "0x00000000480a03b8",
+      "0x00000000480a04d8",
+      "0x0000000048037b5c",
+      "0x0000000048037b64",
+      "0x0000000048052f14",
+      "0x00000000480a0548"
+    ],
+    "branches": [
+      {
+        "from": "0x000000004806d40a",
+        "to": "0x000000004806dbde",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806d420",
+        "to": "0x000000004806d424",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806d45c",
+        "to": "0x000000004806d482",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004806d464",
+        "to": "0x000000004806d46c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806d46a",
+        "to": "0x000000004806d482",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004806d474",
+        "to": "0x000000004806d466",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004806d4fa",
+        "to": "0x000000004806d540",
+        "mnemonic": "bmi"
+      },
+      {
+        "from": "0x000000004806d50a",
+        "to": "0x000000004806d540",
+        "mnemonic": "bpl"
+      },
+      {
+        "from": "0x000000004806d514",
+        "to": "0x000000004806d51e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806d51c",
+        "to": "0x000000004806d540",
+        "mnemonic": "bpl"
+      },
+      {
+        "from": "0x000000004806d530",
+        "to": "0x000000004806d516",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004806d548",
+        "to": "0x000000004806d538",
+        "mnemonic": "blt"
+      },
+      {
+        "from": "0x000000004806d566",
+        "to": "0x000000004806d57a",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004806d582",
+        "to": "0x000000004806d556",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004806d588",
+        "to": "0x000000004806d65a",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004806d5b2",
+        "to": "0x000000004806d5e8",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806d5e6",
+        "to": "0x000000004806d538",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004806d60a",
+        "to": "0x000000004806d5b4",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004806d658",
+        "to": "0x000000004806d5de",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806d67c",
+        "to": "0x000000004806d69e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806d692",
+        "to": "0x000000004806d754",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004806d6be",
+        "to": "0x000000004806d67e",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004806d708",
+        "to": "0x000000004806d694",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806d752",
+        "to": "0x000000004806d5de",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806d764",
+        "to": "0x000000004806d6d0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806d7b2",
+        "to": "0x000000004806d5de",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806d7c4",
+        "to": "0x000000004806d58a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806d7d4",
+        "to": "0x000000004806d53a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806d7e8",
+        "to": "0x000000004806d53a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806d8de",
+        "to": "0x000000004806d9d0",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004806d93c",
+        "to": "0x000000004806da00",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004806d952",
+        "to": "0x000000004806d9b2",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004806d970",
+        "to": "0x000000004806d980",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806d97c",
+        "to": "0x000000004806d9b2",
+        "mnemonic": "bhs"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004806d404",
+        "string_address": "0x0000000048106d80",
+        "target": "userdata",
+        "string": "userdata",
+        "via": "thumb ldr/add-pc r3",
+        "instruction": "add r3, pc"
+      },
+      {
+        "xref_address": "0x000000004806d5a2",
+        "string_address": "0x00000000481007d4",
+        "target": "userdata",
+        "string": "%s: reset userdata partition info\n",
+        "via": "thumb ldr/add-pc r3",
+        "instruction": "add r3, pc"
+      },
+      {
+        "xref_address": "0x000000004806d5a8",
+        "string_address": "0x00000000481007d4",
+        "target": "userdata",
+        "string": "%s: reset userdata partition info\n",
+        "via": "thumb ldr/add-pc r3",
+        "instruction": "add r3, pc"
+      },
+      {
+        "xref_address": "0x000000004806d5ae",
+        "string_address": "0x00000000481007d4",
+        "target": "userdata",
+        "string": "%s: reset userdata partition info\n",
+        "via": "thumb ldr/add-pc r3",
+        "instruction": "add r3, pc"
+      },
+      {
+        "xref_address": "0x000000004806d66a",
+        "string_address": "0x00000000481007d4",
+        "target": "userdata",
+        "string": "%s: reset userdata partition info\n",
+        "via": "thumb ldr/add-pc r3",
+        "instruction": "add r3, pc"
+      },
+      {
+        "xref_address": "0x000000004806d672",
+        "string_address": "0x00000000481007d4",
+        "target": "userdata",
+        "string": "%s: reset userdata partition info\n",
+        "via": "thumb ldr/add-pc r3",
+        "instruction": "add r3, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048083d7c",
+    "end_address": "0x0000000048083e76",
+    "score": 8,
+    "matched_targets": [
+      "flashing_locked",
+      "flashing_unlocked"
+    ],
+    "calls": [
+      "0x0000000048081f60",
+      "0x0000000048083738",
+      "0x00000000480380b4",
+      "0x00000000480820d0",
+      "0x0000000048038048",
+      "0x0000000048082164",
+      "0x0000000048083d7c",
+      "0x0000000048037fec",
+      "0x0000000048037f44",
+      "0x0000000048077828"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048083d82",
+        "to": "0x0000000048083db4",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048083d8a",
+        "to": "0x0000000048083dc8",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048083da2",
+        "to": "0x0000000048083dc2",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048083db2",
+        "to": "0x0000000048083dc2",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048083dce",
+        "to": "0x0000000048083de6",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048083dd4",
+        "to": "0x0000000048083df6",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048083de4",
+        "to": "0x0000000048083d9a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048083df4",
+        "to": "0x0000000048083d9a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048083e04",
+        "to": "0x0000000048083d9a",
+        "mnemonic": "b"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048083d94",
+        "string_address": "0x0000000048107bf4",
+        "target": "flashing_unlocked",
+        "string": "flashing_unlocked",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048083dee",
+        "string_address": "0x0000000048107c08",
+        "target": "flashing_locked",
+        "string": "flashing_locked",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004806b07c",
+    "end_address": "0x000000004806b4c2",
+    "score": 7,
+    "matched_targets": [
+      "metadata"
+    ],
+    "calls": [
+      "0x000000004804b08c",
+      "0x00000000480516d8",
+      "0x00000000480518e8",
+      "0x0000000048051864",
+      "0x000000004806aef4",
+      "0x0000000048051940",
+      "0x0000000048037b5c",
+      "0x0000000048037f10",
+      "0x0000000048087030",
+      "0x00000000480871ac",
+      "0x000000004806ff38",
+      "0x0000000048037b90",
+      "0x000000004806afc8"
+    ],
+    "branches": [
+      {
+        "from": "0x000000004806b160",
+        "to": "0x000000004806b156",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004806b26c",
+        "to": "0x000000004806b30c",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004806b27a",
+        "to": "0x000000004806b2da",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004806b2ac",
+        "to": "0x0000000048b6d2b8",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x000000004806b2c8",
+        "to": "0x000000004806b30c",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004806b2e2",
+        "to": "0x000000004806b30c",
+        "mnemonic": "bls"
+      },
+      {
+        "from": "0x000000004806b322",
+        "to": "0x000000004806b3d4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b338",
+        "to": "0x000000004806b3ba",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004806b346",
+        "to": "0x000000004806b3ba",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004806b376",
+        "to": "0x000000004806b386",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004806b37e",
+        "to": "0x000000004806b386",
+        "mnemonic": "bhi"
+      },
+      {
+        "from": "0x000000004806b38c",
+        "to": "0x000000004806b374",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004806b3fe",
+        "to": "0x000000004806b436",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b41a",
+        "to": "0x000000004806b3e0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b42e",
+        "to": "0x000000004806b30c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b44e",
+        "to": "0x000000004806b436",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b460",
+        "to": "0x000000004806b436",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b472",
+        "to": "0x000000004806b30c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b482",
+        "to": "0x000000004806b4ec",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004806b496",
+        "to": "0x000000004806b51a",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004806b49c",
+        "to": "0x000000004806b4c6",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x000000004806b4a6",
+        "to": "0x000000004806b3d0",
+        "mnemonic": "bne"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004806b28a",
+        "string_address": "0x00000000480faa20",
+        "target": "metadata",
+        "string": "ValidateMetadataAndLoad",
+        "via": "thumb ldr/add-pc r8",
+        "instruction": "add r8, pc"
+      },
+      {
+        "xref_address": "0x000000004806b290",
+        "string_address": "0x00000000480fa7ac",
+        "target": "metadata",
+        "string": "%s: Failed in validating slot %d metadata!\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004806b31a",
+        "string_address": "0x00000000480fa970",
+        "target": "metadata",
+        "string": "%s: Failed in validating metadata!\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004806b428",
+        "string_address": "0x00000000480faa20",
+        "target": "metadata",
+        "string": "ValidateMetadataAndLoad",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      },
+      {
+        "xref_address": "0x000000004806b46c",
+        "string_address": "0x00000000480fa7d8",
+        "target": "metadata",
+        "string": "%s: Failed in validating slot %d backup metadata!\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048079140",
+    "end_address": "0x0000000048079402",
+    "score": 7,
+    "matched_targets": [
+      "imei"
+    ],
+    "calls": [
+      "0x0000000048080998",
+      "0x0000000048078eb0",
+      "0x0000000048078588",
+      "0x0000000048080868",
+      "0x00000000480797c4",
+      "0x0000000048079054",
+      "0x0000000048078e60"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048079168",
+        "to": "0x0000000048079172",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004807918a",
+        "to": "0x000000004807916a",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x00000000480791aa",
+        "to": "0x000000004807916a",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x00000000480791f4",
+        "to": "0x00000000480791e2",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048079218",
+        "to": "0x000000004807916a",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048079232",
+        "to": "0x0000000048079316",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004807923e",
+        "to": "0x00000000480792da",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048079264",
+        "to": "0x0000000048079278",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480792d4",
+        "to": "0x000000004807916c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480792d8",
+        "to": "0x0000000048079206",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480792e6",
+        "to": "0x0000000048079240",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004807930a",
+        "to": "0x0000000048079320",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048079314",
+        "to": "0x0000000048079240",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004807931e",
+        "to": "0x0000000048079234",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048079336",
+        "to": "0x0000000048079240",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048079338",
+        "to": "0x000000004807930c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004807933c",
+        "to": "0x0000000048079340",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048079344",
+        "to": "0x000000004807934e",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048079348",
+        "to": "0x0000000048079354",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x000000004807934c",
+        "to": "0x0000000048079360",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048079350",
+        "to": "0x0000000048079364",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048079354",
+        "to": "0x000000004807936e",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048079358",
+        "to": "0x00000000480793be",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004807935c",
+        "to": "0x0000000048079362",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048079360",
+        "to": "0x000000004807936c",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048079368",
+        "to": "0x00000000480793aa",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x000000004807936c",
+        "to": "0x00000000480793a8",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048079390",
+        "to": "0x000000004807941e",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048079392",
+        "to": "0x000000004807940c",
+        "mnemonic": "bls"
+      },
+      {
+        "from": "0x0000000048079396",
+        "to": "0x0000000048079406",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004807939a",
+        "to": "0x0000000048079424",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x00000000480793e2",
+        "to": "0x000000004807942a",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480793e6",
+        "to": "0x00000000480793f4",
+        "mnemonic": "bls"
+      },
+      {
+        "from": "0x00000000480793f8",
+        "to": "0x00000000480793fe",
+        "mnemonic": "beq"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048079242",
+        "string_address": "0x0000000048104c58",
+        "target": "imei",
+        "string": "Checking SigRsp IMEI - Success",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x00000000480792f6",
+        "string_address": "0x0000000048104bb0",
+        "target": "imei",
+        "string": "Checking SigRsp IMEI - comparing serial number data data",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x000000004807930e",
+        "string_address": "0x0000000048104bb0",
+        "target": "imei",
+        "string": "Checking SigRsp IMEI - comparing serial number data data",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x000000004807930e",
+        "string_address": "0x0000000048104bec",
+        "target": "imei",
+        "string": "FIX ME ! Ignoring IMEI check error",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x0000000048079318",
+        "string_address": "0x0000000048104bec",
+        "target": "imei",
+        "string": "FIX ME ! Ignoring IMEI check error",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x0000000048079322",
+        "string_address": "0x0000000048104bec",
+        "target": "imei",
+        "string": "FIX ME ! Ignoring IMEI check error",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x0000000048079322",
+        "string_address": "0x0000000048104c10",
+        "target": "imei",
+        "string": "Checking SigRsp IMEI - checking zero padding of remaining IMEI bytes",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004808570c",
+    "end_address": "0x0000000048085802",
+    "score": 6,
+    "matched_targets": [
+      "nvdata"
+    ],
+    "calls": [
+      "0x00000000480516d8",
+      "0x00000000480518e8",
+      "0x0000000048051940",
+      "0x000000004805343c",
+      "0x000000004803816c",
+      "0x000000004806ff38",
+      "0x00000000480535b0"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048085728",
+        "to": "0x000000004808573a",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048085738",
+        "to": "0x0000000048085740",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048085752",
+        "to": "0x0000000048085778",
+        "mnemonic": "blt"
+      },
+      {
+        "from": "0x0000000048085766",
+        "to": "0x000000004808573a",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048085776",
+        "to": "0x000000004808573c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048085784",
+        "to": "0x000000004808573a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480857b8",
+        "to": "0x00000000480857e0",
+        "mnemonic": "blt"
+      },
+      {
+        "from": "0x00000000480857da",
+        "to": "0x00000000480857f6",
+        "mnemonic": "blt"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004808575e",
+        "string_address": "0x0000000048108f0c",
+        "target": "nvdata",
+        "string": "nvdata-erase",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x000000004808577e",
+        "string_address": "0x0000000048108f30",
+        "target": "nvdata",
+        "string": "mot_sec: %s Failed to read nvdata-erase string\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x00000000480857e8",
+        "string_address": "0x0000000048108f30",
+        "target": "nvdata",
+        "string": "mot_sec: %s Failed to read nvdata-erase string\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x00000000480857f8",
+        "string_address": "0x0000000048108f30",
+        "target": "nvdata",
+        "string": "mot_sec: %s Failed to read nvdata-erase string\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004809eae8",
+    "end_address": "0x000000004809ed28",
+    "score": 6,
+    "matched_targets": [
+      "nvdata"
+    ],
+    "calls": [
+      "0x000000004809da54",
+      "0x000000004809de84",
+      "0x000000004809ddb0",
+      "0x000000004809daa0",
+      "0x000000004809da40",
+      "0x000000004809dbe4",
+      "0x000000004809eae8",
+      "0x000000004809dbc8"
+    ],
+    "branches": [
+      {
+        "from": "0x000000004809eb1c",
+        "to": "0x000000004809eb32",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004809eb1e",
+        "to": "0x000000004809eb76",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x000000004809eb24",
+        "to": "0x000000004809eba8",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004809eb4c",
+        "to": "0x000000004809ebac",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x000000004809ebaa",
+        "to": "0x000000004809eb2c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809ebcc",
+        "to": "0x000000004809ec06",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x000000004809ebda",
+        "to": "0x000000004809ec32",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004809ec04",
+        "to": "0x000000004809eb6e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809ec30",
+        "to": "0x000000004809eb6e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809ec54",
+        "to": "0x000000004809eb1e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809ec58",
+        "to": "0x000000004809ece4",
+        "mnemonic": "bvc"
+      },
+      {
+        "from": "0x000000004809ece4",
+        "to": "0x000000004809ed2c",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004809ecfc",
+        "to": "0x000000004809ed26",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004809ed0a",
+        "to": "0x000000004809ed54",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x000000004809ed16",
+        "to": "0x000000004809ed86",
+        "mnemonic": "beq"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004809eb8a",
+        "string_address": "0x00000000481077a0",
+        "target": "nvdata",
+        "string": "mot_sec: Invalid partition name when clear 'nvdata-erase'\n",
+        "via": "thumb ldr/add-pc r3",
+        "instruction": "add r3, pc"
+      },
+      {
+        "xref_address": "0x000000004809eb9a",
+        "string_address": "0x00000000481077dc",
+        "target": "nvdata",
+        "string": "mot_sec: Failed to clear 'nvdata-erase' command in: %s!\n",
+        "via": "thumb ldr/add-pc r3",
+        "instruction": "add r3, pc"
+      },
+      {
+        "xref_address": "0x000000004809ec1a",
+        "string_address": "0x00000000481077a0",
+        "target": "nvdata",
+        "string": "mot_sec: Invalid partition name when clear 'nvdata-erase'\n",
+        "via": "thumb ldr/add-pc r3",
+        "instruction": "add r3, pc"
+      },
+      {
+        "xref_address": "0x000000004809ec2a",
+        "string_address": "0x00000000481077dc",
+        "target": "nvdata",
+        "string": "mot_sec: Failed to clear 'nvdata-erase' command in: %s!\n",
+        "via": "thumb ldr/add-pc r3",
+        "instruction": "add r3, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004808316c",
+    "end_address": "0x00000000480832a2",
+    "score": 5,
+    "matched_targets": [
+      "userdata"
+    ],
+    "calls": [
+      "0x000000004805b64c",
+      "0x00000000480371c0",
+      "0x0000000048081560",
+      "0x000000004808316c"
+    ],
+    "branches": [
+      {
+        "from": "0x00000000480831fe",
+        "to": "0x000000004805b64c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x000000004808324a",
+        "to": "0x000000004808329c",
+        "mnemonic": "ble"
+      },
+      {
+        "from": "0x0000000048083252",
+        "to": "0x00000000480832a4",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048083256",
+        "to": "0x00000000480832ce",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004808325a",
+        "to": "0x00000000480832d4",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004808325e",
+        "to": "0x00000000480832da",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048083262",
+        "to": "0x00000000480832e0",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048083266",
+        "to": "0x00000000480832e6",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004808326a",
+        "to": "0x00000000480832ec",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004808326e",
+        "to": "0x0000000048083314",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048083272",
+        "to": "0x000000004808331a",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048083276",
+        "to": "0x000000004808329c",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048083284",
+        "to": "0x00000000480832aa",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004808328e",
+        "to": "0x0000000048083324",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048083292",
+        "to": "0x00000000480832a0",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004808329a",
+        "to": "0x00000000480832a0",
+        "mnemonic": "b"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x00000000480831bc",
+        "string_address": "0x0000000048107278",
+        "target": "userdata",
+        "string": "  4 - Force userdata use production key",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x00000000480831c6",
+        "string_address": "0x0000000048107278",
+        "target": "userdata",
+        "string": "  4 - Force userdata use production key",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x00000000480831d0",
+        "string_address": "0x0000000048107278",
+        "target": "userdata",
+        "string": "  4 - Force userdata use production key",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x00000000480835ac",
+    "end_address": "0x00000000480835e4",
+    "score": 5,
+    "matched_targets": [
+      "nvdata"
+    ],
+    "calls": [
+      "0x000000004808570c",
+      "0x000000004806ff38",
+      "0x0000000048038150"
+    ],
+    "branches": [
+      {
+        "from": "0x00000000480835b0",
+        "to": "0x00000000480835e6",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x00000000480835c2",
+        "to": "0x00000000480835d0",
+        "mnemonic": "cbnz"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x00000000480835c6",
+        "string_address": "0x000000004810776c",
+        "target": "nvdata",
+        "string": "mot_sec: No place is found to decide erase nvdata\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x00000000480835d2",
+        "string_address": "0x0000000048107730",
+        "target": "nvdata",
+        "string": "mot_sec: Locate 'nvdata-erase' cmd string in sec partition\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x00000000480835d2",
+        "string_address": "0x000000004810776c",
+        "target": "nvdata",
+        "string": "mot_sec: No place is found to decide erase nvdata\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004808360a",
+    "end_address": "0x0000000048083688",
+    "score": 5,
+    "matched_targets": [
+      "nvdata"
+    ],
+    "calls": [
+      "0x0000000048085794",
+      "0x000000004806ff38",
+      "0x0000000048086510"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048083612",
+        "to": "0x0000000048083616",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048083624",
+        "to": "0x000000004806ff38",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048083630",
+        "to": "0x000000004806ff38",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048083642",
+        "to": "0x0000000048083656",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048083646",
+        "to": "0x00000000480836ae",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004808364a",
+        "to": "0x00000000480836b4",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004808364e",
+        "to": "0x00000000480836ba",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048083654",
+        "to": "0x000000004808365a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048083682",
+        "to": "0x000000004808368a",
+        "mnemonic": "cbnz"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048083622",
+        "string_address": "0x00000000481077dc",
+        "target": "nvdata",
+        "string": "mot_sec: Failed to clear 'nvdata-erase' command in: %s!\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004808362e",
+        "string_address": "0x00000000481077a0",
+        "target": "nvdata",
+        "string": "mot_sec: Invalid partition name when clear 'nvdata-erase'\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004808362e",
+        "string_address": "0x00000000481077dc",
+        "target": "nvdata",
+        "string": "mot_sec: Failed to clear 'nvdata-erase' command in: %s!\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048087212",
+    "end_address": "0x00000000480874e4",
+    "score": 5,
+    "matched_targets": [
+      "metadata"
+    ],
+    "calls": [
+      "0x000000004806ff38",
+      "0x0000000048087198",
+      "0x00000000480ae88c",
+      "0x00000000480ae904",
+      "0x00000000480ae9b8",
+      "0x0000000048037f10",
+      "0x0000000048003804"
+    ],
+    "branches": [
+      {
+        "from": "0x000000004808724c",
+        "to": "0x00000000480871f4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004808726c",
+        "to": "0x00000000480871f2",
+        "mnemonic": "blo"
+      },
+      {
+        "from": "0x0000000048087272",
+        "to": "0x00000000480871f2",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004808727a",
+        "to": "0x00000000480871f2",
+        "mnemonic": "bhi"
+      },
+      {
+        "from": "0x0000000048087280",
+        "to": "0x00000000480871f2",
+        "mnemonic": "blo"
+      },
+      {
+        "from": "0x0000000048087286",
+        "to": "0x00000000480871f2",
+        "mnemonic": "blo"
+      },
+      {
+        "from": "0x000000004808728c",
+        "to": "0x00000000480871f2",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048087292",
+        "to": "0x00000000480871f2",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048087298",
+        "to": "0x00000000480871f2",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004808729e",
+        "to": "0x00000000480871f2",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x00000000480872a6",
+        "to": "0x0000000048087352",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480872b4",
+        "to": "0x00000000480871f2",
+        "mnemonic": "bhi"
+      },
+      {
+        "from": "0x00000000480872ca",
+        "to": "0x00000000480871f2",
+        "mnemonic": "bhi"
+      },
+      {
+        "from": "0x00000000480872d2",
+        "to": "0x00000000480871f2",
+        "mnemonic": "bhi"
+      },
+      {
+        "from": "0x00000000480872da",
+        "to": "0x00000000480871f2",
+        "mnemonic": "bhi"
+      },
+      {
+        "from": "0x00000000480872e8",
+        "to": "0x00000000480871f2",
+        "mnemonic": "blo"
+      },
+      {
+        "from": "0x00000000480872ec",
+        "to": "0x00000000480871f2",
+        "mnemonic": "blo"
+      },
+      {
+        "from": "0x00000000480872f0",
+        "to": "0x00000000480872e6",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004808732a",
+        "to": "0x000000004808736a",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048087336",
+        "to": "0x000000004808733e",
+        "mnemonic": "blo"
+      },
+      {
+        "from": "0x000000004808733c",
+        "to": "0x0000000048087328",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048087368",
+        "to": "0x0000000048087338",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048087370",
+        "to": "0x0000000048087322",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x00000000480873f4",
+        "to": "0x0000000048087412",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x00000000480873f8",
+        "to": "0x000000004808740c",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048087400",
+        "to": "0x000000004808740c",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048087406",
+        "to": "0x0000000048087426",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004808740a",
+        "to": "0x0000000048087426",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048087410",
+        "to": "0x00000000480871f4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048087424",
+        "to": "0x00000000480871f4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004808742a",
+        "to": "0x0000000048087460",
+        "mnemonic": "blo"
+      },
+      {
+        "from": "0x000000004808745a",
+        "to": "0x0000000048087476",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x000000004808745e",
+        "to": "0x00000000480871f4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048087474",
+        "to": "0x00000000480871f4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048087486",
+        "to": "0x00000000480871f2",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480874de",
+        "to": "0x00000000480874e8",
+        "mnemonic": "bne"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004808741c",
+        "string_address": "0x000000004810a890",
+        "target": "metadata",
+        "string": "validate_metadata",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      },
+      {
+        "xref_address": "0x000000004808746c",
+        "string_address": "0x000000004810a890",
+        "target": "metadata",
+        "string": "validate_metadata",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      },
+      {
+        "xref_address": "0x0000000048087480",
+        "string_address": "0x000000004810a890",
+        "target": "metadata",
+        "string": "validate_metadata",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048099504",
+    "end_address": "0x00000000480997f8",
+    "score": 5,
+    "matched_targets": [
+      "Already unlocked"
+    ],
+    "calls": [
+      "0x00000000480992cc",
+      "0x000000004809e2e0",
+      "0x000000004809da44",
+      "0x000000004809ddb0",
+      "0x000000004809daa0",
+      "0x0000000048036d54",
+      "0x000000004809d140",
+      "0x000000004809e278",
+      "0x000000004809db9c",
+      "0x000000004809dfe4"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048099516",
+        "to": "0x0000000048099542",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809951a",
+        "to": "0x000000004809952c",
+        "mnemonic": "bmi"
+      },
+      {
+        "from": "0x000000004809952a",
+        "to": "0x000000004809958c",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004809958a",
+        "to": "0x0000000048099594",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x00000000480995a0",
+        "to": "0x000000004809958c",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480995a2",
+        "to": "0x00000000480995ce",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x00000000480995a6",
+        "to": "0x00000000480995f8",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x00000000480995b8",
+        "to": "0x000000004809958c",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480995fc",
+        "to": "0x00000000480995ac",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809963c",
+        "to": "0x0000000048099634",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004809964e",
+        "to": "0x000000004809958c",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048099668",
+        "to": "0x000000004809958c",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048099676",
+        "to": "0x000000004809958c",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004809967e",
+        "to": "0x00000000480996ee",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480996a6",
+        "to": "0x000000004809969e",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048099708",
+        "to": "0x00000000480997d2",
+        "mnemonic": "bmi"
+      },
+      {
+        "from": "0x000000004809970e",
+        "to": "0x0000000048099726",
+        "mnemonic": "bhi"
+      },
+      {
+        "from": "0x000000004809977a",
+        "to": "0x000000004809958e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048099788",
+        "to": "0x0000000048099726",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048099796",
+        "to": "0x0000000048099726",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480997b8",
+        "to": "0x0000000048099726",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480997d8",
+        "to": "0x0000000048099748",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480997dc",
+        "to": "0x000000004809963e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480997e0",
+        "to": "0x00000000480996a8",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480997f0",
+        "to": "0x0000000048099880",
+        "mnemonic": "bhi"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x00000000480995fa",
+        "string_address": "0x0000000048106c74",
+        "target": "Already unlocked",
+        "string": "Already unlocked",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004809e554",
+    "end_address": "0x000000004809ea66",
+    "score": 5,
+    "matched_targets": [
+      "metadata"
+    ],
+    "calls": [
+      "0x000000004809ddb0",
+      "0x000000004809daa0",
+      "0x000000004809ddec",
+      "0x000000004809de68",
+      "0x000000004809928c",
+      "0x000000004809b128",
+      "0x000000004809b1d8",
+      "0x000000004809b250",
+      "0x000000004809dc94",
+      "0x000000004801e08c",
+      "0x000000004801e0b8",
+      "0x000000004801e0f0",
+      "0x000000004809a750"
+    ],
+    "branches": [
+      {
+        "from": "0x000000004809e57c",
+        "to": "0x000000004809e45e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809e590",
+        "to": "0x000000004809e5b8",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x000000004809e5b6",
+        "to": "0x000000004809e45e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809e5c8",
+        "to": "0x000000004809e592",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004809e5d8",
+        "to": "0x000000004809e600",
+        "mnemonic": "bhs"
+      },
+      {
+        "from": "0x000000004809e5fe",
+        "to": "0x000000004809e45e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809e610",
+        "to": "0x000000004809e636",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x000000004809e634",
+        "to": "0x000000004809e45e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809e64c",
+        "to": "0x000000004809e662",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004809e660",
+        "to": "0x000000004809e688",
+        "mnemonic": "bhs"
+      },
+      {
+        "from": "0x000000004809e686",
+        "to": "0x000000004809e45e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809e69e",
+        "to": "0x000000004809e6b4",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004809e6b2",
+        "to": "0x000000004809e6da",
+        "mnemonic": "bhs"
+      },
+      {
+        "from": "0x000000004809e6d8",
+        "to": "0x000000004809e45e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809e6f0",
+        "to": "0x000000004809e706",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004809e704",
+        "to": "0x000000004809e72c",
+        "mnemonic": "bhs"
+      },
+      {
+        "from": "0x000000004809e72a",
+        "to": "0x000000004809e45e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809e734",
+        "to": "0x000000004809e740",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004809e73a",
+        "to": "0x000000004809e78c",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x000000004809e73e",
+        "to": "0x000000004809e45e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809e750",
+        "to": "0x000000004809e766",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004809e764",
+        "to": "0x000000004809e736",
+        "mnemonic": "bhs"
+      },
+      {
+        "from": "0x000000004809e78a",
+        "to": "0x000000004809e45e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809e792",
+        "to": "0x000000004809e7ca",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004809e7a2",
+        "to": "0x000000004809e7f0",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004809e7c8",
+        "to": "0x000000004809e45e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809e7ee",
+        "to": "0x000000004809e45e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809e802",
+        "to": "0x000000004809e80e",
+        "mnemonic": "bhi"
+      },
+      {
+        "from": "0x000000004809e832",
+        "to": "0x000000004809e45e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809e86c",
+        "to": "0x000000004809e8bc",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004809e892",
+        "to": "0x000000004809e45e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809e8ba",
+        "to": "0x000000004809e85a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809e8ee",
+        "to": "0x000000004809e8f4",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x000000004809e8f2",
+        "to": "0x000000004809e45e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809e8fc",
+        "to": "0x000000004809e90c",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004809e8fe",
+        "to": "0x000000004809e908",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004809e908",
+        "to": "0x000000004809e90c",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004809e90e",
+        "to": "0x000000004809e45e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004809ea56",
+        "to": "0x000000004809ea86",
+        "mnemonic": "bhi"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004809e776",
+        "string_address": "0x0000000048117208",
+        "target": "metadata",
+        "string": "Public key metadata is not entirely in its block.\n",
+        "via": "thumb ldr/add-pc r3",
+        "instruction": "add r3, pc"
+      },
+      {
+        "xref_address": "0x000000004809e780",
+        "string_address": "0x0000000048117208",
+        "target": "metadata",
+        "string": "Public key metadata is not entirely in its block.\n",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      },
+      {
+        "xref_address": "0x000000004809e782",
+        "string_address": "0x0000000048117208",
+        "target": "metadata",
+        "string": "Public key metadata is not entirely in its block.\n",
+        "via": "thumb ldr/add-pc r3",
+        "instruction": "add r3, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004801c4ea",
+    "end_address": "0x000000004801c612",
+    "score": 4,
+    "matched_targets": [
+      "imei"
+    ],
+    "calls": [
+      "0x000000004804b5a4",
+      "0x000000004801c400",
+      "0x000000004801c440",
+      "0x0000000048038f00"
+    ],
+    "branches": [
+      {
+        "from": "0x000000004801c51a",
+        "to": "0x000000004801c53c",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004801c550",
+        "to": "0x000000004801c5ca",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004801c5aa",
+        "to": "0x000000004801c644",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004801c5ae",
+        "to": "0x000000004801c622",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004801c5be",
+        "to": "0x000000004801c616",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x000000004801c5c8",
+        "to": "0x000000004801c602",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004801c5e0",
+        "to": "0x000000004801c552",
+        "mnemonic": "bge"
+      },
+      {
+        "from": "0x000000004801c5e8",
+        "to": "0x000000004801c662",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004801c600",
+        "to": "0x000000004801c5ca",
+        "mnemonic": "bne"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004801c534",
+        "string_address": "0x0000000048104bb0",
+        "target": "imei",
+        "string": "Checking SigRsp IMEI - comparing serial number data data",
+        "via": "thumb ldr/add-pc r3",
+        "instruction": "add r3, pc"
+      },
+      {
+        "xref_address": "0x000000004801c53a",
+        "string_address": "0x0000000048104bec",
+        "target": "imei",
+        "string": "FIX ME ! Ignoring IMEI check error",
+        "via": "thumb ldr/add-pc r3",
+        "instruction": "add r3, pc"
+      },
+      {
+        "xref_address": "0x000000004801c540",
+        "string_address": "0x0000000048104bec",
+        "target": "imei",
+        "string": "FIX ME ! Ignoring IMEI check error",
+        "via": "thumb ldr/add-pc r3",
+        "instruction": "add r3, pc"
+      },
+      {
+        "xref_address": "0x000000004801c546",
+        "string_address": "0x0000000048104bec",
+        "target": "imei",
+        "string": "FIX ME ! Ignoring IMEI check error",
+        "via": "thumb ldr/add-pc r3",
+        "instruction": "add r3, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048063030",
+    "end_address": "0x0000000048063096",
+    "score": 4,
+    "matched_targets": [
+      "frp"
+    ],
+    "calls": [
+      "0x00000000480a04d8",
+      "0x00000000480516d8",
+      "0x00000000480518e8",
+      "0x0000000048051864",
+      "0x00000000480a03fc",
+      "0x000000004806ff38",
+      "0x0000000048037b3c"
+    ],
+    "branches": [
+      {
+        "from": "0x000000004806304a",
+        "to": "0x0000000048063088",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048063074",
+        "to": "0x000000004806309a",
+        "mnemonic": "beq"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048063040",
+        "string_address": "0x00000000480f7e38",
+        "target": "frp",
+        "string": "frp",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004806438c",
+    "end_address": "0x0000000048064d68",
+    "score": 4,
+    "matched_targets": [
+      "serialno",
+      "sku"
+    ],
+    "calls": [
+      "0x00000000480823d8",
+      "0x00000000480652c8",
+      "0x00000000480380fc",
+      "0x00000000480589e0",
+      "0x0000000048058914",
+      "0x0000000048037b10",
+      "0x00000000480583f8",
+      "0x00000000480586c4",
+      "0x0000000048067a50",
+      "0x0000000048067d8c",
+      "0x0000000048067c5c",
+      "0x000000004805896c",
+      "0x00000000480982e0",
+      "0x0000000048065dec",
+      "0x00000000480380b4",
+      "0x0000000048077874",
+      "0x0000000048081f60",
+      "0x0000000048081ec0",
+      "0x00000000480641ac",
+      "0x00000000480641dc",
+      "0x000000004806425c",
+      "0x000000004806420c",
+      "0x0000000048037b5c",
+      "0x0000000048038048",
+      "0x000000004806f2bc",
+      "0x000000004806abf0",
+      "0x0000000048037b90",
+      "0x00000000480383e0",
+      "0x0000000048038f00",
+      "0x0000000048038d54",
+      "0x0000000048037fa4",
+      "0x0000000048038150",
+      "0x000000004808217c",
+      "0x0000000048063f60",
+      "0x0000000048036d54",
+      "0x000000004806ff38"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048064396",
+        "to": "0x0000000048064442",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480643cc",
+        "to": "0x00000000480643f8",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064416",
+        "to": "0x000000004806444a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064644",
+        "to": "0x000000004806465c",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004806466e",
+        "to": "0x0000000048064686",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x00000000480646d0",
+        "to": "0x00000000480646dc",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004806470c",
+        "to": "0x0000000048064724",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048064738",
+        "to": "0x0000000048064748",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004806475a",
+        "to": "0x000000004806476a",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004806477a",
+        "to": "0x000000004806478a",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004806479c",
+        "to": "0x00000000480647ac",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048064980",
+        "to": "0x0000000048064996",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004806498c",
+        "to": "0x0000000048064996",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x00000000480649ba",
+        "to": "0x00000000480644dc",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480649fc",
+        "to": "0x0000000048064a08",
+        "mnemonic": "bgt"
+      },
+      {
+        "from": "0x00000000480649fe",
+        "to": "0x0000000048064a18",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064a06",
+        "to": "0x0000000048064a7e",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048064a16",
+        "to": "0x0000000048064a00",
+        "mnemonic": "bgt"
+      },
+      {
+        "from": "0x0000000048064a1a",
+        "to": "0x00000000480646ee",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064a1e",
+        "to": "0x00000000480644dc",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064a46",
+        "to": "0x00000000480645d6",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064a54",
+        "to": "0x000000004806458c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064a68",
+        "to": "0x0000000048064928",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064a70",
+        "to": "0x00000000480644c0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064a78",
+        "to": "0x00000000480644c0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064a7c",
+        "to": "0x000000004806495a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064a88",
+        "to": "0x0000000048064aa6",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048064a94",
+        "to": "0x0000000048064aa6",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048064ac6",
+        "to": "0x00000000480646ee",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064ade",
+        "to": "0x000000004806491e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064af6",
+        "to": "0x0000000048064912",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064b0e",
+        "to": "0x0000000048064906",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064b26",
+        "to": "0x00000000480648fa",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064b3e",
+        "to": "0x00000000480648ee",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064b56",
+        "to": "0x00000000480648b2",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064b6e",
+        "to": "0x00000000480648a6",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064b86",
+        "to": "0x0000000048064882",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064b90",
+        "to": "0x0000000048064c0c",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048064b9e",
+        "to": "0x0000000048064c00",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048064ba8",
+        "to": "0x00000000480647d0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064bfe",
+        "to": "0x00000000480646ee",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064c0a",
+        "to": "0x00000000480647d0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064c22",
+        "to": "0x00000000480647d0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064c32",
+        "to": "0x00000000480646fa",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064c40",
+        "to": "0x00000000480646ee",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064c4e",
+        "to": "0x00000000480646ee",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064c5c",
+        "to": "0x00000000480646ee",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064c80",
+        "to": "0x0000000048064c30",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064cbc",
+        "to": "0x0000000048064a14",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064ccc",
+        "to": "0x0000000048064ae8",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064cd0",
+        "to": "0x000000004806497c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064d10",
+        "to": "0x0000000048064a30",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048064d2c",
+        "to": "0x0000000048064d70",
+        "mnemonic": "bge"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x00000000480644f0",
+        "string_address": "0x00000000480f8388",
+        "target": "serialno",
+        "string": " androidboot.serialno=",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x0000000048064740",
+        "string_address": "0x00000000480f857c",
+        "target": "sku",
+        "string": " androidboot.hardware.sku=",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x00000000480647d8",
+        "string_address": "0x00000000480f8388",
+        "target": "serialno",
+        "string": " androidboot.serialno=",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048064afe",
+        "string_address": "0x00000000480f857c",
+        "target": "sku",
+        "string": " androidboot.hardware.sku=",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048066b9c",
+    "end_address": "0x00000000480674ec",
+    "score": 4,
+    "matched_targets": [
+      "battid"
+    ],
+    "calls": [
+      "0x0000000048039958",
+      "0x000000004800130c",
+      "0x00000000480380fc",
+      "0x000000004806ff38",
+      "0x0000000048084c68",
+      "0x00000000480652c8",
+      "0x00000000480669c4",
+      "0x00000000480978b8",
+      "0x00000000480982e0",
+      "0x0000000048058140",
+      "0x0000000048039b34",
+      "0x00000000480398f0",
+      "0x000000004801a470",
+      "0x00000000480666d4",
+      "0x000000004801a1b4",
+      "0x000000004801a1d4",
+      "0x0000000048037b10",
+      "0x000000004801a220",
+      "0x000000004801a200",
+      "0x000000004801a1e0",
+      "0x000000004806f2a0",
+      "0x0000000048038150",
+      "0x000000004803826c",
+      "0x0000000048037fa4",
+      "0x000000004803820c",
+      "0x0000000048097704",
+      "0x0000000048097c8c",
+      "0x0000000048038048",
+      "0x000000004801a108",
+      "0x0000000048097840",
+      "0x0000000048037b5c",
+      "0x000000004805343c",
+      "0x000000004805896c",
+      "0x00000000480583f8",
+      "0x00000000480383e0"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048066bc4",
+        "to": "0x0000000048066bc8",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048066d1a",
+        "to": "0x0000000048066d4a",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048066d72",
+        "to": "0x0000000048066da4",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048066db6",
+        "to": "0x0000000048066de8",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048066f78",
+        "to": "0x0000000048066f88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048066fa2",
+        "to": "0x0000000048066ff2",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048066fa6",
+        "to": "0x0000000048066ff2",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048066fb2",
+        "to": "0x0000000048066fc2",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048066fc0",
+        "to": "0x00000000480670ba",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048066fe8",
+        "to": "0x000000004806708c",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048066ff0",
+        "to": "0x0000000048066a1e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048067016",
+        "to": "0x0000000048066fc2",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004806701a",
+        "to": "0x0000000048066fc2",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048067028",
+        "to": "0x0000000048066fc2",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048067034",
+        "to": "0x0000000048066fc2",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048067042",
+        "to": "0x0000000048066fc2",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048067050",
+        "to": "0x0000000048066fc2",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004806705e",
+        "to": "0x0000000048066fc2",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004806706c",
+        "to": "0x0000000048066fc2",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004806707a",
+        "to": "0x0000000048066fc2",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048067098",
+        "to": "0x0000000048066a1e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480670a8",
+        "to": "0x0000000048066f88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480670b8",
+        "to": "0x0000000048066f88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806710a",
+        "to": "0x000000004806707c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048067118",
+        "to": "0x000000004806708c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048067128",
+        "to": "0x0000000048066f88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048067138",
+        "to": "0x0000000048066f88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048067148",
+        "to": "0x0000000048066f88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048067158",
+        "to": "0x0000000048066f88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048067168",
+        "to": "0x0000000048066f88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048067172",
+        "to": "0x00000000480671fe",
+        "mnemonic": "blt"
+      },
+      {
+        "from": "0x0000000048067178",
+        "to": "0x0000000048066c50",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048067188",
+        "to": "0x0000000048066f88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048067198",
+        "to": "0x0000000048066f88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480671c8",
+        "to": "0x0000000048066f88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480671da",
+        "to": "0x0000000048066f88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480671ea",
+        "to": "0x0000000048066f88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480671fc",
+        "to": "0x0000000048066f88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806720e",
+        "to": "0x0000000048066f88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048067236",
+        "to": "0x0000000048067264",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048067242",
+        "to": "0x0000000048066d60",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048067252",
+        "to": "0x0000000048066f88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048067262",
+        "to": "0x0000000048066f88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048067274",
+        "to": "0x0000000048066f88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480672e8",
+        "to": "0x000000004806727c",
+        "mnemonic": "bvc"
+      },
+      {
+        "from": "0x00000000480672ec",
+        "to": "0x0000000048067342",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x00000000480673e0",
+        "to": "0x000000004806745c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048067450",
+        "to": "0x00000000480674e4",
+        "mnemonic": "b"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048066db0",
+        "string_address": "0x00000000480f94dc",
+        "target": "battid",
+        "string": "battid",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048066dcc",
+        "string_address": "0x00000000480f94d8",
+        "target": "battid",
+        "string": "mmi,battid",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      },
+      {
+        "xref_address": "0x0000000048066de2",
+        "string_address": "0x00000000480f9508",
+        "target": "battid",
+        "string": "Set \"mmi,battid\" to %s\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x00000000480671e4",
+        "string_address": "0x00000000480f94e4",
+        "target": "battid",
+        "string": "ERROR: Cannot update [mmi,battid]\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004806b500",
+    "end_address": "0x000000004806b7e4",
+    "score": 4,
+    "matched_targets": [
+      "metadata"
+    ],
+    "calls": [
+      "0x0000000048037b5c",
+      "0x000000004806ff38",
+      "0x0000000048037b90"
+    ],
+    "branches": [
+      {
+        "from": "0x000000004806b518",
+        "to": "0x000000004806b484",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b542",
+        "to": "0x000000004806b498",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b564",
+        "to": "0x000000004806b638",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004806b57e",
+        "to": "0x000000004806b5a4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b588",
+        "to": "0x000000004806b630",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004806b5a2",
+        "to": "0x000000004806b5ec",
+        "mnemonic": "blo"
+      },
+      {
+        "from": "0x000000004806b5aa",
+        "to": "0x000000004806b580",
+        "mnemonic": "blo"
+      },
+      {
+        "from": "0x000000004806b5ba",
+        "to": "0x000000004806b5f6",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b5ea",
+        "to": "0x000000004806b3c0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b62c",
+        "to": "0x000000004806b622",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004806b62e",
+        "to": "0x000000004806b3ba",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b636",
+        "to": "0x000000004806b5c0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b63a",
+        "to": "0x000000004806b5c0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b65a",
+        "to": "0x000000004806b3b4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b66a",
+        "to": "0x000000004806b436",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b67e",
+        "to": "0x000000004806b3d4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b692",
+        "to": "0x000000004806b3d4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b6a6",
+        "to": "0x000000004806b3ea",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b6b8",
+        "to": "0x000000004806b410",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b6ca",
+        "to": "0x000000004806b3e0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b6dc",
+        "to": "0x000000004806b3d0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b6ee",
+        "to": "0x000000004806b3d0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b700",
+        "to": "0x000000004806b3d0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b712",
+        "to": "0x000000004806b30c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b722",
+        "to": "0x000000004806b3ae",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b726",
+        "to": "0x000000004806b622",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806b770",
+        "to": "0x000000004806b7ba",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004806b7e0",
+        "to": "0x000000004806b7e6",
+        "mnemonic": "cbz"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004806b70a",
+        "string_address": "0x00000000480fa788",
+        "target": "metadata",
+        "string": "%s: Out of memory for metadata!\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x000000004806b70c",
+        "string_address": "0x00000000480faa38",
+        "target": "metadata",
+        "string": "LoadMetadata",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004802572e",
+    "end_address": "0x0000000048025a38",
+    "score": 3,
+    "matched_targets": [
+      "userdata"
+    ],
+    "calls": [
+      "0x0000000048025194",
+      "0x0000000048025698",
+      "0x0000000048024c20",
+      "0x0000000048026324",
+      "0x0000000048037b5c",
+      "0x000000004802c920",
+      "0x000000004802c92c",
+      "0x0000000048002958",
+      "0x0000000048024cc0",
+      "0x0000000048037fa4",
+      "0x0000000048027600",
+      "0x00000000480256b4",
+      "0x00000000480256bc",
+      "0x00000000480371c0",
+      "0x0000000048025174",
+      "0x000000004806ff38",
+      "0x0000000048025218",
+      "0x0000000048037b90",
+      "0x0000000048026cd0",
+      "0x000000004802c968",
+      "0x00000000480256c8",
+      "0x0000000048057ba4",
+      "0x000000004806a7a8",
+      "0x0000000048027984",
+      "0x0000000048027ba0",
+      "0x0000000048025dc4",
+      "0x0000000048027ee0",
+      "0x0000000048027754"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048025732",
+        "to": "0x0000000048025756",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048025744",
+        "to": "0x000000004802574a",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480257ee",
+        "to": "0x00000000480258b4",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x00000000480257fc",
+        "to": "0x000000004802586c",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048025818",
+        "to": "0x00000000480258fc",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480258a4",
+        "to": "0x00000000480257fe",
+        "mnemonic": "blo"
+      },
+      {
+        "from": "0x00000000480258b2",
+        "to": "0x00000000480257fe",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480258c4",
+        "to": "0x00000000480257f0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048025918",
+        "to": "0x000000004802573c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048025944",
+        "to": "0x00000000480259b6",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004802594a",
+        "to": "0x00000000480258f8",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048025962",
+        "to": "0x0000000048025926",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048025970",
+        "to": "0x0000000048025926",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048025988",
+        "to": "0x0000000048025926",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480259b4",
+        "to": "0x00000000480258f8",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480259ba",
+        "to": "0x00000000480258f8",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480259ca",
+        "to": "0x000000004802573c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048025a24",
+        "to": "0x0000000048003804",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048025a30",
+        "to": "0x0000000048025a3a",
+        "mnemonic": "beq"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004802594e",
+        "string_address": "0x0000000048106d80",
+        "target": "userdata",
+        "string": "userdata",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x00000000480655d4",
+    "end_address": "0x000000004806575e",
+    "score": 3,
+    "matched_targets": [
+      "barcode"
+    ],
+    "calls": [
+      "0x0000000048003f04",
+      "0x0000000048004130",
+      "0x000000004806555c",
+      "0x00000000480982e0",
+      "0x0000000048037fa4",
+      "0x000000004801a5f8",
+      "0x0000000048065548",
+      "0x000000004806540c",
+      "0x00000000480653f4",
+      "0x0000000048037b10",
+      "0x00000000480651b4",
+      "0x000000004806ff38"
+    ],
+    "branches": [
+      {
+        "from": "0x000000004806560a",
+        "to": "0x0000000048065684",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048065618",
+        "to": "0x0000000048065672",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048065622",
+        "to": "0x000000004806562c",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004806562a",
+        "to": "0x00000000480656ce",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004806563e",
+        "to": "0x000000004806564e",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004806564c",
+        "to": "0x00000000480656ac",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048065654",
+        "to": "0x00000000480656e6",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004806565c",
+        "to": "0x0000000048065680",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048065688",
+        "to": "0x000000004806569e",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x00000000480656cc",
+        "to": "0x0000000048065680",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480656e4",
+        "to": "0x0000000048065680",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480656ea",
+        "to": "0x0000000048065702",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048065700",
+        "to": "0x0000000048065680",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048065716",
+        "to": "0x00000000480656fa",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004806573c",
+        "to": "0x0000000048065750",
+        "mnemonic": "ble"
+      },
+      {
+        "from": "0x000000004806574c",
+        "to": "0x00000000480656f0",
+        "mnemonic": "bvs"
+      },
+      {
+        "from": "0x0000000048065750",
+        "to": "0x00000000480656a0",
+        "mnemonic": "bgt"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x00000000480656d0",
+        "string_address": "0x00000000480f898c",
+        "target": "barcode",
+        "string": "Volume up key pressed for BARCODE screen",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x00000000480656d8",
+        "string_address": "0x00000000480d2dac",
+        "target": "barcode",
+        "string": "barcode_screen",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x00000000480656d8",
+        "string_address": "0x00000000480f898c",
+        "target": "barcode",
+        "string": "Volume up key pressed for BARCODE screen",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x00000000480810c6",
+    "end_address": "0x00000000480815d6",
+    "score": 3,
+    "matched_targets": [
+      "metadata"
+    ],
+    "calls": [
+      "0x000000004806ff38",
+      "0x000000004809f7a4",
+      "0x0000000048078490",
+      "0x0000000048099eec",
+      "0x0000000048080e70",
+      "0x000000004809df60",
+      "0x000000004804a9a4",
+      "0x0000000048037fec",
+      "0x0000000048037f44",
+      "0x0000000048080f38",
+      "0x000000004809e338",
+      "0x0000000048099e70",
+      "0x00000000480999ac",
+      "0x0000000048099fc8",
+      "0x000000004809dcc0",
+      "0x000000004809db9c",
+      "0x0000000048037fa4",
+      "0x000000004809da4c",
+      "0x000000004801e08c",
+      "0x000000004801e0b8",
+      "0x000000004801e0f0",
+      "0x0000000048037f10",
+      "0x000000004809b128",
+      "0x000000004809b1d8",
+      "0x000000004809b250",
+      "0x000000004809f71c",
+      "0x00000000480516d8",
+      "0x0000000048051940",
+      "0x0000000048037b5c",
+      "0x000000004805343c"
+    ],
+    "branches": [
+      {
+        "from": "0x00000000480810c6",
+        "to": "0x0000000048081144",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480810cc",
+        "to": "0x00000000480810f0",
+        "mnemonic": "bhi"
+      },
+      {
+        "from": "0x0000000048081108",
+        "to": "0x0000000048081156",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048081132",
+        "to": "0x0000000048081174",
+        "mnemonic": "bhs"
+      },
+      {
+        "from": "0x0000000048081142",
+        "to": "0x00000000480810e2",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048081154",
+        "to": "0x00000000480810e2",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004808115c",
+        "to": "0x0000000048081168",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048081166",
+        "to": "0x00000000480810e2",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048081172",
+        "to": "0x00000000480810e8",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048081192",
+        "to": "0x00000000480810e2",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480811d6",
+        "to": "0x00000000480811da",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048081266",
+        "to": "0x0000000048081282",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048081280",
+        "to": "0x0000000048081324",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004808128e",
+        "to": "0x0000000048081312",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004808129a",
+        "to": "0x0000000048081268",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x00000000480812a6",
+        "to": "0x00000000480812d6",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x00000000480812b4",
+        "to": "0x0000000048081268",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480812c4",
+        "to": "0x00000000480810e2",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480812d4",
+        "to": "0x00000000480810e2",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480812ea",
+        "to": "0x00000000480813ea",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480812f4",
+        "to": "0x0000000048081336",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x00000000480812fc",
+        "to": "0x0000000048081302",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048081304",
+        "to": "0x000000004808133c",
+        "mnemonic": "bls"
+      },
+      {
+        "from": "0x0000000048081310",
+        "to": "0x0000000048081268",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048081334",
+        "to": "0x00000000480810e8",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004808133a",
+        "to": "0x00000000480812f8",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048081380",
+        "to": "0x0000000048081482",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480813a6",
+        "to": "0x0000000048081440",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x00000000480813ae",
+        "to": "0x000000004808149a",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x00000000480813e2",
+        "to": "0x000000004808142c",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x00000000480813e8",
+        "to": "0x000000004808126c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480813f6",
+        "to": "0x0000000048081268",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004808141c",
+        "to": "0x00000000480810e2",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004808142a",
+        "to": "0x0000000048081406",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004808143c",
+        "to": "0x00000000480813e4",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004808143e",
+        "to": "0x0000000048081322",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004808144a",
+        "to": "0x00000000480814d8",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048081452",
+        "to": "0x00000000480814c4",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x000000004808147c",
+        "to": "0x00000000480813d8",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048081480",
+        "to": "0x0000000048081324",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048081498",
+        "to": "0x0000000048081322",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480814ac",
+        "to": "0x0000000048081322",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480814c2",
+        "to": "0x0000000048081322",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480814d6",
+        "to": "0x0000000048081322",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480814ea",
+        "to": "0x0000000048081322",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048081580",
+        "to": "0x0000000048081676",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480815a4",
+        "to": "0x000000004808161c",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480815be",
+        "to": "0x0000000048081688",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480815d0",
+        "to": "0x000000004808165e",
+        "mnemonic": "ble"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x00000000480812ce",
+        "string_address": "0x0000000048105d34",
+        "target": "metadata",
+        "string": "mot_sec: %s: Failed to validate its own avb metadata info\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048023d20",
+    "end_address": "0x0000000048023d94",
+    "score": 2,
+    "matched_targets": [
+      "serialno"
+    ],
+    "calls": [
+      "0x00000000480382ec",
+      "0x000000004801edd0",
+      "0x00000000480380fc"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048023d4a",
+        "to": "0x0000000048023da6",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048023d5c",
+        "to": "0x0000000048023d6e",
+        "mnemonic": "bhs"
+      },
+      {
+        "from": "0x0000000048023d6c",
+        "to": "0x0000000048023d60",
+        "mnemonic": "bhi"
+      },
+      {
+        "from": "0x0000000048023d72",
+        "to": "0x0000000048023d96",
+        "mnemonic": "cbnz"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048023d2a",
+        "string_address": "0x00000000480cdd40",
+        "target": "serialno",
+        "string": "androidboot.serialno=",
+        "via": "thumb ldr/add-pc r7",
+        "instruction": "add r7, pc"
+      },
+      {
+        "xref_address": "0x0000000048023d80",
+        "string_address": "0x00000000480cdd40",
+        "target": "serialno",
+        "string": "androidboot.serialno=",
+        "via": "thumb ldr/add-pc r5",
+        "instruction": "add r5, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048030258",
+    "end_address": "0x0000000048030420",
+    "score": 2,
+    "matched_targets": [
+      "meid",
+      "sku"
+    ],
+    "calls": [
+      "0x0000000048069260",
+      "0x0000000048069fac",
+      "0x000000004801f8b8",
+      "0x000000004806bff4",
+      "0x000000004802fbe0",
+      "0x0000000048037b10",
+      "0x000000004806bfe4",
+      "0x000000004806a968",
+      "0x000000004805a250",
+      "0x000000004806a0d8",
+      "0x000000004801f8bc",
+      "0x000000004801f8c4",
+      "0x000000004802fb74",
+      "0x00000000480380fc",
+      "0x000000004801f8c0",
+      "0x000000004801f8b4",
+      "0x000000004806a094",
+      "0x000000004806a374"
+    ],
+    "branches": [],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004803029a",
+        "string_address": "0x00000000480d2e44",
+        "target": "meid",
+        "string": "IMEI/MEID: %s",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      },
+      {
+        "xref_address": "0x0000000048030308",
+        "string_address": "0x00000000480d2e54",
+        "target": "sku",
+        "string": "SKU: %s",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048031d96",
+    "end_address": "0x0000000048032308",
+    "score": 2,
+    "matched_targets": [
+      "barcode"
+    ],
+    "calls": [
+      "0x000000004806a448",
+      "0x000000004806a384",
+      "0x0000000048031934",
+      "0x000000004803122c",
+      "0x0000000048030d84",
+      "0x000000004806a6e8",
+      "0x0000000048038048",
+      "0x000000004801f868",
+      "0x000000004806a344",
+      "0x000000004801f9c8",
+      "0x000000004806a050",
+      "0x000000004806bff4",
+      "0x0000000048081f3c",
+      "0x00000000480777e8",
+      "0x00000000480310d8",
+      "0x0000000048030cc8",
+      "0x0000000048030ff4",
+      "0x000000004801f938",
+      "0x0000000048030fa8",
+      "0x0000000048030f50",
+      "0x000000004801f850",
+      "0x0000000048037b10",
+      "0x0000000048030df0",
+      "0x000000004806fecc",
+      "0x000000004803112c",
+      "0x0000000048069260",
+      "0x0000000048069fac",
+      "0x000000004806a094"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048031d9c",
+        "to": "0x0000000048031c78",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048031db2",
+        "to": "0x0000000048031e5e",
+        "mnemonic": "bmi"
+      },
+      {
+        "from": "0x0000000048031db6",
+        "to": "0x0000000048031cdc",
+        "mnemonic": "bpl"
+      },
+      {
+        "from": "0x0000000048031dc8",
+        "to": "0x0000000048031cee",
+        "mnemonic": "bpl"
+      },
+      {
+        "from": "0x0000000048031dda",
+        "to": "0x0000000048031d00",
+        "mnemonic": "bpl"
+      },
+      {
+        "from": "0x0000000048031dec",
+        "to": "0x0000000048031d12",
+        "mnemonic": "bpl"
+      },
+      {
+        "from": "0x0000000048031dfe",
+        "to": "0x0000000048031d24",
+        "mnemonic": "bpl"
+      },
+      {
+        "from": "0x0000000048031e10",
+        "to": "0x0000000048031d36",
+        "mnemonic": "bpl"
+      },
+      {
+        "from": "0x0000000048031e1c",
+        "to": "0x0000000048031d36",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048031e52",
+        "to": "0x0000000048031d36",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048031e68",
+        "to": "0x0000000048031db4",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048031e7e",
+        "to": "0x0000000048031cca",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048031e8e",
+        "to": "0x0000000048031c66",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048031ebe",
+        "to": "0x0000000048031f56",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048031f00",
+        "to": "0x0000000048031c7e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048031f54",
+        "to": "0x0000000048031c78",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048031f64",
+        "to": "0x0000000048031ece",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048031f9c",
+        "to": "0x0000000048031d24",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048031fd0",
+        "to": "0x0000000048031d12",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048032000",
+        "to": "0x0000000048031cdc",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048032032",
+        "to": "0x0000000048031d00",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048032064",
+        "to": "0x0000000048031cee",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048032096",
+        "to": "0x0000000048031e0e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480320c6",
+        "to": "0x0000000048031dfc",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480320f6",
+        "to": "0x0000000048031dea",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048032126",
+        "to": "0x0000000048031dd8",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048032158",
+        "to": "0x0000000048031dc6",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004803216c",
+        "to": "0x0000000048031db4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048032172",
+        "to": "0x000000004803217a",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048032178",
+        "to": "0x000000004803217e",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048032184",
+        "to": "0x0000000048031cca",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004803218a",
+        "to": "0x0000000048031cbc",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480321c2",
+        "to": "0x0000000048031cb6",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480321ce",
+        "to": "0x0000000048031cb0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480321f6",
+        "to": "0x0000000048031caa",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480321fc",
+        "to": "0x0000000048031ca4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048032202",
+        "to": "0x0000000048031c9e",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048032244",
+        "to": "0x0000000048031c98",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004803224a",
+        "to": "0x0000000048031c92",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004803228c",
+        "to": "0x0000000048031cce",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480322b6",
+        "to": "0x00000000480322e0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480322c6",
+        "to": "0x00000000480322d2",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x00000000480322ee",
+        "to": "0x00000000480322b8",
+        "mnemonic": "blt"
+      },
+      {
+        "from": "0x00000000480322f0",
+        "to": "0x0000000048031daa",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480322f6",
+        "to": "0x0000000048031da4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048032304",
+        "to": "0x0000000048031c60",
+        "mnemonic": "b"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048031fb6",
+        "string_address": "0x00000000480d3440",
+        "target": "barcode",
+        "string": "barcodes",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x0000000048031fca",
+        "string_address": "0x00000000480d344c",
+        "target": "barcode",
+        "string": "Barcodes",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048032c88",
+    "end_address": "0x0000000048032d12",
+    "score": 2,
+    "matched_targets": [
+      "esimid"
+    ],
+    "calls": [
+      "0x00000000480324f8",
+      "0x00000000480982e0",
+      "0x00000000480380fc",
+      "0x0000000048032560",
+      "0x0000000048037b10",
+      "0x000000004806bfe4",
+      "0x000000004806a968",
+      "0x000000004806bff4",
+      "0x000000004805a250",
+      "0x000000004806a0d8"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048032cc4",
+        "to": "0x0000000048032cce",
+        "mnemonic": "cbz"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048032cb8",
+        "string_address": "0x00000000480d3650",
+        "target": "esimid",
+        "string": "esimid",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x0000000048032cd6",
+        "string_address": "0x00000000480d3658",
+        "target": "esimid",
+        "string": "ESIMID: %s",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048032d1c",
+    "end_address": "0x0000000048032ee8",
+    "score": 2,
+    "matched_targets": [
+      "meid",
+      "sku"
+    ],
+    "calls": [
+      "0x0000000048069260",
+      "0x0000000048069fac",
+      "0x000000004801f8b8",
+      "0x000000004806bff4",
+      "0x0000000048032c68",
+      "0x0000000048037b10",
+      "0x000000004806bfe4",
+      "0x000000004806a968",
+      "0x000000004805a250",
+      "0x000000004806a0d8",
+      "0x000000004801f8bc",
+      "0x000000004801f8c4",
+      "0x00000000480324f8",
+      "0x00000000480380fc",
+      "0x000000004801f8c0",
+      "0x000000004801f8b4",
+      "0x0000000048032c88",
+      "0x000000004806a094",
+      "0x000000004806a374"
+    ],
+    "branches": [],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048032d5e",
+        "string_address": "0x00000000480d2e44",
+        "target": "meid",
+        "string": "IMEI/MEID: %s",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      },
+      {
+        "xref_address": "0x0000000048032dcc",
+        "string_address": "0x00000000480d2e54",
+        "target": "sku",
+        "string": "SKU: %s",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x00000000480589e4",
+    "end_address": "0x0000000048058a46",
+    "score": 2,
+    "matched_targets": [
+      "barcode",
+      "serialno"
+    ],
+    "calls": [
+      "0x00000000480982e0",
+      "0x000000004806c724",
+      "0x000000004801a0e8",
+      "0x0000000048098014"
+    ],
+    "branches": [
+      {
+        "from": "0x00000000480589f2",
+        "to": "0x00000000480589f6",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048058a04",
+        "to": "0x00000000480589f4",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048058a0c",
+        "to": "0x0000000048058a1a",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048058a16",
+        "to": "0x0000000048038150",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x0000000048058a18",
+        "to": "0x0000000048058a82",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048058a22",
+        "to": "0x0000000048058a0e",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048058a24",
+        "to": "0x00000000480589f4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048058a40",
+        "to": "0x0000000048058a48",
+        "mnemonic": "cbnz"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x00000000480589ec",
+        "string_address": "0x00000000480b2550",
+        "target": "serialno",
+        "string": "serialno",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x00000000480589fc",
+        "string_address": "0x00000000480e172c",
+        "target": "barcode",
+        "string": "barcode",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004805a250",
+    "end_address": "0x000000004805a29e",
+    "score": 2,
+    "matched_targets": [
+      "barcode"
+    ],
+    "calls": [
+      "0x0000000048059ab4",
+      "0x0000000048059fb4",
+      "0x000000004806ff38"
+    ],
+    "branches": [
+      {
+        "from": "0x000000004805a25a",
+        "to": "0x000000004805a25e",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004805a268",
+        "to": "0x000000004805a290",
+        "mnemonic": "blt"
+      },
+      {
+        "from": "0x000000004805a27c",
+        "to": "0x000000004805a25c",
+        "mnemonic": "beq"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004805a260",
+        "string_address": "0x00000000480e2248",
+        "target": "barcode",
+        "string": "barcode_setting",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x000000004805a294",
+        "string_address": "0x00000000480e2258",
+        "target": "barcode",
+        "string": "No barcode setting, use default scale 4\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004805a2b4",
+    "end_address": "0x000000004805a302",
+    "score": 2,
+    "matched_targets": [
+      "barcode"
+    ],
+    "calls": [
+      "0x0000000048059ab4",
+      "0x0000000048059fb4",
+      "0x000000004806ff38"
+    ],
+    "branches": [
+      {
+        "from": "0x000000004805a2be",
+        "to": "0x000000004805a2c2",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004805a2cc",
+        "to": "0x000000004805a2f4",
+        "mnemonic": "blt"
+      },
+      {
+        "from": "0x000000004805a2e0",
+        "to": "0x000000004805a2c0",
+        "mnemonic": "beq"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004805a2c4",
+        "string_address": "0x00000000480e2248",
+        "target": "barcode",
+        "string": "barcode_setting",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      },
+      {
+        "xref_address": "0x000000004805a2f8",
+        "string_address": "0x00000000480e2294",
+        "target": "barcode",
+        "string": "No barcode setting, use default width 3\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x00000000480641b0",
+    "end_address": "0x00000000480641d2",
+    "score": 2,
+    "matched_targets": [
+      "sku"
+    ],
+    "calls": [
+      "0x00000000480982e0"
+    ],
+    "branches": [
+      {
+        "from": "0x00000000480641c0",
+        "to": "0x00000000480641d2",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x00000000480641ce",
+        "to": "0x000000004806ff38",
+        "mnemonic": "b.w"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x00000000480641b8",
+        "string_address": "0x00000000480f2e48",
+        "target": "sku",
+        "string": "sku",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      },
+      {
+        "xref_address": "0x00000000480641cc",
+        "string_address": "0x00000000480f8340",
+        "target": "sku",
+        "string": "SKU: %s\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048003d34",
+    "end_address": "0x0000000048003de0",
+    "score": 1,
+    "matched_targets": [
+      "serialno"
+    ],
+    "calls": [
+      "0x0000000048038f00",
+      "0x00000000480380fc",
+      "0x0000000048039958",
+      "0x0000000048037438",
+      "0x00000000480652c8"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048003d48",
+        "to": "0x0000000048003df6",
+        "mnemonic": "blt"
+      },
+      {
+        "from": "0x0000000048003d78",
+        "to": "0x0000000048003d6c",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048003db6",
+        "to": "0x0000000048003e24",
+        "mnemonic": "bhi"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048003da8",
+        "string_address": "0x00000000480b2550",
+        "target": "serialno",
+        "string": "serialno",
+        "via": "thumb ldr/add-pc r2",
+        "instruction": "add r2, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x000000004802f9ac",
+    "end_address": "0x000000004802fb12",
+    "score": 1,
+    "matched_targets": [
+      "barcode"
+    ],
+    "calls": [
+      "0x000000004806ff38",
+      "0x00000000480651c0",
+      "0x000000004802f7c8"
+    ],
+    "branches": [
+      {
+        "from": "0x000000004802f9ae",
+        "to": "0x000000004802f9da",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004802f9b8",
+        "to": "0x000000004802f9be",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004802f9bc",
+        "to": "0x000000004802f9da",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004802f9c4",
+        "to": "0x000000004802f9da",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x000000004802f9ca",
+        "to": "0x000000004802f9dc",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004802f9d0",
+        "to": "0x000000004802fa7e",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004802f9d8",
+        "to": "0x000000004802fa34",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004802f9e4",
+        "to": "0x000000004802faa6",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004802fa0a",
+        "to": "0x000000004802fa70",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004802fa10",
+        "to": "0x000000004802f9f8",
+        "mnemonic": "bls"
+      },
+      {
+        "from": "0x000000004802fa1e",
+        "to": "0x000000004802fa98",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004802fa30",
+        "to": "0x000000004802f57c",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x000000004802fa3c",
+        "to": "0x000000004802fab4",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004802fa42",
+        "to": "0x000000004802fa9e",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004802fa46",
+        "to": "0x000000004802fa86",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004802fa6c",
+        "to": "0x0000000048064314",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x000000004802fa7c",
+        "to": "0x000000004802fa0c",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004802fa82",
+        "to": "0x000000004801f8c8",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x000000004802fa9c",
+        "to": "0x000000004802fa22",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004802faa2",
+        "to": "0x000000004802f964",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x000000004802fab0",
+        "to": "0x000000004806ff38",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x000000004802fabc",
+        "to": "0x00000000480651c0",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x000000004802fabe",
+        "to": "0x000000004802fb22",
+        "mnemonic": "cbnz"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004802fa92",
+        "string_address": "0x00000000480d2dac",
+        "target": "barcode",
+        "string": "barcode_screen",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048030020",
+    "end_address": "0x0000000048030250",
+    "score": 1,
+    "matched_targets": [
+      "barcode"
+    ],
+    "calls": [
+      "0x000000004806a4d4"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048030028",
+        "to": "0x000000004802fc62",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004803003c",
+        "to": "0x000000004802fc5a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030050",
+        "to": "0x000000004802ff32",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030068",
+        "to": "0x000000004802ff22",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030080",
+        "to": "0x000000004802ff1a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030098",
+        "to": "0x000000004802ff12",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480300b0",
+        "to": "0x000000004802ff0a",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480300c8",
+        "to": "0x000000004802ff02",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480300e0",
+        "to": "0x000000004802fefa",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480300f8",
+        "to": "0x000000004802fef2",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030110",
+        "to": "0x000000004802feea",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030128",
+        "to": "0x000000004802fee2",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004803013c",
+        "to": "0x000000004802feda",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030150",
+        "to": "0x000000004802fed2",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030166",
+        "to": "0x000000004802fec0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004803017c",
+        "to": "0x000000004802feb8",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030192",
+        "to": "0x000000004802feb0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480301a8",
+        "to": "0x000000004802fea8",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480301be",
+        "to": "0x000000004802fea0",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480301d4",
+        "to": "0x000000004802fe98",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x00000000480301ea",
+        "to": "0x000000004802fe90",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030200",
+        "to": "0x000000004802fe88",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030216",
+        "to": "0x000000004802fe80",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004803022a",
+        "to": "0x000000004802fe78",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004803023e",
+        "to": "0x000000004802fe70",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x000000004803024c",
+        "to": "0x000000004806ff38",
+        "mnemonic": "b.w"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048030244",
+        "string_address": "0x00000000480d2e1c",
+        "target": "barcode",
+        "string": "Barcode is too long for the display\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x00000000480309ca",
+    "end_address": "0x0000000048030d32",
+    "score": 1,
+    "matched_targets": [
+      "barcode"
+    ],
+    "calls": [
+      "0x0000000048004130",
+      "0x00000000480651c0",
+      "0x0000000048064314",
+      "0x000000004801fca0",
+      "0x000000004801f868",
+      "0x0000000048030974",
+      "0x000000004806fdac",
+      "0x000000004806fdd0",
+      "0x000000004806fdec",
+      "0x00000000480a71b4",
+      "0x0000000048065400",
+      "0x00000000480660a8",
+      "0x000000004806ff38",
+      "0x00000000480625ec",
+      "0x000000004801f8c8",
+      "0x000000004806242c",
+      "0x0000000048037b10",
+      "0x000000004806a6e8",
+      "0x000000004806a384",
+      "0x000000004806a344"
+    ],
+    "branches": [
+      {
+        "from": "0x00000000480309d8",
+        "to": "0x0000000048030a62",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480309de",
+        "to": "0x0000000048030a62",
+        "mnemonic": "bls"
+      },
+      {
+        "from": "0x00000000480309e4",
+        "to": "0x0000000048030a68",
+        "mnemonic": "bls"
+      },
+      {
+        "from": "0x00000000480309ea",
+        "to": "0x0000000048030a62",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x00000000480309fa",
+        "to": "0x0000000048030a62",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048030a2c",
+        "to": "0x0000000048030ae2",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048030a38",
+        "to": "0x0000000048030a62",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048030a6e",
+        "to": "0x0000000048030b4a",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048030a78",
+        "to": "0x0000000048030aa4",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048030a88",
+        "to": "0x0000000048030ad8",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048030a96",
+        "to": "0x0000000048030ad8",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048030aa2",
+        "to": "0x0000000048030a84",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048030ab8",
+        "to": "0x0000000048030b04",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048030ac2",
+        "to": "0x0000000048030b8c",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048030ae0",
+        "to": "0x0000000048030aa4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030b02",
+        "to": "0x0000000048030a62",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030b0c",
+        "to": "0x0000000048030ac4",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048030b48",
+        "to": "0x0000000048030ac4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030b4c",
+        "to": "0x0000000048030b50",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048030b5c",
+        "to": "0x0000000048030aa4",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048030b62",
+        "to": "0x0000000048030b7e",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048030b6e",
+        "to": "0x0000000048030b7e",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x0000000048030b70",
+        "to": "0x0000000048030b88",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048030b7a",
+        "to": "0x0000000048030b5e",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048030b7c",
+        "to": "0x0000000048030aa4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030b86",
+        "to": "0x0000000048030aa4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030b8a",
+        "to": "0x0000000048030b74",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030ba0",
+        "to": "0x0000000048030c22",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048030bac",
+        "to": "0x0000000048030ac4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030bd4",
+        "to": "0x0000000048030a62",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030be4",
+        "to": "0x0000000048030a62",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030c10",
+        "to": "0x0000000048030c2e",
+        "mnemonic": "bhi"
+      },
+      {
+        "from": "0x0000000048030c14",
+        "to": "0x0000000048030c40",
+        "mnemonic": "blo"
+      },
+      {
+        "from": "0x0000000048030c1a",
+        "to": "0x0000000048030a62",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030c20",
+        "to": "0x0000000048030a62",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030c2c",
+        "to": "0x0000000048030ac4",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030c3e",
+        "to": "0x0000000048030c16",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030c50",
+        "to": "0x0000000048030c16",
+        "mnemonic": "b"
+      },
+      {
+        "from": "0x0000000048030ce0",
+        "to": "0x0000000048030d48",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048030ce2",
+        "to": "0x0000000048030d34",
+        "mnemonic": "cbz"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048030bde",
+        "string_address": "0x00000000480d2dac",
+        "target": "barcode",
+        "string": "barcode_screen",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x00000000480326ac",
+    "end_address": "0x00000000480328d0",
+    "score": 1,
+    "matched_targets": [
+      "barcode"
+    ],
+    "calls": [
+      "0x000000004806a988",
+      "0x000000004806a4d4",
+      "0x000000004806a9ac",
+      "0x000000004806a998",
+      "0x000000004806a9a8"
+    ],
+    "branches": [
+      {
+        "from": "0x00000000480326be",
+        "to": "0x000000004803266a",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480326d4",
+        "to": "0x0000000048032670",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480326ea",
+        "to": "0x0000000048032676",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048032702",
+        "to": "0x000000004803267c",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004803271a",
+        "to": "0x0000000048032682",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048032732",
+        "to": "0x0000000048032688",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004803274a",
+        "to": "0x000000004803268e",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048032762",
+        "to": "0x0000000048032694",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x000000004803277a",
+        "to": "0x000000004803269a",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x0000000048032792",
+        "to": "0x00000000480326a0",
+        "mnemonic": "beq"
+      },
+      {
+        "from": "0x00000000480328a2",
+        "to": "0x00000000480328ba",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x00000000480328b6",
+        "to": "0x000000004806ff38",
+        "mnemonic": "b.w"
+      },
+      {
+        "from": "0x00000000480328b8",
+        "to": "0x000000004803290a",
+        "mnemonic": "cbnz"
+      },
+      {
+        "from": "0x00000000480328c8",
+        "to": "0x00000000480328cc",
+        "mnemonic": "b"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x00000000480328ae",
+        "string_address": "0x00000000480d2e1c",
+        "target": "barcode",
+        "string": "Barcode is too long for the display\n",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048066130",
+    "end_address": "0x0000000048066152",
+    "score": 1,
+    "matched_targets": [
+      "sku"
+    ],
+    "calls": [
+      "0x00000000480982e0",
+      "0x00000000480380fc"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048066144",
+        "to": "0x0000000048066158",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x000000004806614c",
+        "to": "0x0000000048066154",
+        "mnemonic": "cbnz"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004806613e",
+        "string_address": "0x00000000480f2e40",
+        "target": "sku",
+        "string": "carrier_sku",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x0000000048078e60",
+    "end_address": "0x0000000048078ea0",
+    "score": 1,
+    "matched_targets": [
+      "imei"
+    ],
+    "calls": [
+      "0x0000000048080998"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048078e68",
+        "to": "0x0000000048078e7c",
+        "mnemonic": "cbz"
+      },
+      {
+        "from": "0x0000000048078e70",
+        "to": "0x0000000048078e7c",
+        "mnemonic": "bne"
+      },
+      {
+        "from": "0x0000000048078e76",
+        "to": "0x0000000048078e84",
+        "mnemonic": "bhi"
+      },
+      {
+        "from": "0x0000000048078e80",
+        "to": "0x00000000480807d0",
+        "mnemonic": "b.w"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x0000000048078e8a",
+        "string_address": "0x000000004810488f",
+        "target": "imei",
+        "string": "\u0005\u0082J\u00bf\u0095\u0014z\u00b8\u00e2\u00ae+\u00b1{8\u001b\u00b6\f\u009b\u008e\u00d2\u0092\r\u00be\u00d5\u00e5\u00b7\u00ef\u00dc|!\u00df\u00db\u000b\u00d4\u00d2\u00d3\u0086B\u00e2\u00d4\u00f1\u00f8\u00b3\u00ddhn\u0083\u00da\u001f\u00cd\u0016\u00be\u0081[&\u00b9\u00f6\u00e1w\u00b0owG\u00b7\u0018\u00e6Z\b\u0088pj\u000f\u00ff\u00ca;\u0006f\\\u000b\u0001\u0011\u00ff\u009ee\u008fi\u00aeb\u00f8\u00d3\u00ffkaE\u00cfl\u0016x\u00e2\n\u00a0\u00ee\u00d2\r\u00d7T\u0083\u0004N\u00c2\u00b3\u00039a&g\u00a7\u00f7\u0016`\u00d0MGiI\u00dbwn>Jj\u00d1\u00ae\u00dcZ\u00d6\u00d9f\u000b\u00df@\u00f0;\u00d87S\u00ae\u00bc\u00a9\u00c5\u009e\u00bb\u00de\u007f\u00cf\u00b2G\u00e9\u00ff\u00b50\u001c\u00f2\u00bd\u00bd\u008a\u00c2\u00ba\u00ca0\u0093\u00b3S\u00a6\u00a3\u00b4$\u00056\u00d0\u00ba\u0093\u0006\u00d7\u00cd)W\u00deT\u00bfg\u00d9#.zf\u00b3\u00b8Ja\u00c4\u0002\u001bh]\u0094+o*7\u00be\u000b\u00b4\u00a1\u008e\f\u00c3\u001b\u00df\u0005Z\u008d\u00ef\u0002-Using ALT IMEI UID",
+        "via": "thumb ldr/add-pc r0",
+        "instruction": "add r0, pc"
+      }
+    ]
+  },
+  {
+    "start_address": "0x00000000480840f8",
+    "end_address": "0x000000004808412a",
+    "score": 1,
+    "matched_targets": [
+      "barcode"
+    ],
+    "calls": [
+      "0x00000000480982e0",
+      "0x000000004803816c"
+    ],
+    "branches": [
+      {
+        "from": "0x0000000048084114",
+        "to": "0x0000000048084128",
+        "mnemonic": "cbz"
+      }
+    ],
+    "xrefs": [
+      {
+        "xref_address": "0x000000004808411c",
+        "string_address": "0x00000000480e172c",
+        "target": "barcode",
+        "string": "barcode",
+        "via": "thumb ldr/add-pc r1",
+        "instruction": "add r1, pc"
+      }
+    ]
+  }
+]

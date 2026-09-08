@@ -1,0 +1,427 @@
+{
+  "function_start": "0x0000000048077fe0",
+  "function_end": "0x00000000480781c4",
+  "confidence": 62,
+  "evidence": [
+    "string target: validate_hash_password: Version 2 datablock",
+    "string target: validate_hash_password: Version 1 datablock",
+    "string target: validate_hash_password: Unsupported datablock",
+    "string target: mot_sec: hash calculation failure!",
+    "string target: mot_sec: hash at offset i:",
+    "string target: mot_sec: validate_hash_password: Unsupported datablock",
+    "checks Motorola helper success value 0xf",
+    "uses hash-sized 0x20 byte buffer",
+    "contains multi-stage decode/hash call chain",
+    "called by another flow candidate",
+    "caller branches validator failure toward Code validation failure"
+  ],
+  "matched_targets": [
+    "mot_sec: hash at offset i:",
+    "mot_sec: hash calculation failure!",
+    "mot_sec: validate_hash_password: Unsupported datablock",
+    "validate_hash_password: Unsupported datablock",
+    "validate_hash_password: Version 1 datablock",
+    "validate_hash_password: Version 2 datablock"
+  ],
+  "callers": [
+    {
+      "caller_start": "0x0000000048082974",
+      "caller_start_file_offset": "0x82974",
+      "caller_start_hxd_offset": "00082974",
+      "call_site": "0x0000000048082a4a",
+      "call_site_file_offset": "0x82a4a",
+      "call_site_hxd_offset": "00082A4A"
+    }
+  ],
+  "failure_edges": [
+    {
+      "call_site": "0x0000000048082a4a",
+      "call_site_file_offset": "0x82a4a",
+      "call_site_hxd_offset": "00082A4A",
+      "failure_target": "0x0000000048082a60",
+      "failure_target_file_offset": "0x82a60",
+      "failure_target_hxd_offset": "00082A60",
+      "branch": "cbnz"
+    }
+  ],
+  "function_start_file_offset": "0x77fe0",
+  "function_start_hxd_offset": "00077FE0",
+  "function_end_file_offset": "0x781c4",
+  "function_end_hxd_offset": "000781C4",
+  "structural_instructions": [
+    {
+      "role": "hash_0x20_buffer_or_length",
+      "address": "0x0000000048077fe8",
+      "file_offset": "0x77fe8",
+      "hxd_offset": "00077FE8",
+      "instruction": "movs r5, #0x20",
+      "raw": "2025"
+    },
+    {
+      "role": "call",
+      "address": "0x0000000048077ff0",
+      "file_offset": "0x77ff0",
+      "hxd_offset": "00077FF0",
+      "instruction": "bl #0x48077a2c",
+      "raw": "fff71cfd"
+    },
+    {
+      "role": "call",
+      "address": "0x000000004807800e",
+      "file_offset": "0x7800e",
+      "hxd_offset": "0007800E",
+      "instruction": "bl #0x480787a4",
+      "raw": "00f0c9fb"
+    },
+    {
+      "role": "zero_compare",
+      "address": "0x0000000048078012",
+      "file_offset": "0x78012",
+      "hxd_offset": "00078012",
+      "instruction": "cmp r0, #0xf",
+      "raw": "0f28"
+    },
+    {
+      "role": "call",
+      "address": "0x000000004807801a",
+      "file_offset": "0x7801a",
+      "hxd_offset": "0007801A",
+      "instruction": "bl #0x48080870",
+      "raw": "08f029fc"
+    },
+    {
+      "role": "call",
+      "address": "0x000000004807802c",
+      "file_offset": "0x7802c",
+      "hxd_offset": "0007802C",
+      "instruction": "bl #0x4806ff38",
+      "raw": "f7f784ff"
+    },
+    {
+      "role": "zero_compare",
+      "address": "0x000000004807803a",
+      "file_offset": "0x7803a",
+      "hxd_offset": "0007803A",
+      "instruction": "cmp r0, #0",
+      "raw": "0028"
+    },
+    {
+      "role": "call",
+      "address": "0x000000004807803e",
+      "file_offset": "0x7803e",
+      "hxd_offset": "0007803E",
+      "instruction": "bl #0x480794a4",
+      "raw": "01f031fa"
+    },
+    {
+      "role": "call",
+      "address": "0x0000000048078046",
+      "file_offset": "0x78046",
+      "hxd_offset": "00078046",
+      "instruction": "bl #0x48079490",
+      "raw": "01f023fa"
+    },
+    {
+      "role": "string_xref",
+      "address": "0x0000000048078058",
+      "file_offset": "0x78058",
+      "hxd_offset": "00078058",
+      "instruction": "add r1, pc",
+      "raw": "7944"
+    },
+    {
+      "role": "call",
+      "address": "0x000000004807805a",
+      "file_offset": "0x7805a",
+      "hxd_offset": "0007805A",
+      "instruction": "bl #0x4806ff38",
+      "raw": "f7f76dff"
+    },
+    {
+      "role": "string_xref",
+      "address": "0x0000000048078064",
+      "file_offset": "0x78064",
+      "hxd_offset": "00078064",
+      "instruction": "add r1, pc",
+      "raw": "7944"
+    },
+    {
+      "role": "call",
+      "address": "0x0000000048078066",
+      "file_offset": "0x78066",
+      "hxd_offset": "00078066",
+      "instruction": "bl #0x4806ff38",
+      "raw": "f7f767ff"
+    },
+    {
+      "role": "string_xref",
+      "address": "0x000000004807806e",
+      "file_offset": "0x7806e",
+      "hxd_offset": "0007806E",
+      "instruction": "add r1, pc",
+      "raw": "7944"
+    },
+    {
+      "role": "call",
+      "address": "0x0000000048078070",
+      "file_offset": "0x78070",
+      "hxd_offset": "00078070",
+      "instruction": "bl #0x4806ff38",
+      "raw": "f7f762ff"
+    },
+    {
+      "role": "string_xref",
+      "address": "0x0000000048078080",
+      "file_offset": "0x78080",
+      "hxd_offset": "00078080",
+      "instruction": "add r1, pc",
+      "raw": "7944"
+    },
+    {
+      "role": "call",
+      "address": "0x0000000048078082",
+      "file_offset": "0x78082",
+      "hxd_offset": "00078082",
+      "instruction": "bl #0x4806ff38",
+      "raw": "f7f759ff"
+    },
+    {
+      "role": "call",
+      "address": "0x00000000480780a4",
+      "file_offset": "0x780a4",
+      "hxd_offset": "000780A4",
+      "instruction": "bl #0x480786b8",
+      "raw": "00f008fb"
+    },
+    {
+      "role": "zero_compare",
+      "address": "0x00000000480780a8",
+      "file_offset": "0x780a8",
+      "hxd_offset": "000780A8",
+      "instruction": "cmp r0, #0xf",
+      "raw": "0f28"
+    },
+    {
+      "role": "call",
+      "address": "0x00000000480780b4",
+      "file_offset": "0x780b4",
+      "hxd_offset": "000780B4",
+      "instruction": "bl #0x4806ff38",
+      "raw": "f7f740ff"
+    },
+    {
+      "role": "string_xref",
+      "address": "0x00000000480780c0",
+      "file_offset": "0x780c0",
+      "hxd_offset": "000780C0",
+      "instruction": "add r1, pc",
+      "raw": "7944"
+    },
+    {
+      "role": "call",
+      "address": "0x00000000480780c2",
+      "file_offset": "0x780c2",
+      "hxd_offset": "000780C2",
+      "instruction": "bl #0x4806ff38",
+      "raw": "f7f739ff"
+    },
+    {
+      "role": "call",
+      "address": "0x00000000480780da",
+      "file_offset": "0x780da",
+      "hxd_offset": "000780DA",
+      "instruction": "bl #0x480786b8",
+      "raw": "00f0edfa"
+    },
+    {
+      "role": "zero_compare",
+      "address": "0x00000000480780de",
+      "file_offset": "0x780de",
+      "hxd_offset": "000780DE",
+      "instruction": "cmp r0, #0xf",
+      "raw": "0f28"
+    },
+    {
+      "role": "string_xref",
+      "address": "0x00000000480780e8",
+      "file_offset": "0x780e8",
+      "hxd_offset": "000780E8",
+      "instruction": "add r1, pc",
+      "raw": "7944"
+    },
+    {
+      "role": "call",
+      "address": "0x00000000480780ea",
+      "file_offset": "0x780ea",
+      "hxd_offset": "000780EA",
+      "instruction": "bl #0x4806ff38",
+      "raw": "f7f725ff"
+    },
+    {
+      "role": "hash_0x20_buffer_or_length",
+      "address": "0x00000000480780f4",
+      "file_offset": "0x780f4",
+      "hxd_offset": "000780F4",
+      "instruction": "lsrs r5, r4, #0x20",
+      "raw": "2508"
+    },
+    {
+      "role": "hash_0x20_buffer_or_length",
+      "address": "0x0000000048078114",
+      "file_offset": "0x78114",
+      "hxd_offset": "00078114",
+      "instruction": "movs r2, #0x20",
+      "raw": "2022"
+    },
+    {
+      "role": "call",
+      "address": "0x0000000048078118",
+      "file_offset": "0x78118",
+      "hxd_offset": "00078118",
+      "instruction": "bl #0x480807cc",
+      "raw": "08f058fb"
+    },
+    {
+      "role": "string_xref",
+      "address": "0x0000000048078124",
+      "file_offset": "0x78124",
+      "hxd_offset": "00078124",
+      "instruction": "add r1, pc",
+      "raw": "7944"
+    },
+    {
+      "role": "call",
+      "address": "0x0000000048078126",
+      "file_offset": "0x78126",
+      "hxd_offset": "00078126",
+      "instruction": "bl #0x4806ff38",
+      "raw": "f7f707ff"
+    },
+    {
+      "role": "call",
+      "address": "0x0000000048078182",
+      "file_offset": "0x78182",
+      "hxd_offset": "00078182",
+      "instruction": "bl #0x4806ff38",
+      "raw": "f7f7d9fe"
+    },
+    {
+      "role": "zero_compare",
+      "address": "0x0000000048078186",
+      "file_offset": "0x78186",
+      "hxd_offset": "00078186",
+      "instruction": "cmp r6, #0",
+      "raw": "002e"
+    },
+    {
+      "role": "zero_compare",
+      "address": "0x000000004807818a",
+      "file_offset": "0x7818a",
+      "hxd_offset": "0007818A",
+      "instruction": "cmp r4, #0xa4",
+      "raw": "a42c"
+    },
+    {
+      "role": "call",
+      "address": "0x0000000048078198",
+      "file_offset": "0x78198",
+      "hxd_offset": "00078198",
+      "instruction": "bl #0x48037f10",
+      "raw": "bff7bafe"
+    },
+    {
+      "role": "call",
+      "address": "0x00000000480781aa",
+      "file_offset": "0x781aa",
+      "hxd_offset": "000781AA",
+      "instruction": "bl #0x48037f10",
+      "raw": "bff7b1fe"
+    }
+  ],
+  "xrefs": [
+    {
+      "target": "validate_hash_password: Unsupported datablock",
+      "string": "mot_sec: validate_hash_password: Unsupported datablock\n",
+      "xref_address": "0x0000000048078058",
+      "xref_file_offset": "0x78058",
+      "xref_hxd_offset": "00078058",
+      "string_address": "0x000000004810336c",
+      "string_file_offset": "0x10336c",
+      "string_hxd_offset": "0010336C",
+      "instruction": "add r1, pc",
+      "via": "thumb ldr/add-pc r1"
+    },
+    {
+      "target": "mot_sec: validate_hash_password: Unsupported datablock",
+      "string": "mot_sec: validate_hash_password: Unsupported datablock\n",
+      "xref_address": "0x0000000048078064",
+      "xref_file_offset": "0x78064",
+      "xref_hxd_offset": "00078064",
+      "string_address": "0x000000004810336c",
+      "string_file_offset": "0x10336c",
+      "string_hxd_offset": "0010336C",
+      "instruction": "add r1, pc",
+      "via": "thumb ldr/add-pc r1"
+    },
+    {
+      "target": "mot_sec: validate_hash_password: Unsupported datablock",
+      "string": "mot_sec: validate_hash_password: Unsupported datablock\n",
+      "xref_address": "0x000000004807806e",
+      "xref_file_offset": "0x7806e",
+      "xref_hxd_offset": "0007806E",
+      "string_address": "0x000000004810336c",
+      "string_file_offset": "0x10336c",
+      "string_hxd_offset": "0010336C",
+      "instruction": "add r1, pc",
+      "via": "thumb ldr/add-pc r1"
+    },
+    {
+      "target": "validate_hash_password: Version 1 datablock",
+      "string": "mot_sec: validate_hash_password: Version 1 datablock\n",
+      "xref_address": "0x0000000048078080",
+      "xref_file_offset": "0x78080",
+      "xref_hxd_offset": "00078080",
+      "string_address": "0x0000000048103334",
+      "string_file_offset": "0x103334",
+      "string_hxd_offset": "00103334",
+      "instruction": "add r1, pc",
+      "via": "thumb ldr/add-pc r1"
+    },
+    {
+      "target": "validate_hash_password: Version 2 datablock",
+      "string": "mot_sec: validate_hash_password: Version 2 datablock\n",
+      "xref_address": "0x00000000480780c0",
+      "xref_file_offset": "0x780c0",
+      "xref_hxd_offset": "000780C0",
+      "string_address": "0x00000000481032fc",
+      "string_file_offset": "0x1032fc",
+      "string_hxd_offset": "001032FC",
+      "instruction": "add r1, pc",
+      "via": "thumb ldr/add-pc r1"
+    },
+    {
+      "target": "mot_sec: hash calculation failure!",
+      "string": "mot_sec: hash calculation failure!\n",
+      "xref_address": "0x00000000480780e8",
+      "xref_file_offset": "0x780e8",
+      "xref_hxd_offset": "000780E8",
+      "string_address": "0x00000000481033c8",
+      "string_file_offset": "0x1033c8",
+      "string_hxd_offset": "001033C8",
+      "instruction": "add r1, pc",
+      "via": "thumb ldr/add-pc r1"
+    },
+    {
+      "target": "mot_sec: hash at offset i:",
+      "string": "mot_sec: hash at offset i: %02d : %02x does not match\n",
+      "xref_address": "0x0000000048078124",
+      "xref_file_offset": "0x78124",
+      "xref_hxd_offset": "00078124",
+      "string_address": "0x00000000481033ec",
+      "string_file_offset": "0x1033ec",
+      "string_hxd_offset": "001033EC",
+      "instruction": "add r1, pc",
+      "via": "thumb ldr/add-pc r1"
+    }
+  ]
+}

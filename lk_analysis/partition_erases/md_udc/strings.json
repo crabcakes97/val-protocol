@@ -1,0 +1,28 @@
+[
+  {
+    "partition": "md_udc",
+    "address": "0x00000000480f47cc",
+    "file_offset": "0xf47cc",
+    "hxd_offset": "000F47CC",
+    "text": "md_udc",
+    "reference_mode": "direct_string",
+    "role": "partition_arg",
+    "operation": "erase",
+    "xref_address": "0x0000000048082a82",
+    "xref_instruction": "add r4, pc",
+    "xref_via": "thumb ldr/add-pc r4"
+  },
+  {
+    "partition": "md_udc",
+    "address": "0x0000000048106da4",
+    "file_offset": "0x106da4",
+    "hxd_offset": "00106DA4",
+    "text": "Failed to erase md_udc.\n",
+    "reference_mode": "embedded_string",
+    "role": "failure_message",
+    "operation": "erase",
+    "xref_address": "0x0000000048082a82",
+    "xref_instruction": null,
+    "xref_via": null
+  }
+]

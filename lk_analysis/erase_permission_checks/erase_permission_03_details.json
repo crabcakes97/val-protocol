@@ -1,0 +1,323 @@
+{
+  "function_start": "0xffff000050f121ec",
+  "function_end": "0xffff000050f12318",
+  "confidence": 38,
+  "evidence": [
+    "string target: Invalid partition name %s",
+    "string target: debug_token",
+    "string target: avb_custom_key",
+    "partition-name comparisons (2)",
+    "reads fastboot command argument pointer at struct offset +0x10",
+    "skips leading ':' with add argument pointer +1",
+    "contains calls whose boolean result gates erase flow"
+  ],
+  "matched_targets": [
+    "Invalid partition name %s",
+    "avb_custom_key",
+    "debug_token"
+  ],
+  "calls": [
+    "0xffff000050f29978",
+    "0xffff000050f8e6fc",
+    "0xffff000050f25510",
+    "0xffff000050f9e600",
+    "0xffff000050f386b0",
+    "0xffff000050f07c4c"
+  ],
+  "callers": [],
+  "name_checks": [
+    {
+      "xref_address": "0xffff000050f12264",
+      "xref_file_offset": "0x12264",
+      "xref_hxd_offset": "00012264",
+      "name": "debug_token",
+      "compare_call_target": "0xffff000050f8e6fc",
+      "compare_call_target_file_offset": "0x8e6fc",
+      "compare_call_target_hxd_offset": "0008E6FC",
+      "branch_target": "0xffff000050f122c8",
+      "branch_target_file_offset": "0x122c8",
+      "branch_target_hxd_offset": "000122C8"
+    },
+    {
+      "xref_address": "0xffff000050f1227c",
+      "xref_file_offset": "0x1227c",
+      "xref_hxd_offset": "0001227C",
+      "name": "avb_custom_key",
+      "compare_call_target": "0xffff000050f8e6fc",
+      "compare_call_target_file_offset": "0x8e6fc",
+      "compare_call_target_hxd_offset": "0008E6FC",
+      "branch_target": "0xffff000050f122c8",
+      "branch_target_file_offset": "0x122c8",
+      "branch_target_hxd_offset": "000122C8"
+    }
+  ],
+  "denied_edges": [],
+  "function_start_file_offset": "0x121ec",
+  "function_start_hxd_offset": "000121EC",
+  "function_end_file_offset": "0x12318",
+  "function_end_hxd_offset": "00012318",
+  "structural_instructions": [
+    {
+      "role": "call",
+      "address": "0xffff000050f12208",
+      "file_offset": "0x12208",
+      "hxd_offset": "00012208",
+      "instruction": "bl #0xffff000050f29978",
+      "raw": "dc5d0094"
+    },
+    {
+      "role": "fastboot_argument_load_struct_plus_0x10",
+      "address": "0xffff000050f1220c",
+      "file_offset": "0x1220c",
+      "hxd_offset": "0001220C",
+      "instruction": "ldr x8, [x19, #0x10]",
+      "raw": "680a40f9"
+    },
+    {
+      "role": "partition_name_skip_colon",
+      "address": "0xffff000050f1221c",
+      "file_offset": "0x1221c",
+      "hxd_offset": "0001221C",
+      "instruction": "add x19, x8, #1",
+      "raw": "13050091"
+    },
+    {
+      "role": "permission_or_helper_call",
+      "address": "0xffff000050f12224",
+      "file_offset": "0x12224",
+      "hxd_offset": "00012224",
+      "instruction": "bl #0xffff000050f8e6fc",
+      "raw": "36f10194"
+    },
+    {
+      "role": "conditional_branch",
+      "address": "0xffff000050f12228",
+      "file_offset": "0x12228",
+      "hxd_offset": "00012228",
+      "instruction": "cbz w0, #0xffff000050f122c8",
+      "raw": "00050034"
+    },
+    {
+      "role": "permission_or_helper_call",
+      "address": "0xffff000050f1223c",
+      "file_offset": "0x1223c",
+      "hxd_offset": "0001223C",
+      "instruction": "bl #0xffff000050f8e6fc",
+      "raw": "30f10194"
+    },
+    {
+      "role": "conditional_branch",
+      "address": "0xffff000050f12240",
+      "file_offset": "0x12240",
+      "hxd_offset": "00012240",
+      "instruction": "cbz w0, #0xffff000050f122c8",
+      "raw": "40040034"
+    },
+    {
+      "role": "permission_or_helper_call",
+      "address": "0xffff000050f12254",
+      "file_offset": "0x12254",
+      "hxd_offset": "00012254",
+      "instruction": "bl #0xffff000050f8e6fc",
+      "raw": "2af10194"
+    },
+    {
+      "role": "conditional_branch",
+      "address": "0xffff000050f12258",
+      "file_offset": "0x12258",
+      "hxd_offset": "00012258",
+      "instruction": "cbz w0, #0xffff000050f122c8",
+      "raw": "80030034"
+    },
+    {
+      "role": "partition_name_string_xref",
+      "address": "0xffff000050f12264",
+      "file_offset": "0x12264",
+      "hxd_offset": "00012264",
+      "instruction": "add x1, x1, #0xc48",
+      "raw": "21203191"
+    },
+    {
+      "role": "string_xref",
+      "address": "0xffff000050f12264",
+      "file_offset": "0x12264",
+      "hxd_offset": "00012264",
+      "instruction": "add x1, x1, #0xc48",
+      "raw": "21203191"
+    },
+    {
+      "role": "permission_or_helper_call",
+      "address": "0xffff000050f1226c",
+      "file_offset": "0x1226c",
+      "hxd_offset": "0001226C",
+      "instruction": "bl #0xffff000050f8e6fc",
+      "raw": "24f10194"
+    },
+    {
+      "role": "conditional_branch",
+      "address": "0xffff000050f12270",
+      "file_offset": "0x12270",
+      "hxd_offset": "00012270",
+      "instruction": "cbz w0, #0xffff000050f122c8",
+      "raw": "c0020034"
+    },
+    {
+      "role": "partition_name_string_xref",
+      "address": "0xffff000050f1227c",
+      "file_offset": "0x1227c",
+      "hxd_offset": "0001227C",
+      "instruction": "add x1, x1, #0x5ba",
+      "raw": "21e81691"
+    },
+    {
+      "role": "string_xref",
+      "address": "0xffff000050f1227c",
+      "file_offset": "0x1227c",
+      "hxd_offset": "0001227C",
+      "instruction": "add x1, x1, #0x5ba",
+      "raw": "21e81691"
+    },
+    {
+      "role": "permission_or_helper_call",
+      "address": "0xffff000050f12284",
+      "file_offset": "0x12284",
+      "hxd_offset": "00012284",
+      "instruction": "bl #0xffff000050f8e6fc",
+      "raw": "1ef10194"
+    },
+    {
+      "role": "conditional_branch",
+      "address": "0xffff000050f12288",
+      "file_offset": "0x12288",
+      "hxd_offset": "00012288",
+      "instruction": "cbz w0, #0xffff000050f122c8",
+      "raw": "00020034"
+    },
+    {
+      "role": "permission_or_helper_call",
+      "address": "0xffff000050f1229c",
+      "file_offset": "0x1229c",
+      "hxd_offset": "0001229C",
+      "instruction": "bl #0xffff000050f8e6fc",
+      "raw": "18f10194"
+    },
+    {
+      "role": "conditional_branch",
+      "address": "0xffff000050f122a0",
+      "file_offset": "0x122a0",
+      "hxd_offset": "000122A0",
+      "instruction": "cbz w0, #0xffff000050f122c8",
+      "raw": "40010034"
+    },
+    {
+      "role": "permission_or_helper_call",
+      "address": "0xffff000050f122a8",
+      "file_offset": "0x122a8",
+      "hxd_offset": "000122A8",
+      "instruction": "bl #0xffff000050f25510",
+      "raw": "9a4c0094"
+    },
+    {
+      "role": "conditional_branch",
+      "address": "0xffff000050f122ac",
+      "file_offset": "0x122ac",
+      "hxd_offset": "000122AC",
+      "instruction": "cbz x0, #0xffff000050f122d8",
+      "raw": "600100b4"
+    },
+    {
+      "role": "permission_or_helper_call",
+      "address": "0xffff000050f122b0",
+      "file_offset": "0x122b0",
+      "hxd_offset": "000122B0",
+      "instruction": "bl #0xffff000050f9e600",
+      "raw": "d4300294"
+    },
+    {
+      "role": "conditional_branch",
+      "address": "0xffff000050f122b4",
+      "file_offset": "0x122b4",
+      "hxd_offset": "000122B4",
+      "instruction": "tbz w0, #0, #0xffff000050f122f8",
+      "raw": "20020036"
+    },
+    {
+      "role": "permission_or_helper_call",
+      "address": "0xffff000050f122c0",
+      "file_offset": "0x122c0",
+      "hxd_offset": "000122C0",
+      "instruction": "bl #0xffff000050f386b0",
+      "raw": "fc980094"
+    },
+    {
+      "role": "conditional_branch",
+      "address": "0xffff000050f122c4",
+      "file_offset": "0x122c4",
+      "hxd_offset": "000122C4",
+      "instruction": "tbz w0, #0, #0xffff000050f1230c",
+      "raw": "40020036"
+    },
+    {
+      "role": "string_xref",
+      "address": "0xffff000050f122e4",
+      "file_offset": "0x122e4",
+      "hxd_offset": "000122E4",
+      "instruction": "add x1, x1, #0xff4",
+      "raw": "21d03f91"
+    },
+    {
+      "role": "call",
+      "address": "0xffff000050f122ec",
+      "file_offset": "0x122ec",
+      "hxd_offset": "000122EC",
+      "instruction": "bl #0xffff000050f07c4c",
+      "raw": "58d6ff97"
+    },
+    {
+      "role": "call",
+      "address": "0xffff000050f12308",
+      "file_offset": "0x12308",
+      "hxd_offset": "00012308",
+      "instruction": "bl #0xffff000050f07c4c",
+      "raw": "51d6ff97"
+    }
+  ],
+  "xrefs": [
+    {
+      "target": "debug_token",
+      "string": "debug_token",
+      "xref_address": "0xffff000050f12264",
+      "xref_file_offset": "0x12264",
+      "xref_hxd_offset": "00012264",
+      "string_address": "0xffff000050ffbc48",
+      "string_file_offset": "0xfbc48",
+      "string_hxd_offset": "000FBC48",
+      "instruction": "add x1, x1, #0xc48",
+      "via": "adrp/add x1"
+    },
+    {
+      "target": "avb_custom_key",
+      "string": "avb_custom_key",
+      "xref_address": "0xffff000050f1227c",
+      "xref_file_offset": "0x1227c",
+      "xref_hxd_offset": "0001227C",
+      "string_address": "0xffff000050fd35ba",
+      "string_file_offset": "0xd35ba",
+      "string_hxd_offset": "000D35BA",
+      "instruction": "add x1, x1, #0x5ba",
+      "via": "adrp/add x1"
+    },
+    {
+      "target": "Invalid partition name %s",
+      "string": "Invalid partition name %s",
+      "xref_address": "0xffff000050f122e4",
+      "xref_file_offset": "0x122e4",
+      "xref_hxd_offset": "000122E4",
+      "string_address": "0xffff000050fe8ff4",
+      "string_file_offset": "0xe8ff4",
+      "string_hxd_offset": "000E8FF4",
+      "instruction": "add x1, x1, #0xff4",
+      "via": "adrp/add x1"
+    }
+  ]
+}

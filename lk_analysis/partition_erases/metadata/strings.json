@@ -1,0 +1,28 @@
+[
+  {
+    "partition": "metadata",
+    "address": "0x00000000480f47c0",
+    "file_offset": "0xf47c0",
+    "hxd_offset": "000F47C0",
+    "text": "metadata",
+    "reference_mode": "direct_string",
+    "role": "partition_arg",
+    "operation": "erase",
+    "xref_address": "0x0000000048082a62",
+    "xref_instruction": "add r0, pc",
+    "xref_via": "thumb ldr/add-pc r0"
+  },
+  {
+    "partition": "metadata",
+    "address": "0x0000000048106d54",
+    "file_offset": "0x106d54",
+    "hxd_offset": "00106D54",
+    "text": "Failed to erase metadata.",
+    "reference_mode": "embedded_string",
+    "role": "failure_message",
+    "operation": "erase",
+    "xref_address": "0x0000000048082a62",
+    "xref_instruction": null,
+    "xref_via": null
+  }
+]

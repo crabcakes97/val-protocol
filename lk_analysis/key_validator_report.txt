@@ -1,0 +1,125 @@
+[01] confidence=62 range=0x0000000048077fe0-0x00000000480781c4 HxD=0x00077FE0-0x000781C4
+  targets: mot_sec: hash at offset i:, mot_sec: hash calculation failure!, mot_sec: validate_hash_password: Unsupported datablock, validate_hash_password: Unsupported datablock, validate_hash_password: Version 1 datablock, validate_hash_password: Version 2 datablock
+  evidence:
+    - string target: validate_hash_password: Version 2 datablock
+    - string target: validate_hash_password: Version 1 datablock
+    - string target: validate_hash_password: Unsupported datablock
+    - string target: mot_sec: hash calculation failure!
+    - string target: mot_sec: hash at offset i:
+    - string target: mot_sec: validate_hash_password: Unsupported datablock
+    - checks Motorola helper success value 0xf
+    - uses hash-sized 0x20 byte buffer
+    - contains multi-stage decode/hash call chain
+    - called by another flow candidate
+    - caller branches validator failure toward Code validation failure
+  callers:
+    - caller 0x0000000048082974, HxD=00082974, call site 0x0000000048082a4a, call_HxD=00082A4A
+  failure edges:
+    - call 0x0000000048082a4a, cbnz -> 0x0000000048082a60 call_HxD=00082A4A failure_HxD=00082A60 (Code validation failure path)
+  structural instructions:
+    - hash_0x20_buffer_or_length: 0x0000000048077fe8 off=0x77fe8 HxD=00077FE8 raw=2025  movs r5, #0x20
+    - call: 0x0000000048077ff0 off=0x77ff0 HxD=00077FF0 raw=fff71cfd  bl #0x48077a2c
+    - call: 0x000000004807800e off=0x7800e HxD=0007800E raw=00f0c9fb  bl #0x480787a4
+    - zero_compare: 0x0000000048078012 off=0x78012 HxD=00078012 raw=0f28  cmp r0, #0xf
+    - call: 0x000000004807801a off=0x7801a HxD=0007801A raw=08f029fc  bl #0x48080870
+    - call: 0x000000004807802c off=0x7802c HxD=0007802C raw=f7f784ff  bl #0x4806ff38
+    - zero_compare: 0x000000004807803a off=0x7803a HxD=0007803A raw=0028  cmp r0, #0
+    - call: 0x000000004807803e off=0x7803e HxD=0007803E raw=01f031fa  bl #0x480794a4
+    - call: 0x0000000048078046 off=0x78046 HxD=00078046 raw=01f023fa  bl #0x48079490
+    - string_xref: 0x0000000048078058 off=0x78058 HxD=00078058 raw=7944  add r1, pc
+    - call: 0x000000004807805a off=0x7805a HxD=0007805A raw=f7f76dff  bl #0x4806ff38
+    - string_xref: 0x0000000048078064 off=0x78064 HxD=00078064 raw=7944  add r1, pc
+    - call: 0x0000000048078066 off=0x78066 HxD=00078066 raw=f7f767ff  bl #0x4806ff38
+    - string_xref: 0x000000004807806e off=0x7806e HxD=0007806E raw=7944  add r1, pc
+    - call: 0x0000000048078070 off=0x78070 HxD=00078070 raw=f7f762ff  bl #0x4806ff38
+    - string_xref: 0x0000000048078080 off=0x78080 HxD=00078080 raw=7944  add r1, pc
+    - call: 0x0000000048078082 off=0x78082 HxD=00078082 raw=f7f759ff  bl #0x4806ff38
+    - call: 0x00000000480780a4 off=0x780a4 HxD=000780A4 raw=00f008fb  bl #0x480786b8
+    - zero_compare: 0x00000000480780a8 off=0x780a8 HxD=000780A8 raw=0f28  cmp r0, #0xf
+    - call: 0x00000000480780b4 off=0x780b4 HxD=000780B4 raw=f7f740ff  bl #0x4806ff38
+    - string_xref: 0x00000000480780c0 off=0x780c0 HxD=000780C0 raw=7944  add r1, pc
+    - call: 0x00000000480780c2 off=0x780c2 HxD=000780C2 raw=f7f739ff  bl #0x4806ff38
+    - call: 0x00000000480780da off=0x780da HxD=000780DA raw=00f0edfa  bl #0x480786b8
+    - zero_compare: 0x00000000480780de off=0x780de HxD=000780DE raw=0f28  cmp r0, #0xf
+    - string_xref: 0x00000000480780e8 off=0x780e8 HxD=000780E8 raw=7944  add r1, pc
+    - call: 0x00000000480780ea off=0x780ea HxD=000780EA raw=f7f725ff  bl #0x4806ff38
+    - hash_0x20_buffer_or_length: 0x00000000480780f4 off=0x780f4 HxD=000780F4 raw=2508  lsrs r5, r4, #0x20
+    - hash_0x20_buffer_or_length: 0x0000000048078114 off=0x78114 HxD=00078114 raw=2022  movs r2, #0x20
+    - call: 0x0000000048078118 off=0x78118 HxD=00078118 raw=08f058fb  bl #0x480807cc
+    - string_xref: 0x0000000048078124 off=0x78124 HxD=00078124 raw=7944  add r1, pc
+    - call: 0x0000000048078126 off=0x78126 HxD=00078126 raw=f7f707ff  bl #0x4806ff38
+    - call: 0x0000000048078182 off=0x78182 HxD=00078182 raw=f7f7d9fe  bl #0x4806ff38
+    - zero_compare: 0x0000000048078186 off=0x78186 HxD=00078186 raw=002e  cmp r6, #0
+    - zero_compare: 0x000000004807818a off=0x7818a HxD=0007818A raw=a42c  cmp r4, #0xa4
+    - call: 0x0000000048078198 off=0x78198 HxD=00078198 raw=bff7bafe  bl #0x48037f10
+    - call: 0x00000000480781aa off=0x781aa HxD=000781AA raw=bff7b1fe  bl #0x48037f10
+  key instructions:
+    0x0000000048077fe8 off=0x77fe8 HxD=00077FE8: movs     r5, #0x20
+    0x0000000048077fea off=0x77fea HxD=00077FEA: mov      r6, r0
+    0x0000000048077ff0 off=0x77ff0 HxD=00077FF0: bl       #0x48077a2c
+    0x0000000048077ffa off=0x77ffa HxD=00077FFA: ldrb     r3, [r3, #1]
+    0x0000000048078002 off=0x78002 HxD=00078002: ldrb     r0, [r3, #1]
+    0x0000000048078004 off=0x78004 HxD=00078004: cmp      r0, #1
+    0x000000004807800e off=0x7800e HxD=0007800E: bl       #0x480787a4
+    0x0000000048078012 off=0x78012 HxD=00078012: cmp      r0, #0xf
+    0x000000004807801a off=0x7801a HxD=0007801A: bl       #0x48080870
+    0x000000004807801e off=0x7801e HxD=0007801E: mov      r0, r4
+    0x000000004807802c off=0x7802c HxD=0007802C: bl       #0x4806ff38
+    0x000000004807803a off=0x7803a HxD=0007803A: cmp      r0, #0
+    0x000000004807803e off=0x7803e HxD=0007803E: bl       #0x480794a4
+    0x0000000048078042 off=0x78042 HxD=00078042: mov      r7, r0
+    0x0000000048078046 off=0x78046 HxD=00078046: bl       #0x48079490
+    0x000000004807804a off=0x7804a HxD=0007804A: cmp      r7, #2
+    0x000000004807804c off=0x7804c HxD=0007804C: mov      r8, r0
+    0x0000000048078050 off=0x78050 HxD=00078050: cmp      r7, #1
+    0x0000000048078058 off=0x78058 HxD=00078058: add      r1, pc
+    0x000000004807805a off=0x7805a HxD=0007805A: bl       #0x4806ff38
+    0x0000000048078064 off=0x78064 HxD=00078064: add      r1, pc
+    0x0000000048078066 off=0x78066 HxD=00078066: bl       #0x4806ff38
+    0x000000004807806e off=0x7806e HxD=0007806E: add      r1, pc
+    0x0000000048078070 off=0x78070 HxD=00078070: bl       #0x4806ff38
+    0x0000000048078076 off=0x78076 HxD=00078076: mov      r0, r4
+    0x000000004807807c off=0x7807c HxD=0007807C: mov      r0, r7
+    0x0000000048078080 off=0x78080 HxD=00078080: add      r1, pc
+    0x0000000048078082 off=0x78082 HxD=00078082: bl       #0x4806ff38
+    0x000000004807808c off=0x7808c HxD=0007808C: mov      r0, r7
+    0x0000000048078098 off=0x78098 HxD=00078098: mov      r1, r6
+    0x000000004807809e off=0x7809e HxD=0007809E: mov      r0, r4
+    0x00000000480780a4 off=0x780a4 HxD=000780A4: bl       #0x480786b8
+    0x00000000480780a8 off=0x780a8 HxD=000780A8: cmp      r0, #0xf
+    0x00000000480780b4 off=0x780b4 HxD=000780B4: bl       #0x4806ff38
+    0x00000000480780be off=0x780be HxD=000780BE: mov      r4, r0
+    0x00000000480780c0 off=0x780c0 HxD=000780C0: add      r1, pc
+    0x00000000480780c2 off=0x780c2 HxD=000780C2: bl       #0x4806ff38
+    0x00000000480780ce off=0x780ce HxD=000780CE: mov      r0, r4
+    0x00000000480780d0 off=0x780d0 HxD=000780D0: mov      r1, r7
+    0x00000000480780d2 off=0x780d2 HxD=000780D2: mov      r3, r6
+    0x00000000480780da off=0x780da HxD=000780DA: bl       #0x480786b8
+    0x00000000480780de off=0x780de HxD=000780DE: cmp      r0, #0xf
+    0x00000000480780e8 off=0x780e8 HxD=000780E8: add      r1, pc
+    0x00000000480780ea off=0x780ea HxD=000780EA: bl       #0x4806ff38
+    0x00000000480780f4 off=0x780f4 HxD=000780F4: lsrs     r5, r4, #0x20
+    0x00000000480780fe off=0x780fe HxD=000780FE: ldrb     r3, [r1, #1]!
+    0x0000000048078102 off=0x78102 HxD=00078102: ldrb     r0, [r4, #1]!
+    0x0000000048078106 off=0x78106 HxD=00078106: cmp      r0, r3
+    0x000000004807810c off=0x7810c HxD=0007810C: cmp      r2, r5
+    0x0000000048078110 off=0x78110 HxD=00078110: mov      r0, r6
+    0x0000000048078114 off=0x78114 HxD=00078114: movs     r2, #0x20
+    0x0000000048078118 off=0x78118 HxD=00078118: bl       #0x480807cc
+    0x0000000048078124 off=0x78124 HxD=00078124: add      r1, pc
+    0x0000000048078126 off=0x78126 HxD=00078126: bl       #0x4806ff38
+    0x000000004807815a off=0x7815a HxD=0007815A: mov      r4, r1
+    0x0000000048078166 off=0x78166 HxD=00078166: mov      r6, r0
+    0x000000004807816a off=0x7816a HxD=0007816A: mov      r0, r5
+    0x0000000048078182 off=0x78182 HxD=00078182: bl       #0x4806ff38
+    0x0000000048078186 off=0x78186 HxD=00078186: cmp      r6, #0
+    0x000000004807818a off=0x7818a HxD=0007818A: cmp      r4, #0xa4
+    0x000000004807818e off=0x7818e HxD=0007818E: mov      r2, r5
+    0x0000000048078190 off=0x78190 HxD=00078190: mov      r0, r6
+    0x0000000048078198 off=0x78198 HxD=00078198: bl       #0x48037f10
+    0x00000000480781a2 off=0x781a2 HxD=000781A2: mov      r1, r5
+    0x00000000480781aa off=0x781aa HxD=000781AA: bl       #0x48037f10
+    0x00000000480781b0 off=0x781b0 HxD=000781B0: ldrb     r2, [r6, #3]
+    0x00000000480781b4 off=0x781b4 HxD=000781B4: ldrb     r3, [r6, #4]
+    0x00000000480781bc off=0x781bc HxD=000781BC: cmp      r4, r3
+

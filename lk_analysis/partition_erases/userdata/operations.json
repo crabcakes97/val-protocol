@@ -1,0 +1,31 @@
+[
+  {
+    "flow_start": "0x0000000048082974",
+    "partition": "userdata",
+    "operation": "erase",
+    "xref_address": "0x0000000048082a6e",
+    "string_address": "0x0000000048106d80",
+    "string_text": "userdata",
+    "reference_mode": "direct_string",
+    "xref_instruction": "add r0, pc",
+    "xref_via": "thumb ldr/add-pc r0",
+    "call_site": "0x0000000048082a70",
+    "call_target": "0x000000004805bd88",
+    "result_check_address": "0x0000000048082a74",
+    "failure_target": "0x0000000048082b00",
+    "failure_message_address": "0x0000000048106d70",
+    "failure_message": "Failed to erase userdata",
+    "flow_start_file_offset": "0x82974",
+    "flow_start_hxd_offset": "00082974",
+    "xref_file_offset": "0x82a6e",
+    "xref_hxd_offset": "00082A6E",
+    "string_file_offset": "0x106d80",
+    "string_hxd_offset": "00106D80",
+    "call_site_file_offset": "0x82a70",
+    "call_site_hxd_offset": "00082A70",
+    "call_target_file_offset": "0x5bd88",
+    "call_target_hxd_offset": "0005BD88",
+    "failure_target_file_offset": "0x82b00",
+    "failure_target_hxd_offset": "00082B00"
+  }
+]

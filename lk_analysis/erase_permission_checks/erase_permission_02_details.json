@@ -1,0 +1,370 @@
+{
+  "function_start": "0xffff000050f09f38",
+  "function_end": "0xffff000050f0a060",
+  "confidence": 39,
+  "evidence": [
+    "string target: debug_token",
+    "string target: avb_custom_key",
+    "string target: cache",
+    "repeated partition-name comparisons (3)",
+    "reads fastboot command argument pointer at struct offset +0x10",
+    "skips leading ':' with add argument pointer +1",
+    "contains calls whose boolean result gates erase flow"
+  ],
+  "matched_targets": [
+    "avb_custom_key",
+    "cache",
+    "debug_token",
+    "userdata"
+  ],
+  "calls": [
+    "0xffff000050f8e3ec",
+    "0xffff000050f29978",
+    "0xffff000050f0a500",
+    "0xffff000050f8b044",
+    "0xffff000050f07c4c",
+    "0xffff000050f9ceac",
+    "0xffff000050f9f0f8",
+    "0xffff000050f13348"
+  ],
+  "callers": [],
+  "name_checks": [
+    {
+      "xref_address": "0xffff000050f09f5c",
+      "xref_file_offset": "0x9f5c",
+      "xref_hxd_offset": "00009F5C",
+      "name": "avb_custom_key",
+      "compare_call_target": "0xffff000050f8e3ec",
+      "compare_call_target_file_offset": "0x8e3ec",
+      "compare_call_target_hxd_offset": "0008E3EC",
+      "branch_target": "0xffff000050f09ff4",
+      "branch_target_file_offset": "0x9ff4",
+      "branch_target_hxd_offset": "00009FF4"
+    },
+    {
+      "xref_address": "0xffff000050f09f78",
+      "xref_file_offset": "0x9f78",
+      "xref_hxd_offset": "00009F78",
+      "name": "debug_token",
+      "compare_call_target": "0xffff000050f8e3ec",
+      "compare_call_target_file_offset": "0x8e3ec",
+      "compare_call_target_hxd_offset": "0008E3EC",
+      "branch_target": "0xffff000050f0a010",
+      "branch_target_file_offset": "0xa010",
+      "branch_target_hxd_offset": "0000A010"
+    },
+    {
+      "xref_address": "0xffff000050f09f8c",
+      "xref_file_offset": "0x9f8c",
+      "xref_hxd_offset": "00009F8C",
+      "name": "cache",
+      "compare_call_target": "0xffff000050f8e3ec",
+      "compare_call_target_file_offset": "0x8e3ec",
+      "compare_call_target_hxd_offset": "0008E3EC",
+      "branch_target": "0xffff000050f0a020",
+      "branch_target_file_offset": "0xa020",
+      "branch_target_hxd_offset": "0000A020"
+    }
+  ],
+  "denied_edges": [],
+  "function_start_file_offset": "0x9f38",
+  "function_start_hxd_offset": "00009F38",
+  "function_end_file_offset": "0xa060",
+  "function_end_hxd_offset": "0000A060",
+  "structural_instructions": [
+    {
+      "role": "fastboot_argument_load_struct_plus_0x10",
+      "address": "0xffff000050f09f48",
+      "file_offset": "0x9f48",
+      "hxd_offset": "00009F48",
+      "instruction": "ldr x8, [x0, #0x10]",
+      "raw": "080840f9"
+    },
+    {
+      "role": "partition_name_string_xref",
+      "address": "0xffff000050f09f5c",
+      "file_offset": "0x9f5c",
+      "hxd_offset": "00009F5C",
+      "instruction": "add x1, x1, #0x5ba",
+      "raw": "21e81691"
+    },
+    {
+      "role": "string_xref",
+      "address": "0xffff000050f09f5c",
+      "file_offset": "0x9f5c",
+      "hxd_offset": "00009F5C",
+      "instruction": "add x1, x1, #0x5ba",
+      "raw": "21e81691"
+    },
+    {
+      "role": "partition_name_skip_colon",
+      "address": "0xffff000050f09f60",
+      "file_offset": "0x9f60",
+      "hxd_offset": "00009F60",
+      "instruction": "add x22, x8, #1",
+      "raw": "16050091"
+    },
+    {
+      "role": "permission_or_helper_call",
+      "address": "0xffff000050f09f68",
+      "file_offset": "0x9f68",
+      "hxd_offset": "00009F68",
+      "instruction": "bl #0xffff000050f8e3ec",
+      "raw": "21110294"
+    },
+    {
+      "role": "conditional_branch",
+      "address": "0xffff000050f09f6c",
+      "file_offset": "0x9f6c",
+      "hxd_offset": "00009F6C",
+      "instruction": "cbz w0, #0xffff000050f09ff4",
+      "raw": "40040034"
+    },
+    {
+      "role": "partition_name_string_xref",
+      "address": "0xffff000050f09f78",
+      "file_offset": "0x9f78",
+      "hxd_offset": "00009F78",
+      "instruction": "add x1, x1, #0xc48",
+      "raw": "21203191"
+    },
+    {
+      "role": "string_xref",
+      "address": "0xffff000050f09f78",
+      "file_offset": "0x9f78",
+      "hxd_offset": "00009F78",
+      "instruction": "add x1, x1, #0xc48",
+      "raw": "21203191"
+    },
+    {
+      "role": "permission_or_helper_call",
+      "address": "0xffff000050f09f7c",
+      "file_offset": "0x9f7c",
+      "hxd_offset": "00009F7C",
+      "instruction": "bl #0xffff000050f8e3ec",
+      "raw": "1c110294"
+    },
+    {
+      "role": "conditional_branch",
+      "address": "0xffff000050f09f80",
+      "file_offset": "0x9f80",
+      "hxd_offset": "00009F80",
+      "instruction": "cbz w0, #0xffff000050f0a010",
+      "raw": "80040034"
+    },
+    {
+      "role": "partition_name_string_xref",
+      "address": "0xffff000050f09f8c",
+      "file_offset": "0x9f8c",
+      "hxd_offset": "00009F8C",
+      "instruction": "add x1, x1, #0xb62",
+      "raw": "21882d91"
+    },
+    {
+      "role": "string_xref",
+      "address": "0xffff000050f09f8c",
+      "file_offset": "0x9f8c",
+      "hxd_offset": "00009F8C",
+      "instruction": "add x1, x1, #0xb62",
+      "raw": "21882d91"
+    },
+    {
+      "role": "permission_or_helper_call",
+      "address": "0xffff000050f09f90",
+      "file_offset": "0x9f90",
+      "hxd_offset": "00009F90",
+      "instruction": "bl #0xffff000050f8e3ec",
+      "raw": "17110294"
+    },
+    {
+      "role": "conditional_branch",
+      "address": "0xffff000050f09f94",
+      "file_offset": "0x9f94",
+      "hxd_offset": "00009F94",
+      "instruction": "cbz w0, #0xffff000050f0a020",
+      "raw": "60040034"
+    },
+    {
+      "role": "string_xref",
+      "address": "0xffff000050f09fa0",
+      "file_offset": "0x9fa0",
+      "hxd_offset": "00009FA0",
+      "instruction": "add x1, x1, #0x574",
+      "raw": "21d01591"
+    },
+    {
+      "role": "permission_or_helper_call",
+      "address": "0xffff000050f09fa4",
+      "file_offset": "0x9fa4",
+      "hxd_offset": "00009FA4",
+      "instruction": "bl #0xffff000050f8e3ec",
+      "raw": "12110294"
+    },
+    {
+      "role": "conditional_branch",
+      "address": "0xffff000050f09fa8",
+      "file_offset": "0x9fa8",
+      "hxd_offset": "00009FA8",
+      "instruction": "cbnz w0, #0xffff000050f09fc8",
+      "raw": "00010035"
+    },
+    {
+      "role": "string_xref",
+      "address": "0xffff000050f09fb4",
+      "file_offset": "0x9fb4",
+      "hxd_offset": "00009FB4",
+      "instruction": "add x1, x1, #0x9a1",
+      "raw": "21842691"
+    },
+    {
+      "role": "call",
+      "address": "0xffff000050f09fb8",
+      "file_offset": "0x9fb8",
+      "hxd_offset": "00009FB8",
+      "instruction": "bl #0xffff000050f29978",
+      "raw": "707e0094"
+    },
+    {
+      "role": "call",
+      "address": "0xffff000050f09fc4",
+      "file_offset": "0x9fc4",
+      "hxd_offset": "00009FC4",
+      "instruction": "bl #0xffff000050f0a500",
+      "raw": "4f010094"
+    },
+    {
+      "role": "call",
+      "address": "0xffff000050f09fcc",
+      "file_offset": "0x9fcc",
+      "hxd_offset": "00009FCC",
+      "instruction": "bl #0xffff000050f8b044",
+      "raw": "1e040294"
+    },
+    {
+      "role": "conditional_branch",
+      "address": "0xffff000050f09fd4",
+      "file_offset": "0x9fd4",
+      "hxd_offset": "00009FD4",
+      "instruction": "b.eq #0xffff000050f0a038",
+      "raw": "20030054"
+    },
+    {
+      "role": "call",
+      "address": "0xffff000050f09fe8",
+      "file_offset": "0x9fe8",
+      "hxd_offset": "00009FE8",
+      "instruction": "bl #0xffff000050f07c4c",
+      "raw": "19f7ff97"
+    },
+    {
+      "role": "call",
+      "address": "0xffff000050f09ffc",
+      "file_offset": "0x9ffc",
+      "hxd_offset": "00009FFC",
+      "instruction": "bl #0xffff000050f9ceac",
+      "raw": "ac4b0294"
+    },
+    {
+      "role": "call",
+      "address": "0xffff000050f0a018",
+      "file_offset": "0xa018",
+      "hxd_offset": "0000A018",
+      "instruction": "bl #0xffff000050f9f0f8",
+      "raw": "38540294"
+    },
+    {
+      "role": "call",
+      "address": "0xffff000050f0a030",
+      "file_offset": "0xa030",
+      "hxd_offset": "0000A030",
+      "instruction": "bl #0xffff000050f29978",
+      "raw": "527e0094"
+    },
+    {
+      "role": "fastboot_argument_load_struct_plus_0x10",
+      "address": "0xffff000050f0a038",
+      "file_offset": "0xa038",
+      "hxd_offset": "0000A038",
+      "instruction": "ldr x8, [x21, #0x10]",
+      "raw": "a80a40f9"
+    },
+    {
+      "role": "partition_name_skip_colon",
+      "address": "0xffff000050f0a044",
+      "file_offset": "0xa044",
+      "hxd_offset": "0000A044",
+      "instruction": "add x0, x8, #1",
+      "raw": "00050091"
+    },
+    {
+      "role": "call",
+      "address": "0xffff000050f0a048",
+      "file_offset": "0xa048",
+      "hxd_offset": "0000A048",
+      "instruction": "bl #0xffff000050f13348",
+      "raw": "c0240094"
+    }
+  ],
+  "xrefs": [
+    {
+      "target": "avb_custom_key",
+      "string": "avb_custom_key",
+      "xref_address": "0xffff000050f09f5c",
+      "xref_file_offset": "0x9f5c",
+      "xref_hxd_offset": "00009F5C",
+      "string_address": "0xffff000050fd35ba",
+      "string_file_offset": "0xd35ba",
+      "string_hxd_offset": "000D35BA",
+      "instruction": "add x1, x1, #0x5ba",
+      "via": "adrp/add x1"
+    },
+    {
+      "target": "debug_token",
+      "string": "debug_token",
+      "xref_address": "0xffff000050f09f78",
+      "xref_file_offset": "0x9f78",
+      "xref_hxd_offset": "00009F78",
+      "string_address": "0xffff000050ffbc48",
+      "string_file_offset": "0xfbc48",
+      "string_hxd_offset": "000FBC48",
+      "instruction": "add x1, x1, #0xc48",
+      "via": "adrp/add x1"
+    },
+    {
+      "target": "cache",
+      "string": "cache",
+      "xref_address": "0xffff000050f09f8c",
+      "xref_file_offset": "0x9f8c",
+      "xref_hxd_offset": "00009F8C",
+      "string_address": "0xffff000050fe5b62",
+      "string_file_offset": "0xe5b62",
+      "string_hxd_offset": "000E5B62",
+      "instruction": "add x1, x1, #0xb62",
+      "via": "adrp/add x1"
+    },
+    {
+      "target": "userdata",
+      "string": "userdata",
+      "xref_address": "0xffff000050f09fa0",
+      "xref_file_offset": "0x9fa0",
+      "xref_hxd_offset": "00009FA0",
+      "string_address": "0xffff000050fd9574",
+      "string_file_offset": "0xd9574",
+      "string_hxd_offset": "000D9574",
+      "instruction": "add x1, x1, #0x574",
+      "via": "adrp/add x1"
+    },
+    {
+      "target": "userdata",
+      "string": "clear ship_dirty flag during erasing userdata partition\n",
+      "xref_address": "0xffff000050f09fb4",
+      "xref_file_offset": "0x9fb4",
+      "xref_hxd_offset": "00009FB4",
+      "string_address": "0xffff000050fda9a1",
+      "string_file_offset": "0xda9a1",
+      "string_hxd_offset": "000DA9A1",
+      "instruction": "add x1, x1, #0x9a1",
+      "via": "adrp/add x1"
+    }
+  ]
+}

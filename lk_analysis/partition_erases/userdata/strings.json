@@ -1,0 +1,28 @@
+[
+  {
+    "partition": "userdata",
+    "address": "0x0000000048106d70",
+    "file_offset": "0x106d70",
+    "hxd_offset": "00106D70",
+    "text": "Failed to erase userdata",
+    "reference_mode": "embedded_string",
+    "role": "failure_message",
+    "operation": "erase",
+    "xref_address": "0x0000000048082a6e",
+    "xref_instruction": null,
+    "xref_via": null
+  },
+  {
+    "partition": "userdata",
+    "address": "0x0000000048106d80",
+    "file_offset": "0x106d80",
+    "hxd_offset": "00106D80",
+    "text": "userdata",
+    "reference_mode": "direct_string",
+    "role": "partition_arg",
+    "operation": "erase",
+    "xref_address": "0x0000000048082a6e",
+    "xref_instruction": "add r0, pc",
+    "xref_via": "thumb ldr/add-pc r0"
+  }
+]
