@@ -73,8 +73,14 @@ def main() -> int:
         h = hashlib.sha256(dst.read_bytes()).hexdigest()
         manifest.append(f"{h}  {dst.name}  {dst.stat().st_size}")
         print(f"saved {dst.name} {dst.stat().st_size}B sha256:{h[:16]}...")
-    gv = sh("fastboot", "getvar", "all")
-    (out / "getvar.txt").write_text(gv.stdout + gv.stderr)
+    gv = sh("fastboot", "devices")
+    if "fastboot" in gv.stdout:
+        gv = sh("fastboot", "getvar", "all")
+        (out / "getvar.txt").write_text(gv.stdout + gv.stderr)
+    else:
+        (out / "getvar.txt").write_text("no fastboot device (phone in Android); "
+                                        "slot snapshot skipped\n")
+        print("note: phone not in fastboot; getvar snapshot skipped")
     (out / "MANIFEST.txt").write_text("\n".join(manifest) + "\n")
     print(f"MANIFEST: {out / 'MANIFEST.txt'} ({len(manifest)} entries)")
     print("backups are revert material only: restore with "

@@ -205,7 +205,23 @@ def replace_mode(input_path, target_name, new_file, out_path=None, verbose=False
             else:
                 # copy original header + padded data as-is (preserve original padding)
                 out_fp.write(raw_hdr)
-                copy_stream(src_fp, out_fp, data_offset, padded)
+                avail = file_size - data_offset
+                if avail < padded:
+                    # Documented -111-3 container quirk: trailing CERT headers
+                    # declare more PADDING than the file holds ("cert2 padded
+                    # data exceeds file size" on the unmodified pull too).
+                    # Tolerate short trailing CERT padding only: every real
+                    # data byte must be present, and only cert regions qualify.
+                    if not (name or "").lower().startswith("cert") \
+                            or avail < hdr.data_size():
+                        raise ParseError(
+                            "%s region short: need %d, have %d (not the "
+                            "known trailing-cert-padding quirk)"
+                            % (name, padded, avail))
+                    print("warning: QUIRK parity: %s declares %d padded "
+                          "bytes, file holds %d; copying what exists "
+                          "(matches input)" % (name, padded, avail))
+                copy_stream(src_fp, out_fp, data_offset, max(min(padded, avail), 0))
                 offset = offset + PART_HDR_SIZE + padded
                 index += 1
                 if hdr.img_list_end:
