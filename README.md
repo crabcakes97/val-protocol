@@ -467,6 +467,28 @@ fastboot, `oem ramdump` prints usage (not `command restricted`),
 `oem ramdump status` answers (SSM-permission gate, no freeze),
 `oem ramdump enable` returns `enable full ramdump` + `OKAY`, no freeze.
 
+### `readdump` (custom read command — in development, NOT a preset yet)
+
+Since this LK has no pull verb and crash capture yields logs only, a
+custom `oem readdump <hexaddr>` command was built (borrows the harmless
+`regex` dispatch slot `0x1207B0`, handler in zero cave `0xCE080`,
+old-byte gated, re-signs `VALID`). Status:
+
+- Proven live on slot B: arg parse (lowercase hex, no `0x`), LK-short
+  `0x50Fxxxxx` auto-extend, window-table allowlist (miss => `deny: no
+  window`), 256 B reads as 16 INFO hex lines, byte-exact (cave oracle).
+- Proven windows: DRAM scratch `[0x40000000,0x40010000)`,
+  `[0x48402000,...)`, LK image VA. Kernel iomem is NOT LK's map:
+  `0x80000000` faults the board (Data Abort -> watchdog reboot);
+  misses must deny, never read.
+- Open bugs: the counting dump loop runs away (all 16-line outputs
+  verified came from the straight-line unrolled build instead); the
+  `0x40000000` window reads back staged-image content (fastboot
+  download buffer), not live DRAM. Next: length arg, DATA-phase bulk
+  transport, modem-window probes (expect faults; reboot to recover).
+- Builder prototype lives outside the repo for now (`/tmp`); it
+  graduates to `--preset readdump-read` only once fully trusted.
+
 ### Cross-device: auto-detect + experimental
 
 Gate offsets are **discovered per image**, not hardcoded: anchor string →
