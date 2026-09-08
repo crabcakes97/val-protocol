@@ -142,8 +142,7 @@ git status --short; git diff --stat
 - Val work (preset) is committed? NO — working tree only (`git
   status`). Nothing pushed. Commit before risky flashes.
 
-## 9. v14+ : loop blown away, table allowlist, slot-B flag truth (2026-09-08 ~07:xx UTC)
-- Counter (reg AND stack-spilled) never terminated: init=1 STILL ran
+## 9. v14+ : loop blown away, table allowlist, slot-B flag truth (2026-09-08 ~07:xx UTC)- Counter (reg AND stack-spilled) never terminated: init=1 STILL ran
   away (475 K lines), so the exit path itself is suspect, NOT the init.
   Scientific ladder: hello (dispatch/return OK) -> one-liner (body OK,
   `72656164...` exact) -> unrolled x16 (EXACTLY 16 lines + OKAY).
@@ -191,3 +190,41 @@ OLD:
 4. Graduate `readdump` from `/tmp` prototype to a real Val preset
    (`--preset readdump-read`?) with docs, once fully trusted.
 5. Finish GKI module (option 2) as the no-flash parallel path.
+
+## 10. Bulk/DATA front + the INFO-blocks mystery (2026-09-08 ~09:xx UTC, context ~60%)
+- LIVE NOW: `/tmp/lk_b_bypass.img` (bulk4 layout, info_path bypassed to
+  usage). `oem readdump 40000000` -> usage + OKAY + alive.
+- Stock bulk primitives mapped: eMMC sender @`0xA840` (16 KB chunks via
+  `bl 0x89638`, `cmp w0,w26` verify); USB vtable send =
+  `[0x51052280]+0x30` (x0=buf, w1=len, w2=0x1388); `DATA%08x` fmt @
+  `0xDDD40`, `DATA%016llx` @`0xFA311`; OKAY @`0xD4DBA`, FAIL @`0xFA223`
+  (both exact C-strings, usable as responder tags).
+- Builder `/tmp/build_bulk.py` (+`build_bulk2.py` shrunk-frame): full
+  bulk handler (parse x2, len cap 1 MB, window table on [addr,addr+len),
+  DATA header, chunk loop, OKAY/FAIL, INFO fallback). Gates pass,
+  VALID re-signs. Has 3 REAL bugs found+fixed along the way:
+  (a) parse ran before argc check (bare call deref garbage -> crash);
+  (b) prologue stp/ldp words mis-encoded dup regs (x24/x26 never
+  saved -> caller-clobber); (c) `subs_imm32` helper emitted SUB not
+  SUBS; (d) emit_parse LDRB base 0x38 not 0x38_4 (store not load);
+  (e) gadget ldr transposed imm12. LESSON: python-compute every word,
+  capstone-verify every operand, never mental hex.
+- ISOLATION RESULT (the big one): bulk 1-arg INFO path dies with ZERO
+  output, but the bypass build (same binary, info blocks skipped)
+  prints usage + OKAY + alive. So parse/dispatch/usage/deny/return/
+  responder ALL work in bulk layout; the fault is INSIDE the 16 INFO
+  blocks as built into bulk files — even though they are
+  mnemonic-identical to the PROVEN unrolled blocks. Untested delta:
+  adrp/bl absolute targets (layout-shifted), block overlap with
+  strings/table (asserts say no), x20/entry state (mov present).
+- NEXT: binary-diff bulk-info-blocks vs unrolled-blocks WORD BY WORD
+  (not mnemonics — full 32-bit words, flagging every non-target
+  difference); then single-block bring-up (first block only + return)
+  to find the faulting instruction class. DO NOT reflash looping
+  counter builds; unrolled shape only.
+- ALSO OPEN: preloader-loop incident (bulk1 bare crash + torn-flash
+  scare): slot B flagged unbootable (retry 0) but fastboot fine;
+  fallback to A proven twice. `fastboot flash` MUST show Send+Write
+  OKAY lines — a swallowed timeout == treat image as NOT flashed.
+- OTHER PHONE ON BUS: `22b8:2e24 moto g play 2023` shares the host.
+  ALWAYS use `-s ZT4229CJG5` for fastboot/adb.
