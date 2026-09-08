@@ -9,7 +9,9 @@ import struct
 import sys
 from pathlib import Path
 
-sys.path.insert(0, "/tmp")
+_HERE = str(Path(__file__).resolve().parent)
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
 from build_readdump_v1 import (
     Asm, movz, movk, mov64, add_imm64, cmp_reg64, subs_imm32, ldp_post,
     BASE, CAVE, RESPONDER, INFO_TAG_OFF, REGEX_ROW, align8, WINDOWS,
