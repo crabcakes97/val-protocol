@@ -98,7 +98,7 @@ This repository is intended for repair, interoperability research, recovery work
   - key validator candidates
   - partition erase operations
   - serial number runtime source
-- Applies research presets (unlock, erase, and modem flows).
+- Applies research presets (unlock, erase, modem, ramdump, factory, and hypervisor flows).
 - Uses runtime serial number derivation for generated keys.
 - Rebuilds the original multi-image container.
 - Updates MTK `CERT2` image hashes.
@@ -400,6 +400,42 @@ OEM census: `lk_oem_cmd_mapper.py lk.bin` maps all 76 known commands
 `--preset full-allow --modem-size-bypass --modem-allow-unsafe
 --factory-allow --factory-allow-unsafe`.
 
+### `ramdump` preset (MRDUMP freeze triage, slot B ground truth)
+
+Same Val pipeline, report-only: maps the ramdump/MRDUMP subsystem per
+image (command-table row → handler entry, subcommand strcmp slots, USB
+`OKAY`/`INFO`/`usb_write` markers, dead `mrdump_*` strings) and changes
+zero payload bytes. Grounded against the live slot B pull (`-111-3`,
+factory-allow already applied there):
+
+```bash
+python lk_auto_patch.py lk_b_phone.img -o /tmp/lk_b_ramdump_report.img \
+  --preset ramdump
+```
+
+| Item | slot B lk.bin offset / VA |
+|---|---|
+| `ramdump` c-string | `0xF7195` / `…FF7195` |
+| command-table row `[name-ptr, handler-ptr]` | `0x120870` |
+| handler entry (4-slot strcmp chain) | `0xDE1C` / `…F0DE1C` |
+| `help` / `enable` / `disable` / `status` slots | `0xDE3C` / `0xDE50` / `0xDE64` / `0xDE78` |
+| `usage: fastboot oem ramdump` | `0xF72F7` (1 ref) |
+| `enable_fulldump` flag | `0xF72E7` (11 refs) |
+
+Findings that shape the freeze hunt: this build has **no**
+`pull`/`now`/`clear` subcommand slot (unknown args fall through to the
+usage text — no freeze path there); `mrdump_chkimg` / `mrdump_fallocate` /
+`mrdump_out_set` are present but **unreferenced by code** (dead: cannot
+freeze, cannot pull); `total ram size` / `dram init` / `[PL LOG]` are
+absent. The parser holds no `0x40000000` DRAM-range check — a Data-Abort
+freeze would live in the dump backend behind the `enable` path, so trace
+the handler's BL targets with capstone and audit `CBZ`/`CBNZ`/`CMP` there.
+
+Live-proven on slot B: preset output flashed to `lk_b`, booted to
+fastboot, `oem ramdump` prints usage (not `command restricted`),
+`oem ramdump status` answers (SSM-permission gate, no freeze),
+`oem ramdump enable` returns `enable full ramdump` + `OKAY`, no freeze.
+
 ### Cross-device: auto-detect + experimental
 
 Gate offsets are **discovered per image**, not hardcoded: anchor string →
@@ -509,7 +545,7 @@ verify). The rest are its stages, exposed for manual control.
 
 | Tool | What it does | How to use it |
 |---|---|---|
-| `lk_auto_patch.py` | Main entry point: extracts the `lk` payload, runs the analyzer, applies a `--preset`, rebuilds the container, updates CERT2, verifies `VALID`. Presets: `unlock-serial`, `erase-serial`, `unlock-serial-nvdata` (+ legacy `unlock-imei` aliases), research `modem-unlock`, `factory-allow`, `full-allow`, `gz-canary`, `gz-range`. | `python lk_auto_patch.py lk.img -o out.img --preset unlock-serial --key-token-secret "YourSecret"` |
+| `lk_auto_patch.py` | Main entry point: extracts the `lk` payload, runs the analyzer, applies a `--preset`, rebuilds the container, updates CERT2, verifies `VALID`. Presets: `unlock-serial`, `erase-serial`, `unlock-serial-nvdata` (+ legacy `unlock-imei` aliases), research `modem-unlock`, `ramdump`, `factory-allow`, `full-allow`, `gz-canary`, `gz-range`. | `python lk_auto_patch.py lk.img -o out.img --preset unlock-serial --key-token-secret "YourSecret"` |
 | `lk_static_analyzer.py` | Static analysis only: disassembles the payload, finds unlock flows, FRP/OEM checkers, key validators, erase ops, serialno source; writes `summary.txt`, JSON reports, flow graphs into an analysis dir. | `python lk_static_analyzer.py lk.img -o analysis/ [--full-disasm]` |
 | `lk_patch_partition.py` | Patch engine: applies gates/presets to an extracted payload using an analysis dir (report-only or `--apply`). All research gates (`--modem-size-bypass`, `--factory-allow`, …) live here with old-byte checks. | `python lk_patch_partition.py --analysis-dir analysis/ --apply --output lk.patched.bin --preset-flags…` |
 | `lk_keygen.py` | Generates 20-char unlock keys derived from secret + device serialno (deterministic with `--seed`). | `python lk_keygen.py --secret "YourSecret" --serialno "SERIAL" --count 1` |

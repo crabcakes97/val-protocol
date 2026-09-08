@@ -18,6 +18,7 @@ PRESETS = (
     "erase-serial",
     "unlock-serial-nvdata",
     "modem-unlock",
+    "ramdump",
     "factory-allow",
     "full-allow",
     "gz-canary",
@@ -187,8 +188,11 @@ def build_parser() -> argparse.ArgumentParser:
             "erase-imei y unlock-imei-nvdata quedan como alias compatibles, pero "
             "ahora derivan KEY desde serialno en runtime. unlock-serial, "
             "erase-serial y unlock-serial-nvdata son los nombres explicitos. "
-            "modem-unlock es RESEARCH REPORT-ONLY: localiza marcadores "
-            "modem/CCCI/MPU/MMU reales en este lk y no modifica ningun byte."
+             "modem-unlock es RESEARCH REPORT-ONLY: localiza marcadores "
+             "modem/CCCI/MPU/MMU reales en este lk y no modifica ningun byte. "
+             "ramdump es RESEARCH REPORT-ONLY: mapea la tabla de comandos, "
+             "el handler y los subcomandos ramdump/MRDUMP sin modificar "
+             "ningun byte."
         ),
     )
     parser.add_argument(
@@ -473,6 +477,10 @@ def build_patch_command(args: argparse.Namespace, root: Path, analysis_dir: Path
                 patch_cmd.append("--experimental")
         else:
             patch_cmd.append("--modem-research-report-only")
+        return patch_cmd
+
+    if args.preset == "ramdump":
+        patch_cmd.append("--ramdump-research-report-only")
         return patch_cmd
 
     if args.preset == "factory-allow":

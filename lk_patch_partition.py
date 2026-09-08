@@ -120,6 +120,47 @@ FACTORY_GATES: tuple[tuple[str, int, bytes, bytes, str], ...] = (
 )
 
 
+# ---- ramdump / MRDUMP research (slot-B freeze triage) ----
+# Ground truth from the live -111-3 phone LK (aarch64, base
+# 0xffff000050f00000): the top-level "ramdump" fastboot command lives in the
+# standard [name-ptr (8B), handler-ptr (8B)] table; its handler parses exactly
+# 4 subcommands (help/enable/disable/status) via a strcmp chain. This build
+# has NO pull/now/clear subcommand slot, the mrdump_* strings are present but
+# unreferenced by code, and the subcommand parser itself contains no
+# DRAM-range check — any Data-Abort freeze lives deeper in the dump backend,
+# not in the parser. Everything below is re-discovered per image; the preset
+# is report-only (zero bytes changed).
+
+RAMDUMP_CMD_NAME = b"ramdump"
+RAMDUMP_SUBCOMMANDS: tuple[bytes, ...] = (b"help", b"enable", b"disable", b"status")
+RAMDUMP_HANDLER_RANGE = 0x400  # bytes past handler entry holding the strcmp chain
+
+# Tokens the generic MRDUMP playbook expects but this LK family may not
+# implement as ramdump subcommands. Checked as exact C-strings; a hit only
+# counts when code inside the handler range references it.
+RAMDUMP_PROBE_TOKENS: tuple[bytes, ...] = (b"pull", b"now", b"clear")
+
+RAMDUMP_USB_MARKERS: tuple[tuple[str, bytes], ...] = (
+    ("usage", b"usage: fastboot oem ramdump"),
+    ("fulldump-flag", b"enable_fulldump"),
+    ("fastboot-okay", b"OKAY"),
+    ("fastboot-info", b"INFO"),
+    ("usb-write", b"usb_write"),
+)
+
+RAMDUMP_DEAD_MARKERS: tuple[tuple[str, bytes], ...] = (
+    ("mrdump-chkimg", b"mrdump_chkimg"),
+    ("mrdump-fallocate", b"mrdump_fallocate"),
+    ("mrdump-out-set", b"mrdump_out_set"),
+)
+
+RAMDUMP_ABSENT_MARKERS: tuple[tuple[str, bytes], ...] = (
+    ("total-ram-size", b"total ram size"),
+    ("dram-init", b"dram init"),
+    ("pl-log", b"[PL LOG]"),
+)
+
+
 def patch_bytes_checked(data: bytearray, offset: int, old: bytes, new: bytes, label: str) -> None:
     """Same-footprint patch with old-byte gate. Raises on any mismatch."""
     if len(old) != len(new):
@@ -543,6 +584,18 @@ def detect_report(analysis_dir: Path, experimental: bool) -> int:
         offsets = ", ".join(f"0x{off:x}" for _, off, _, _, _ in gates)
         print(f"{family.capitalize():<8}: OK gates=[{offsets}]"
               + (" (experimental, unknown build)" if build is None else ""))
+    try:
+        rd = ramdump_research_scan(data, base)
+    except (ValueError, struct.error):
+        rd = None
+    if rd and rd.get("handler_offset") is not None:
+        subs = ",".join(
+            s["token"] for s in rd["subcommands"] if s["handler_refs"]
+        ) or "none-parsed"
+        print(f"Ramdump : OK handler=0x{rd['handler_offset']:x} "
+              f"table=0x{rd['table_offset']:x} sub=[{subs}]")
+    else:
+        print("Ramdump : NO ROW (no ramdump command-table pair on this build)")
     return rc
 
 
@@ -576,6 +629,264 @@ def print_modem_research_report(data: bytearray, analysis_dir: Path) -> None:
     print("Note    : LK != EL3 (LK issues SMC calls INTO ATF/EL3; patching LK")
     print("Note    : does not yield EL3). LK MMU/EMI-MPU tables are rebuilt by")
     print("Note    : the kernel at boot, so LK remaps do not persist to Linux.")
+    print("Status  : REPORT ONLY - lk.bin left unmodified by design.")
+
+
+def _exact_c_string_offsets(data: bytes, token: bytes) -> list[int]:
+    """File offsets where token appears as an exact NUL-terminated C-string."""
+    needle = token + b"\x00"
+    out: list[int] = []
+    start = 0
+    while True:
+        idx = data.find(needle, start)
+        if idx < 0:
+            return out
+        if idx == 0 or data[idx - 1] == 0:
+            out.append(idx)
+        start = idx + 1
+
+
+def _handler_range_refs(
+    data: bytes, base: int, str_off: int, handler_off: int
+) -> list[int]:
+    """ADRP+ADD refs to str_off that sit inside the handler's strcmp chain."""
+    if base == 0 or handler_off < 0:
+        return []
+    refs = _find_string_refs(data, base, base + str_off)
+    lo, hi = handler_off, handler_off + RAMDUMP_HANDLER_RANGE
+    return [off for off in refs if lo <= off <= hi]
+
+
+def _direct_table_row(data: bytes, base: int, cmd_off: int) -> tuple[int, int] | None:
+    """Fallback [name-ptr, handler-ptr] row scan without neighbor heuristic.
+
+    The strict helper needs a populated neighbor row; sparse tables (zero
+    padding between entries) fail it even when the exact name pointer pairs
+    with an in-range, prologue-shaped handler. Returns (row_off, handler_off).
+    """
+    want = struct.pack("<Q", base + cmd_off)
+    best: tuple[int, int] | None = None
+    pos = 0
+    while True:
+        row = data.find(want, pos)
+        if row < 0:
+            return best
+        pos = row + 1
+        if row % 8 or row + 16 > len(data):
+            continue
+        name_va, code_va = struct.unpack_from("<QQ", data, row)
+        if name_va != base + cmd_off:
+            continue
+        if not (base <= code_va < base + len(data)):
+            continue
+        handler_off = code_va - base
+        if handler_off % 4:
+            continue
+        word = struct.unpack_from("<I", data, handler_off)[0]
+        prologue = (
+            (word & 0xFFC00000) == 0xD1000000  # sub sp, sp, #imm
+            or (word & 0xFFE003E0) == 0xA98003E0  # stp x29, x30, [sp, ...]
+            or word in (0xD503233F, 0xD503237F)  # paciasp / pacibsp
+        )
+        if prologue:
+            return (row, handler_off)
+        if best is None:
+            best = (row, handler_off)
+    return best
+
+
+def ramdump_research_scan(data: bytes, base: int) -> dict[str, object]:
+    """Byte-level map of the ramdump/MRDUMP subsystem. Never raises.
+
+    Returns exact C-string offsets, the fastboot command-table row (when the
+    [name-ptr, handler-ptr] pair resolves), per-subcommand handler-range ref
+    counts, USB-pipeline markers, and dead/absent-marker verdicts.
+    """
+    raw = bytes(data)
+    cmd_offs = _exact_c_string_offsets(raw, RAMDUMP_CMD_NAME)
+    table_off: int | None = None
+    handler_off: int | None = None
+    if base and cmd_offs:
+        try:
+            found = find_fastboot_command_handler_offset(raw, base, "ramdump")
+        except (ValueError, struct.error):
+            found = None
+        if found is not None:
+            handler_off = found
+            name_va = struct.pack("<Q", base + cmd_offs[0])
+            # Recover the table row holding this exact name pointer so the
+            # report cites the jump-table file offset, not just the handler.
+            pos = 0
+            while True:
+                row = raw.find(name_va, pos)
+                if row < 0:
+                    break
+                pos = row + 1
+                if row % 8 or row + 16 > len(raw):
+                    continue
+                name_va2, code_va = struct.unpack_from("<QQ", raw, row)
+                if name_va2 == base + cmd_offs[0] and code_va == base + found:
+                    table_off = row
+                    break
+        else:
+            # Sparse table (zero-padded neighbors): resolve the row directly.
+            direct = _direct_table_row(raw, base, cmd_offs[0])
+            if direct is not None:
+                table_off, handler_off = direct
+    subcommands: list[dict[str, object]] = []
+    for token in RAMDUMP_SUBCOMMANDS:
+        offs = _exact_c_string_offsets(raw, token)
+        range_refs: list[int] = []
+        if handler_off is not None:
+            for off in offs[:4]:
+                range_refs.extend(_handler_range_refs(raw, base, off, handler_off))
+        subcommands.append(
+            {
+                "token": token.decode("ascii"),
+                "offsets": offs[:4],
+                "count": len(offs),
+                "handler_refs": sorted(set(range_refs)),
+            }
+        )
+    probes: list[dict[str, object]] = []
+    for token in RAMDUMP_PROBE_TOKENS:
+        offs = _exact_c_string_offsets(raw, token)
+        range_refs = []
+        if handler_off is not None:
+            for off in offs[:4]:
+                range_refs.extend(_handler_range_refs(raw, base, off, handler_off))
+        probes.append(
+            {
+                "token": token.decode("ascii"),
+                "offsets": offs[:4],
+                "count": len(offs),
+                "handler_refs": sorted(set(range_refs)),
+            }
+        )
+    usb: list[dict[str, object]] = []
+    for label, needle in RAMDUMP_USB_MARKERS:
+        offs: list[int] = []
+        start = 0
+        while True:
+            idx = raw.find(needle, start)
+            if idx < 0:
+                break
+            offs.append(idx)
+            start = idx + 1
+        refs = 0
+        if base:
+            for off in offs[:4]:
+                refs += len(_find_string_refs(raw, base, base + off))
+        usb.append({"label": label, "count": len(offs), "offsets": offs[:4],
+                    "adpr_refs": refs})
+    dead: list[dict[str, object]] = []
+    for label, needle in RAMDUMP_DEAD_MARKERS:
+        offs = []
+        start = 0
+        while True:
+            idx = raw.find(needle, start)
+            if idx < 0:
+                break
+            offs.append(idx)
+            start = idx + 1
+        refs = 0
+        if base:
+            for off in offs[:4]:
+                refs += len(_find_string_refs(raw, base, base + off))
+        dead.append({"label": label, "count": len(offs), "offsets": offs[:4],
+                     "adpr_refs": refs})
+    absent = [label for label, needle in RAMDUMP_ABSENT_MARKERS
+              if raw.find(needle) < 0]
+    return {
+        "cmd_offsets": cmd_offs[:4],
+        "cmd_count": len(cmd_offs),
+        "table_offset": table_off,
+        "handler_offset": handler_off,
+        "subcommands": subcommands,
+        "probes": probes,
+        "usb": usb,
+        "dead": dead,
+        "absent": absent,
+    }
+
+
+def print_ramdump_research_report(data: bytearray, analysis_dir: Path) -> None:
+    try:
+        lk_base = load_analysis_base(analysis_dir)
+    except (OSError, ValueError, FileNotFoundError):
+        lk_base = 0
+    arch = load_analysis_architecture(analysis_dir)
+    print("Report  : ramdump/MRDUMP research (REPORT-ONLY, no LK bytes changed)")
+    print(f"LK size : {len(data)} bytes  arch={arch}")
+    if lk_base:
+        print(f"LK base : 0x{lk_base:x}")
+    else:
+        print("LK base : unknown (offsets only, no VA resolution)")
+    scan = ramdump_research_scan(bytes(data), lk_base)
+
+    def va(off: int) -> str:
+        return f" VA=0x{lk_base + off:x}" if lk_base else ""
+
+    cmd_offs = scan["cmd_offsets"]
+    if cmd_offs:
+        shown = ", ".join(f"0x{off:x} / HxD {off:08X}{va(off)}"
+                           for off in cmd_offs)
+        print(f"CmdStr  : 'ramdump' x{scan['cmd_count']} @ {shown}")
+    else:
+        print("CmdStr  : 'ramdump' ABSENT (no fastboot ramdump surface)")
+    if scan["table_offset"] is not None and scan["handler_offset"] is not None:
+        t, h = scan["table_offset"], scan["handler_offset"]
+        print(f"CmdTbl  : [name-ptr, handler-ptr] row @ 0x{t:x} / HxD {t:08X}")
+        print(f"Handler : entry @ 0x{h:x} / HxD {h:08X}{va(h)} "
+              f"(strcmp chain within +0x{RAMDUMP_HANDLER_RANGE:x})")
+    else:
+        print("CmdTbl  : NO ROW (command table pair unresolved; "
+              "dispatcher shape unknown on this build)")
+    for sub in scan["subcommands"]:
+        refs = sub["handler_refs"]
+        if refs:
+            shown = ", ".join(f"0x{off:x}{va(off)}" for off in sub["offsets"][:2])
+            rshown = ", ".join(f"0x{off:x}" for off in refs[:6])
+            print(f"SubCmd  : {sub['token']:<8} x{sub['count']} @ {shown} "
+                  f"handler-refs=[{rshown}]")
+        else:
+            print(f"SubCmd  : {sub['token']:<8} x{sub['count']} "
+                  f"NO handler-range ref (not parsed by this handler)")
+    for probe in scan["probes"]:
+        refs = probe["handler_refs"]
+        if refs:
+            rshown = ", ".join(f"0x{off:x}" for off in refs[:6])
+            print(f"Probe   : {probe['token']:<8} HANDLER-REF [{rshown}] "
+                  f"(freeze surface: audit this path first)")
+        else:
+            print(f"Probe   : {probe['token']:<8} no subcommand slot "
+                  f"(x{probe['count']} generic hits, none referenced "
+                  f"from the handler range)")
+    for marker in scan["usb"]:
+        if not marker["count"]:
+            print(f"USB     : {marker['label']} ABSENT")
+            continue
+        shown = ", ".join(f"0x{off:x}{va(off)}"
+                           for off in marker["offsets"][:3])
+        extra = f" (+{marker['count'] - 3} more)" if marker["count"] > 3 else ""
+        print(f"USB     : {marker['label']} x{marker['count']} @ "
+              f"{shown}{extra} adrp-refs={marker['adpr_refs']}")
+    for marker in scan["dead"]:
+        if not marker["count"]:
+            print(f"Dead    : {marker['label']} ABSENT")
+        elif marker["adpr_refs"]:
+            print(f"Dead    : {marker['label']} x{marker['count']} REFERENCED "
+                  f"(adpr-refs={marker['adpr_refs']}: live backend, map it)")
+        else:
+            print(f"Dead    : {marker['label']} x{marker['count']} present "
+                  f"but UNREFERENCED (no code path: cannot freeze, cannot pull)")
+    for label in scan["absent"]:
+        print(f"Absent  : {label} NOT FOUND (do not assume this log/range exists)")
+    print("Freeze  : subcommand parser holds no DRAM-range check on the -111-3")
+    print("Freeze  : family (strcmp chain + flag store only). A pull/now Data")
+    print("Freeze  : Abort would live in the dump backend behind the enable")
+    print("Freeze  : path: trace BL targets from the handler entry with")
+    print("Freeze  : capstone, then audit CBZ/CBNZ/CMP vs 0x40000000 there.")
     print("Status  : REPORT ONLY - lk.bin left unmodified by design.")
 
 
@@ -4256,6 +4567,16 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--ramdump-research-report-only",
+        action="store_true",
+        help=(
+            "RESEARCH REPORT-ONLY para --preset ramdump: mapea el subsistema "
+            "ramdump/MRDUMP (command-table row, handler, subcomandos, "
+            "marcadores USB, strings mrdump muertas) y reporta "
+            "offsets/VA sin modificar ningun byte."
+        ),
+    )
+    parser.add_argument(
         "--modem-size-bypass",
         action="store_true",
         help=(
@@ -4424,13 +4745,14 @@ def main() -> int:
         and not erase_token_partition
         and not args.unlock_erase_only
         and not args.modem_research_report_only
+        and not args.ramdump_research_report_only
         and not args.modem_size_bypass
         and not args.factory_allow
     ):
         print(
             "Error: usa --erase-partition <nombre>, --from/--to, --frp-skip-check, "
             "--frp-compare-value, --key-force-success, --key-custom-signature, --key-token-secret, "
-            "--erase-token-partition, --unlock-erase-only, --modem-research-report-only, --modem-size-bypass, --factory-allow, o una combinacion.",
+            "--erase-token-partition, --unlock-erase-only, --modem-research-report-only, --ramdump-research-report-only, --modem-size-bypass, --factory-allow, o una combinacion.",
             file=sys.stderr,
         )
         return 2
@@ -4505,6 +4827,7 @@ def main() -> int:
             args.unlock_erase_only,
             args.modem_size_bypass,
             args.factory_allow,
+            args.ramdump_research_report_only,
         ]
         if any(conflicting):
             print(
@@ -4514,6 +4837,30 @@ def main() -> int:
             )
             return 2
         print_modem_research_report(data, args.analysis_dir)
+        return write_output_if_requested(output_path, data, args.apply)
+
+    if args.ramdump_research_report_only:
+        conflicting = [
+            partition_patch is not None,
+            args.frp_skip_check,
+            args.frp_compare_value is not None,
+            args.key_force_success,
+            bool(args.key_custom_signature),
+            bool(args.key_token_secret),
+            bool(erase_token_partition),
+            args.unlock_erase_only,
+            args.modem_research_report_only,
+            args.modem_size_bypass,
+            args.factory_allow,
+        ]
+        if any(conflicting):
+            print(
+                "Error: --ramdump-research-report-only no se combina con otros "
+                "parches; es solo reporte.",
+                file=sys.stderr,
+            )
+            return 2
+        print_ramdump_research_report(data, args.analysis_dir)
         return write_output_if_requested(output_path, data, args.apply)
 
     if args.modem_size_bypass:
