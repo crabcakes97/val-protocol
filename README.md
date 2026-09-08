@@ -452,9 +452,11 @@ python lk_auto_patch.py lk_b_phone.img -o /tmp/lk_b_ramdump_report.img \
 Findings that shape the freeze hunt: this build has **no**
 `pull`/`now`/`clear` subcommand slot (unknown args fall through to the
 usage text — no freeze path there); `mrdump_chkimg` / `mrdump_fallocate` /
-`mrdump_out_set` are present but **unreferenced by code** (dead: cannot
-freeze, cannot pull); `total ram size` / `dram init` / `[PL LOG]` are
-absent. The parser holds no `0x40000000` DRAM-range check — a Data-Abort
+`mrdump_out_set` sit in the secondary full-name table (`0x120DD8` /
+`0x120DF0` / `0x120E08`, help/gate list only) but are **absent from the
+14-entry dispatch table**, so the live dispatcher rejects them (`not a
+supported oem command` — proven live, cannot freeze, cannot pull);
+`total ram size` / `dram init` / `[PL LOG]` are absent. The parser holds no `0x40000000` DRAM-range check — a Data-Abort
 freeze would live in the dump backend behind the `enable` path, so trace
 the handler's BL targets with capstone and audit `CBZ`/`CBNZ`/`CMP` there.
 

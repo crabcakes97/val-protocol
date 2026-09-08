@@ -793,8 +793,28 @@ def ramdump_research_scan(data: bytes, base: int) -> dict[str, object]:
         if base:
             for off in offs[:4]:
                 refs += len(_find_string_refs(raw, base, base + off))
+        # Second table: full 'oem <name>' rows [name-ptr, code-ptr] used by
+        # the help/unsupported-command path. Listed there != dispatchable:
+        # the live dispatcher only walks the short-name table and answers
+        # "'X' is not a supported oem command" for these.
+        second_rows: list[int] = []
+        if base:
+            full = b"oem " + needle + b"\x00"
+            fo = raw.find(full)
+            if fo >= 0:
+                want = struct.pack("<Q", base + fo)
+                pos = 0
+                while True:
+                    row = raw.find(want, pos)
+                    if row < 0:
+                        break
+                    pos = row + 1
+                    if row % 8 == 0 and row + 16 <= len(raw):
+                        _, code_va = struct.unpack_from("<QQ", raw, row)
+                        if base <= code_va < base + len(raw):
+                            second_rows.append(row)
         dead.append({"label": label, "count": len(offs), "offsets": offs[:4],
-                     "adpr_refs": refs})
+                     "adpr_refs": refs, "second_rows": second_rows})
     absent = [label for label, needle in RAMDUMP_ABSENT_MARKERS
               if raw.find(needle) < 0]
     return {
@@ -877,6 +897,11 @@ def print_ramdump_research_report(data: bytearray, analysis_dir: Path) -> None:
         elif marker["adpr_refs"]:
             print(f"Dead    : {marker['label']} x{marker['count']} REFERENCED "
                   f"(adpr-refs={marker['adpr_refs']}: live backend, map it)")
+        elif marker["second_rows"]:
+            rshown = ", ".join(f"0x{off:x}" for off in marker["second_rows"][:2])
+            print(f"Dead    : {marker['label']} x{marker['count']} in "
+                  f"full-name table [{rshown}] (help/gate list only: live "
+                  f"dispatcher rejects it, cannot freeze, cannot pull)")
         else:
             print(f"Dead    : {marker['label']} x{marker['count']} present "
                   f"but UNREFERENCED (no code path: cannot freeze, cannot pull)")
