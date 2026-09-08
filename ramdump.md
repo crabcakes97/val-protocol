@@ -411,3 +411,9 @@ all that stands between us and every window.
   (committed, INFO-only, always-safe fallback). Images in /tmp.
 - TOKEN HYGIENE: PAT was pasted in chat twice; treat as burned and
   rotate when convenient (wiped from machine after each push).
+
+## 19. Local backup (2026-09-08): `~/val-session-backup-2026-09-08/`
+pulls/ (lk_a/b_phone.img), analysis/ (both dirs), images/
+(safe-unrolled, live-bulk16, sysreg-probe), builders/ (all /tmp
+build_*.py dev lineage), evidence/ (expdb_post.img 128 MB), iomem.txt,
+phys_reader.c (fixed). 179 MB total. Survives reboot + tmpfs wipe.
