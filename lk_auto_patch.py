@@ -19,6 +19,7 @@ PRESETS = (
     "unlock-serial-nvdata",
     "modem-unlock",
     "ramdump-map",
+    "readdump-read",
     "factory-allow",
     "full-allow",
     "gz-canary",
@@ -117,6 +118,62 @@ def run_gz_range(args: argparse.Namespace, root: Path) -> int:
                                output, root, "gz-range, 8 bytes + re-sign")
 
 
+def run_readdump_read(args: argparse.Namespace, root: Path) -> int:
+    """--preset readdump-read (PROOF-OF-CONCEPT): build oem readdump.
+
+    Delegates to lk-tools/build_bulk28.py (INFO 256 B + DATA 16 KB),
+    which enforces its own gates (capstone operand gate, cave-zero,
+    regex-row old-bytes) and requires Result: VALID from the re-signer.
+    REQUIRES factory-allow already on the source image (see
+    lk-tools/README.md step 0) and an analysis dir holding lk.bin
+    (produce it first with --preset ramdump-map or lk_static_analyzer).
+    Flash output to lk_b ONLY, with Send+Write OKAY, then read
+    lk-tools/README.md for live use.
+    """
+    image = args.image.resolve()
+    analysis_dir = (args.analysis_dir or default_analysis_dir(image)).resolve()
+    lkbin = analysis_dir / "lk.bin"
+    if not lkbin.is_file():
+        print(f"analysis dir sin lk.bin: analizando {image} primero...")
+        analysis_cmd = [
+            sys.executable,
+            str(root / "lk_static_analyzer.py"),
+            str(image),
+            "-o",
+            str(analysis_dir),
+        ]
+        if not args.full_disasm:
+            analysis_cmd.append("--no-full-disasm")
+        run_command(analysis_cmd, root)
+        if not lkbin.is_file():
+            raise RuntimeError(f"el analizador no produjo {lkbin}: abortando.")
+    output = (args.output or default_output_image(image)).resolve()
+    builder = root / "lk-tools" / "build_bulk28.py"
+    if not builder.is_file():
+        raise RuntimeError(f"falta el constructor PoC: {builder}")
+    print("readdump-read es PROOF-OF-CONCEPT (ver lk-tools/README.md).")
+    print("Requiere factory-allow previo en la imagen de entrada.")
+    run_command(
+        [
+            sys.executable,
+            str(builder),
+            str(image),
+            str(output),
+            "--analysis-dir",
+            str(analysis_dir),
+            "--repo",
+            str(root),
+        ],
+        root,
+    )
+    print()
+    print("Done (readdump-read PoC; gates + VALID dentro del constructor)")
+    print(f"Analysis dir : {analysis_dir}")
+    print(f"Patched image: {output}")
+    print("Flash SOLO a lk_b con Send+Write OKAY.")
+    return 0
+
+
 def _gz_sign_and_finish(patched: bytes, input_len: int, output: Path,
                         root: Path, done_label: str) -> int:
     """CERT2 re-sign + exact-size trim + VALID gate for GZ images."""
@@ -190,9 +247,13 @@ def build_parser() -> argparse.ArgumentParser:
             "erase-serial y unlock-serial-nvdata son los nombres explicitos. "
              "modem-unlock es RESEARCH REPORT-ONLY: localiza marcadores "
              "modem/CCCI/MPU/MMU reales en este lk y no modifica ningun byte. "
-             "ramdump-map es RESEARCH REPORT-ONLY: mapea la tabla de comandos, "
-             "el handler y los subcomandos ramdump/MRDUMP sin modificar "
-             "ningun byte (no habilita nada; eso lo hace factory-allow)."
+              "ramdump-map es RESEARCH REPORT-ONLY: mapea la tabla de comandos, "
+              "el handler y los subcomandos ramdump/MRDUMP sin modificar "
+              "ningun byte (no habilita nada; eso lo hace factory-allow). "
+              "readdump-read es PROOF-OF-CONCEPT: construye el comando "
+              "oem readdump (INFO 256 B + DATA 16 KB) con gates capstone "
+              "y re-firma VALID. Requiere factory-allow previo en lk_b; "
+              "ver lk-tools/README.md."
         ),
     )
     parser.add_argument(
@@ -626,6 +687,13 @@ def main() -> int:
     if args.preset == "gz-range":
         try:
             return run_gz_range(args, root)
+        except RuntimeError as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 1
+
+    if args.preset == "readdump-read":
+        try:
+            return run_readdump_read(args, root)
         except RuntimeError as exc:
             print(f"Error: {exc}", file=sys.stderr)
             return 1

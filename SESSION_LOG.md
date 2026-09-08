@@ -118,6 +118,28 @@
 - eMMC answer (user asked): raw R/W EXISTS (block vtable @`0x89638`
   bounds-checks then indirect-calls). Read-only interest.
 
+### 15:00-15:30 — TRANSPORT COMPLETE + 1MB sweep
+- b21-b28 lineage: zero-stack-writes bulk (addr x19, static strings),
+  header via 7E00, data 7E24, flush 7E34. Rung ladder (A0 lives, A
+  crashes-benign) + flag-clobber fix (x16) + phantom-F fix along the way.
+- Wire tap (`fb_min.py`, pyusb claim-only): header 12B exact, 32x512B
+  data, OKAY. Distro client never enters DATA on oem (all EOVERFLOWs);
+  custom `fb_dump.py` IS the dump tool. First full 16KB pull byte-exact.
+- `sweep_lk.py`: LK 1MB in 64x16KB, 64/64 OK, diffs confined to our
+  cave page. Standing orders kept: slot A untouched, all reboot-grade.
+- User direction: aim = WHOLE RAM (modem = way in); everything
+  graduates to a real val-protocol preset when proven. Toolbox Q&A:
+  custom commands/reads/writes/stock-calls proven; `fastboot boot`
+  re-add plausible later; BROM out of scope.
+
+### 15:30-16:30 — REMAP CAMPAIGN (details in ramdump.md S21)
+- Sysregs live (EL1, TTBRs, MAIR, tpidr, null chain). Registry decoded
+  (linear map, free slot). Append verified live (boot wipes it).
+- map() unreachable via boot chain (null) + fab-struct crashed once;
+  direct modem read faults clean. Thread scan: 2 threads, both null.
+- Docs updated at break per standing orders. Backup holds all builders
+  + images (b17-b28, sysreg2, probeT/U/V/W, remap1-3).
+
 ## Standing orders (user-set, keep obeying)
 1. Slot A never flashed. Preloader/efuse never touched.
 2. Inactive slot only; every image gated + VALID before cable.

@@ -417,3 +417,64 @@ pulls/ (lk_a/b_phone.img), analysis/ (both dirs), images/
 (safe-unrolled, live-bulk16, sysreg-probe), builders/ (all /tmp
 build_*.py dev lineage), evidence/ (expdb_post.img 128 MB), iomem.txt,
 phys_reader.c (fixed). 179 MB total. Survives reboot + tmpfs wipe.
+
+## 20. TRANSPORT DONE (2026-09-08 ~15:xx UTC): 16KB bulk LIVE + LK 1MB swept
+- LIVE: b28 (`/tmp/lk_b_b28.img`, builders lineage b17-b28 in /tmp +
+  backup). Recipe: header `DATA00004000` via 7E00 (+0x30, w2=-1),
+  16KB via 7E24 (+0x40 raw), flush 7E34, OKAY. Zero stack writes in
+  bulk_go (addr in x19, static strings) after rung A proved stack-built
+  headers fault (cause still open: alignment vs stock-garbage).
+- KILLS along the way: x13-flag clobber (dispatch always-bulk, INFO dead
+  code — fixed x16, b18); PHANTOM-F (VA ...50F29978 = offset 0x29978, NOT
+  0xF29978; b22 jumped 15MB wild); barrier-7E34-cold FAILS (eMMC skips it
+  pre-first-send; b27 wire-tap proof); S18 "request struct" DEAD
+  (F8DEF4=file 0x8DEF4 = memcpy; +0x30 = (buf,len,timeout) raw).
+- WIRE TAP (`/tmp/fb_min.py`, pyusb, claim-only open): header 12B exact,
+  32x512B data, OKAY. Distro client NEVER enters DATA on oem (all its
+  EOVERFLOWs); custom host client `/tmp/fb_dump.py` IS the dump tool.
+- SWEEP (`/tmp/sweep_lk.py`): full LK 1MB in 64x16KB, ALL byte-exact vs
+  file except ONE 4K page (0xCE000 = our cave, 1723B). Footprint = cave
+  only. Slot A untouched; all crashes reboot-grade.
+- NEXT: DRAM still unmapped (MMU wall stands; 0x40000000 faults 4/4 on
+  b28-era builds — old no-fault reads were download-buffer echoes).
+  Option B: sysreg probe (S15 step 1, INFO-only zero-risk) then table
+  walk using the swept 1MB (tables live inside it).
+
+## 21. REMAP CAMPAIGN (2026-09-08 ~16:xx UTC): registry decoded, map gated
+- AIM RESTATED (user): WHOLE RAM; modem is the way in, not the goal.
+  PRESET PROMISE: all of this graduates to a real val-protocol preset
+  (`--preset readdump-read` class) + committed tools + docs when proven.
+- SYSREG SENTINELS (live, zero-risk, all OKAY): f8 CurrentEL=`04` (EL1!),
+  f9 TTBR0=`0x510400`, fa TTBR1=`0x510300`, fb MAIR=`...FF0400`;
+  fe tpidr=`0xFFFF0000512FFF78` (current THREAD, magic "thrd" nearby);
+  ff [tpidr+0x38]=`0` (MMU chain NULL at runtime!). fc phys_to_virt=
+  `0` (tables unregistered). fd = remap vehicle.
+- REGISTRY (`0xFFFF000051022000`, live-read 768B): 8 regions
+  {phys,virt,size,flag}, VIRT=PHYS+linear ALWAYS; flag 0x00=Normal
+  (0x50F00000+288MB, 0x48600000+1M, 0x100000+128K), 0x04=Device
+  (0x08000000,0x0C000000,0x0C530000,0x0D000000,0x10000000+256M).
+  e08 = FREE SLOT (zeros). e09+ = junk (table end).
+- LINEAR EXTENT PROOF: phys 0x52000000 reads (zeros) at linear VA --
+  e00's 288MB is REALLY mapped (not just LK image). Low DRAM readable
+  today wherever e00 covers; modem windows are NOT covered.
+- DISASSEMBLY KILLS: F8DEF4=file 0x8DEF4 = MEMCPY (S18 "request struct"
+  DEAD); F8C89C=snprintf, F8E7D4=strnlen (eMMC header = printed text);
+  PHANTOM-F LESSON: VA ...50F29978 = offset 0x29978 (b22 jumped wild).
+  map() returns {0,-2,-37,+1,-8} (NO +2!). map body uses x0-struct ONLY
+  (no mrs inside): root@+0x08, flag@+0x10, base@+0x18, size@+0x20.
+- APPEND WORKS (verified live): e08={C0000000,FFFF0000C0000000,1MB,0}
+  + zeroed e09 read back EXACT. BUT BOOT WIPES IT (re-init) -- remap is
+  per-boot, or re-append each time. e08 read-back only valid pre-reboot.
+- MAP UNREACHABLE (yet): site-1 tpidr chain null at runtime; the fd
+  `0200...` line was ARGC (=2) via cbz-early-exit, map never ran.
+  Direct modem-VA read faults clean (reboot-grade, slot A safe).
+- THREAD SCAN (64KB, 64 safe reads): 2 thread structs (current + one),
+  BOTH +0x38 null. Boot thread (with mmu?) gone/freed.
+- FAB-STRUCT remap3 (struct in our frame: root=TTBR1, flag 0,
+  cover-all bounds): CRASHED on fd (fault inside map, reboot-grade).
+  Next avenues: flag/bounds variants w/ failcode (needs no-crash run),
+  wider thread-pool scan for a live mmu struct, e00 low-DRAM sweep.
+- TOOLBOX NOTE (user asked): primitives proven = custom oem commands,
+  mapped reads (256B/16KB), live sysregs, LK-data writes, stock calls,
+  host uploader. `fastboot boot` re-add = plausible later (boot fns
+  exist); BROM proper = different stage, out of scope.

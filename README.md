@@ -98,7 +98,7 @@ This repository is intended for repair, interoperability research, recovery work
   - key validator candidates
   - partition erase operations
   - serial number runtime source
-- Applies research presets (unlock, erase, modem, ramdump-map, factory, and hypervisor flows).
+- Applies research presets (unlock, erase, modem, ramdump-map, readdump-read, factory, and hypervisor flows).
 - Uses runtime serial number derivation for generated keys.
 - Rebuilds the original multi-image container.
 - Updates MTK `CERT2` image hashes.
@@ -237,6 +237,45 @@ fastboot oem ramdump status   # answers (SSM-permission gate, no freeze)
 
 Slot B ground truth, freeze-triage notes, and live-test proof:
 [`ramdump-map` ground-truth section below](#ramdump-map-preset-mrdump-freeze-triage-slot-b-ground-truth).
+
+### `readdump-read` (custom read command — WORKING proof-of-concept preset)
+
+Builds the custom `oem readdump` command into LK (borrows the harmless
+`regex` dispatch slot `0x1207B0`, handler in zero cave `0xCE080`,
+old-byte gated, re-signs `VALID`). Proven live on slot B, byte-exact:
+
+- `readdump <hexaddr>` — 256 B as 16 INFO hex lines (lowercase hex, no
+  `0x`; 32-bit `0x50Fxxxxx` auto-extends; misses answer `deny: no
+  window`, never read).
+- `readdump <hexaddr>+` — 16 KB DATA dump (header via stock stub 7E00,
+  data via 7E24, flush 7E34). Pull with the custom host client
+  (`lk-tools/fb_dump.py`) — stock fastboot never enters DATA on `oem`.
+- Read-only sysreg sentinels `f8|f9|fa|fb` (CurrentEL, TTBRs, MAIR).
+
+**Step 0 — factory-allow FIRST** (readdump builds on an allowed base;
+slot A is never touched):
+
+```bash
+python lk_auto_patch.py <lk_b.img> -o <lk_b_allow.img> \
+  --preset factory-allow --factory-allow --factory-allow-unsafe
+fastboot -s ZT4229CJG5 flash lk_b <lk_b_allow.img>  # need Send+Write OKAY
+```
+
+Then build + flash + read (needs `pip install capstone pyusb`):
+
+```bash
+python lk_auto_patch.py <lk_b_allow.img> -o <lk_b_readdump.img> \
+  --preset readdump-read
+fastboot -s ZT4229CJG5 flash lk_b <lk_b_readdump.img>
+fastboot -s ZT4229CJG5 reboot bootloader
+fastboot -s ZT4229CJG5 oem readdump ffff000050fce200  # 16 lines + OKAY
+python lk-tools/fb_dump.py oem readdump ffff000050f00000+ chunk.bin
+```
+
+Current map (nevada `-111-3` LK maps its own image + USB + a registry
+window only; kernel DRAM is NOT LK-mapped — `0x80000000` etc. fault):
+see `lk-tools/README.md` (every builder documented, lineage, standing
+orders) and `ramdump.md` (session log, MMU/remap workfront).
 
 ## Runtime Serial Derivation
 
@@ -467,30 +506,30 @@ fastboot, `oem ramdump` prints usage (not `command restricted`),
 `oem ramdump status` answers (SSM-permission gate, no freeze),
 `oem ramdump enable` returns `enable full ramdump` + `OKAY`, no freeze.
 
-### `readdump` (custom read command — in development, NOT a preset yet)
+### `readdump` (custom read command — graduated, see preset above)
 
 Since this LK has no pull verb and crash capture yields logs only, a
 custom `oem readdump <hexaddr>` command was built (borrows the harmless
 `regex` dispatch slot `0x1207B0`, handler in zero cave `0xCE080`,
-old-byte gated, re-signs `VALID`). Status:
+old-byte gated, re-signs `VALID`). It graduated to
+`--preset readdump-read` (proof-of-concept, working, byte-exact live).
+Design notes that stay true:
 
-- Proven live on slot B: arg parse (lowercase hex, no `0x`), LK-short
-  `0x50Fxxxxx` auto-extend, window-table allowlist (miss => `deny: no
-  window`), 256 B reads as 16 INFO hex lines, byte-exact (cave oracle).
-- Proven windows: DRAM scratch `[0x40000000,0x40010000)`,
-  `[0x48402000,...)`, LK image VA. Kernel iomem is NOT LK's map:
-  `0x80000000` faults the board (Data Abort -> watchdog reboot);
-  misses must deny, never read.
-- Open bugs: the counting dump loop runs away (all 16-line outputs
-  verified came from the straight-line unrolled build instead); the
-  `0x40000000` window reads back staged-image content (fastboot
-  download buffer), not live DRAM. Next: length arg, DATA-phase bulk
-  transport, modem-window probes (expect faults; reboot to recover).
-- Builder prototype lives outside the repo for now (`/tmp`); it
-  graduates to `--preset readdump-read` only once fully trusted.
+- Arg parse (lowercase hex, no `0x`), LK-short `0x50Fxxxxx`
+  auto-extend, window-table allowlist (miss => `deny: no window`),
+  256 B reads as 16 INFO hex lines, byte-exact (cave oracle).
+- Loop bug, solved: counted dump loops run away on this LK; all exact
+  outputs come from straight-line unrolled blocks (see lineage).
+- Stale-x20 lesson: verify VAR==want per address (a table-hit branch
+  once skipped the addr move and echoed scratch as "DRAM").
+- Dev lineage, per-file docs, and standing orders:
+  [`lk-tools/README.md`](lk-tools/README.md). Session log: `ramdump.md`.
+- Open workfront: LK maps its image + USB + registry only — modem DRAM
+  needs the remap path (registry append proven live, map() unreachable
+  via its boot-time pointer so far). `oem regex` is sacrificed for the
+  slot while a readdump image is flashed.
 
-How to use the committed unrolled builder (16 straight-line reads, no
-loop counter — the only variant that terminates exactly):
+The old prototype flow (kept for reference; preset does this now):
 
 ```bash
 # 1. analyze your LK pull (once):
@@ -506,10 +545,9 @@ fastboot reboot bootloader
 fastboot oem readdump ffff000050fce7d0   # own code: must echo file bytes
 fastboot oem readdump 40000000           # 256 B of DRAM scratch
 ```
-Allowlist lives in `WINDOWS` at the top of
-`tools/readdump_unrolled.py` — extend one proven 256 B probe at a time;
-an unmapped probe reboots the board (watchdog), never bricks it. `oem
-regex` is sacrificed for the slot while a readdump image is flashed.
+Allowlist lives in `WINDOWS` at the top of the builder in use — extend
+one proven 256 B probe at a time; an unmapped probe reboots the board
+(watchdog), never bricks it.
 
 ### Cross-device: auto-detect + experimental
 
@@ -544,6 +582,11 @@ table, refusing unknown builds with porting instructions.
   `android13-8` sources for `5.15.180-g9b2308ac0ad6`, build a minimal
   physical-range reader (`/proc/iomem` System RAM map is world-readable),
   `insmod` via root, dump in chunks. Multi-hour job, not yet done.
+- **Live via LK (`--preset readdump-read`):** custom `oem readdump`
+  pulls mapped memory over USB today (256 B INFO + 16 KB DATA,
+  byte-exact; full LK megabyte swept). Blocker is mapping, not
+  transport: this LK maps its image + USB + registry only — modem DRAM
+  needs the remap path (in progress, see `ramdump.md`).
 
 ### Live exploit surface (no flash — Trustonic MobiCore TEE)
 
@@ -620,7 +663,7 @@ verify). The rest are its stages, exposed for manual control.
 
 | Tool | What it does | How to use it |
 |---|---|---|
-| `lk_auto_patch.py` | Main entry point: extracts the `lk` payload, runs the analyzer, applies a `--preset`, rebuilds the container, updates CERT2, verifies `VALID`. Presets: `unlock-serial`, `erase-serial`, `unlock-serial-nvdata` (+ legacy `unlock-imei` aliases), research `modem-unlock`, `ramdump-map`, `factory-allow`, `full-allow`, `gz-canary`, `gz-range`. | `python lk_auto_patch.py lk.img -o out.img --preset unlock-serial --key-token-secret "YourSecret"` |
+| `lk_auto_patch.py` | Main entry point: extracts the `lk` payload, runs the analyzer, applies a `--preset`, rebuilds the container, updates CERT2, verifies `VALID`. Presets: `unlock-serial`, `erase-serial`, `unlock-serial-nvdata` (+ legacy `unlock-imei` aliases), research `modem-unlock`, `ramdump-map`, working PoC `readdump-read`, `factory-allow`, `full-allow`, `gz-canary`, `gz-range`. | `python lk_auto_patch.py lk.img -o out.img --preset unlock-serial --key-token-secret "YourSecret"` |
 | `lk_static_analyzer.py` | Static analysis only: disassembles the payload, finds unlock flows, FRP/OEM checkers, key validators, erase ops, serialno source; writes `summary.txt`, JSON reports, flow graphs into an analysis dir. | `python lk_static_analyzer.py lk.img -o analysis/ [--full-disasm]` |
 | `lk_patch_partition.py` | Patch engine: applies gates/presets to an extracted payload using an analysis dir (report-only or `--apply`). All research gates (`--modem-size-bypass`, `--factory-allow`, …) live here with old-byte checks. | `python lk_patch_partition.py --analysis-dir analysis/ --apply --output lk.patched.bin --preset-flags…` |
 | `lk_keygen.py` | Generates 20-char unlock keys derived from secret + device serialno (deterministic with `--seed`). | `python lk_keygen.py --secret "YourSecret" --serialno "SERIAL" --count 1` |
@@ -638,6 +681,7 @@ verify). The rest are its stages, exposed for manual control.
 | `tools/build-part-img.py` | Rebuilds MTK multi-image containers: `replace` swaps one sub-image (header+data+certs), `concat` joins singles in order. Tolerates the trailing-CERT-padding quirk with a loud warning. | `python tools/build-part-img.py replace in.img --name lk --file lk.new -o out.img` |
 | `tools/sign_mtk_cert.py` | Reads/updates MTK CERT2 image hashes (`-w` writes, `--legacy` for old libsec bypass_mode=1). Vendored from pwnage24mtk. | `python tools/sign_mtk_cert.py -w in.img -o out.img` |
 | `tools/verify_mtk_image.py` | Verifies CERT1/CERT2 metadata (`-n` one image, `--all` everything). Post-sign gate. | `python tools/verify_mtk_image.py out.img` |
+| `lk-tools/` (47 files + README) | readdump session lineage: every builder (`build_bulk28.py` = bulk vehicle, `build_remap6.py` = recon vehicle, `build_readdump_v1.py` = shared lib, ladders/probes/sysreg/remap history) + host tools (`fb_dump.py` DATA client, `fb_min.py` wire tap, `sweep_lk.py` 1 MB sweeper). Per-file docs + standing orders in `lk-tools/README.md`. | `python lk-tools/build_bulk28.py lk.img out.img --analysis-dir analysis/` |
 | `tools/parse_mtk_certs.py` | DER/CERT parsing helpers shared by the sign/verify scripts. | imported, not run directly |
 
 ## Exploit-suite tools (nevada research set)
