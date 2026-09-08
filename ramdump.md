@@ -311,3 +311,13 @@ OLD:
   (`22b8:2e24` 2023): always `-s ZT4229CJG5`.
 - NEXT: probe `0xD9B80000`, `0xEE000000` (expect faults); then DATA
   bulk (`build_bulk16.py` in /tmp, unfinished) or MMU-remap research.
+
+## 14. Probe campaign CLOSED: 0-for-6 (2026-09-08 ~11:xx UTC)
+- `0xC0000000`, `0x9FFF0000`, `0xD9B80000`, `0xEE000000` (+ earlier
+  `0x48402000`, `0x80000000`): ALL fault (drop + watchdog reboot,
+  fallback to A twice, manual return). LK maps NONE of kernel-shared
+  DRAM. Only LK image VA ever reads. Campaign over — no more blind
+  probes; every new address needs an MMU reason first.
+- Paths left: (A) kernel module (GKI env must be rebuilt; needs ~10G
+  free — user files occupy the disk, do NOT touch without asking);
+  (B) LK MMU-remap command (map-then-read; design in S12 notes).
