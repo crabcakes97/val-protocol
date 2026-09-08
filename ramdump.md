@@ -284,3 +284,30 @@ OLD:
   (`0xC0000000+`, `0x9F...`) were NEVER probed — single-row probes
   (one flash cycle each, reboot on fault) come BEFORE any remap
   surgery. Remap = last resort inside option B, not the opener.
+
+## 13. Probe campaign + safety case (2026-09-08 ~11:xx UTC, context ~70%)
+- LIVE NOW: probe build (`/tmp/lk_b_probeB.img` lineage: unrolled shape +
+  6-row table) on slot B fastboot. Row set: `[0x40000000,0x40001000)`,
+  `[0xC0000000,...)`, `[0x9FFF0000,...)`, `[0xD9B80000,...)`,
+  `[0xEE000000,...)`, LK VA. Builder: `/tmp/build_probeB.py` (copy of
+  committed `tools/readdump_unrolled.py` + rows; NOT committed).
+- RESULTS: `0xC0000000` FAULT (drop, fallback to A, manual return);
+  `0x9FFF0000` FAULT (same). `0x40000000` reads but content is stale-
+  scratch/questionable; LK-VA reads exact. Kernel-shared windows are
+  NOT LK-mapped, one by one. Remaining untried rows in image:
+  `0xD9B80000`, `0xEE000000` (expect faults; single-probe discipline).
+- ANTI-HARDBRICK CASE (user asked, verified): only `lk_b` ever
+  flashed (slot A untouched all session); every image gated
+  (old-bytes + exact-size + VALID); preloader intact (enumerated
+  `0e8d:2000` during recoveries); fallback to A proven 3x; efuses
+  never touched. Worst observed cost = reboot + manual
+  `--set-active`. RULE: one probe per fresh fastboot; never
+  `fastboot reboot` on B (use `reboot bootloader`); every flash must
+  show Send+Write OKAY or treat as NOT flashed.
+- HYGIENE: /tmp holds ~15 diverged builder copies + ~25 images.
+  Authoritative live builder = `tools/readdump_unrolled.py` in repo
+  (2-window) + `/tmp/build_probeB.py` (6-window, uncommitted).
+  CONSOLIDATE before adding more variants. Second phone on bus
+  (`22b8:2e24` 2023): always `-s ZT4229CJG5`.
+- NEXT: probe `0xD9B80000`, `0xEE000000` (expect faults); then DATA
+  bulk (`build_bulk16.py` in /tmp, unfinished) or MMU-remap research.
