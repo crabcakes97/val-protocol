@@ -381,3 +381,33 @@ all that stands between us and every window.
 - Recovery from poisoned channel: `getvar` fails; reboot bootloader
   (or USB reset + patience) clears it. Timeouts that abandon mid-DATA
   make it worse — always capture to file, never to terminal.
+
+## 18. Bulk root cause FOUND + request-struct design (2026-09-08 ~14:xx UTC, ctx ~76%)
+- The vtable method `[0x51052280]+0x30` does NOT take (buf,len,timeout).
+  Stock builds a REQUEST STRUCT on stack first (lengths/flags stp'd
+  around sp+0x60-0x98, prepared by `bl 0xF8DEF4`), then calls with
+  (req=x0, len=w1, timeout=0x1388). Our raw-buf call made it chase a
+  garbage pointer -> Data Abort -> reboot. Every bulk crash explained
+  by this ONE wrong assumption. Nothing else is unknown for transport.
+- FIX (not yet built/flashed): replicate req-build exactly (copy the
+  field stores from responder `0x7CB4-0x7CEC` + `0xF8DEF4` init),
+  then call. Same slot/row/gates/VALID discipline. First live test:
+  single 16KB send from LK-VA (mapped-sure), capture to file, expect
+  16384 bytes + OKAY.
+- ALSO LEARNED: `0xF29978` (called as `(-1, fmt, ...)` at `0xA96C`
+  with `DATA%016llx`) is the formatted-to-host sender — candidate for
+  clean single-packet DATA headers if responder-splitting is ever
+  proven (still unproven; raw-struct path first).
+- eMMC bonus (user asked): raw eMMC R/W exists (`send_emmc_data` +
+  block vtable @`0x89638` bounds-check-then-`br`). Read-only interest
+  only (writes = brick territory). Possible dump DESTINATION later;
+  NOT needed for transport.
+- LIVE STATE on pause: slot B = bulk16 build (responder-header
+  version, DATA unproven); last command crashed board (watchdog
+  reboot expected). Slot A stock. Channel may need manual reboot +
+  single-shot discipline (bulk sends poison the endpoint on failure;
+  reboot BL between bulk tests).
+- Builders: `/tmp/build_bulk16.py` (current), `tools/readdump_unrolled.py`
+  (committed, INFO-only, always-safe fallback). Images in /tmp.
+- TOKEN HYGIENE: PAT was pasted in chat twice; treat as burned and
+  rotate when convenient (wiped from machine after each push).
