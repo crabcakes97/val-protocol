@@ -167,6 +167,17 @@ sub_loop:
     mov x21, x0
     ldr w22, [sp]
     add sp, sp, #64
+    // pacing: 2ms per call (flood control)
+    sub sp, sp, #16
+    str xzr, [sp]
+    movz x0, #0x8480
+    movk x0, #0x1e, lsl #16
+    str x0, [sp, #8]
+    mov x0, sp
+    mov x1, xzr
+    mov x8, #101
+    svc #0
+    add sp, sp, #16
     // heartbeat + progress every 4096
     tst w25, #0xfff
     b.ne no_hb
@@ -174,6 +185,18 @@ sub_loop:
     mov w0, w20; bl print_hex32
     mov w0, w25; bl print_hex32
     adrp x0, msg_nl; add x0, x0, :lo12:msg_nl; mov x1, #1; bl print
+    // pacing: 200ms sleep per 4K subs (drains dmesg, cools CPU)
+    sub sp, sp, #16
+    mov x0, xzr
+    movz x1, #0xC200
+    movk x1, #0xBEB, lsl #16   // 200000000 ns
+    str x0, [sp]
+    str x1, [sp, #8]
+    mov x0, sp
+    mov x1, xzr
+    mov x8, #101              // SYS_NANOSLEEP
+    svc #0
+    add sp, sp, #16
     bl save_prog
 no_hb:
     cbnz w21, hit
@@ -214,6 +237,17 @@ fsub_loop:
     mov x21, x0
     ldr w22, [sp]
     add sp, sp, #64
+    // pacing: 2ms per call (flood control)
+    sub sp, sp, #16
+    str xzr, [sp]
+    movz x0, #0x8480
+    movk x0, #0x1e, lsl #16
+    str x0, [sp, #8]
+    mov x0, sp
+    mov x1, xzr
+    mov x8, #101
+    svc #0
+    add sp, sp, #16
     tst w25, #0xfff
     b.ne no_hb2
     adrp x0, msg_hb; add x0, x0, :lo12:msg_hb; bl print_cstr
