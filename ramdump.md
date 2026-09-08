@@ -264,3 +264,23 @@ OLD:
   scratch (diminishing). RECOMMENDATION: A for full dump, B as
   research. 256B INFO-hex can never cover 4GB; DATA bulk (vtable
   `[0x51052280]+0x30`, `DATA%08x` fmt mapped) still untested live.
+
+## 12. Option-B scouting: LK MMU internals mapped (static only, no flash)
+- `arm64_mmu_map` entry @ file `0x6844` (4-level walker, shifts
+  48/36?/27/18/12, block/page descriptor handling, page-table pages
+  via internal allocator `bl 0xF88884`; returns 0/-2/-37). Called from
+  4 sites `0x88944/9d4/a5c/c90` (boot-time region setup).
+- Table root is NOT global: `mrs x8,tpidr_el1` -> `[x8,#0x38]` struct
+  -> `+0x58` passed as map arg (per-CPU MMU struct). Any remap command
+  must resolve this pointer live (same adrp/ldr chain shape).
+- EL evidence: `tpidr_el1` use suggests EL1 (not proven; EL2 can also
+  access it). TLB scope + TTBR selection hinge on this: confirm via
+  `mrs` ID regs before writing any remap (wrong scope = silent stale
+  mappings or crash).
+- `arm64_mmu_unmap` string @`0xD051F`, callers @`0x7230/64/e8`
+  (TLB-maintenance helper likely adjacent — read before building).
+- UNTRIED CHEAP PATH FIRST: LK-visible set is still ~unmapped (only
+  LK image + deny/fault probed). Modem-shared windows
+  (`0xC0000000+`, `0x9F...`) were NEVER probed — single-row probes
+  (one flash cycle each, reboot on fault) come BEFORE any remap
+  surgery. Remap = last resort inside option B, not the opener.
