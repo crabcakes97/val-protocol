@@ -277,6 +277,51 @@ window only; kernel DRAM is NOT LK-mapped — `0x80000000` etc. fault):
 see `lk-tools/README.md` (every builder documented, lineage, standing
 orders) and `ramdump.md` (session log, MMU/remap workfront).
 
+#### Files needed for a working readdump (minimal set)
+
+Python files only — nothing else is required beyond a stock LK image,
+Python 3, `capstone` + `pyusb` (`pip install capstone pyusb`), and
+platform fastboot:
+
+1. `lk_auto_patch.py` — entry point. Runs analysis, then the
+   `readdump-read` builder, validates output.
+2. `lk_static_analyzer.py` — produces `<analysis-dir>/lk.bin`
+   (auto-run by the preset when missing).
+3. `lk_repack_signed.py` — re-signs inside the builder
+   (`tools/sign_mtk_cert.py` + `tools/verify_mtk_image.py`
+   underneath; `Result: VALID` or the build refuses).
+4. `lk-tools/build_bulk28.py` — THE builder (INFO + DATA + sentinels).
+5. `lk-tools/build_readdump_v1.py` — shared lib it imports.
+6. `lk-tools/fb_dump.py` — host-side 16 KB puller (stock fastboot
+   can't do DATA phase on `oem`, so this is mandatory for `+` reads).
+7. `tools/readdump_unrolled.py` — safe INFO-only fallback builder.
+
+Step by step (slot B playground, slot A never touched):
+
+```bash
+# 0. deps + pulls (rooted dd of lk_a/lk_b kept as backups first!)
+pip install capstone pyusb
+# 1. factory-allow on slot B (readdump builds on this base):
+python lk_auto_patch.py lk_b.img -o lk_b_allow.img \
+  --preset factory-allow --factory-allow --factory-allow-unsafe
+fastboot -s ZT4229CJG5 flash lk_b lk_b_allow.img   # Send+Write OKAY
+fastboot -s ZT4229CJG5 reboot bootloader
+# 2. build readdump (analysis auto-runs; gates + VALID enforced):
+python lk_auto_patch.py lk_b_allow.img -o lk_b_readdump.img \
+  --preset readdump-read
+# 3. flash + verify alive:
+fastboot -s ZT4229CJG5 flash lk_b lk_b_readdump.img
+fastboot -s ZT4229CJG5 reboot bootloader
+fastboot -s ZT4229CJG5 getvar current-slot           # want: b
+fastboot -s ZT4229CJG5 oem readdump                  # usage = alive
+fastboot -s ZT4229CJG5 oem readdump 1234             # deny (control)
+fastboot -s ZT4229CJG5 oem readdump ffff000050fce200 # 16 lines + OKAY
+# 4. bulk pull (custom client receives the DATA phase):
+python lk-tools/fb_dump.py oem readdump ffff000050f00000+ chunk.bin
+# 5. sweep a whole mapped megabyte (64 x 16 KB):
+python lk-tools/sweep_lk.py OUTDIR [LK.BIN]
+```
+
 ## Runtime Serial Derivation
 
 The current presets do not embed the target serial number into the LK image. Instead, the patched key validator calls the LK serial number getter at runtime and derives the validation condition from the serial reported by the device itself.
