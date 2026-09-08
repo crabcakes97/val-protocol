@@ -368,3 +368,16 @@ all that stands between us and every window.
   counter then faults fast inside [lo,hi) instead of walking to
   MMIO). Bulk DATA work resumes only under this rule.
 - PARKED: slot B = unrolled (`lk_b_unroll.img`), slot A stock.
+
+## 17. Bulk DATA: bytes flow, framing suspect (2026-09-08 ~13:xx UTC)
+- `readdump <addr>+` (bulk16 build): OKAY + exit 0 + device alive, but
+  0 bytes land on the PC. Next command then fails EOVERFLOW (stale
+  16 KB poisoning the endpoint) until drain/reboot. VERDICT: the
+  vtable send pushes bytes; the HOST never consumes them as DATA.
+- Prime suspect: header framing. `0x7C4C("DATA","00004000")` may emit
+  tag+text as TWO packets; the client needs ONE `DATA%08x` packet or
+  its size parse fails. FIX: build `DATA00004000` contiguously on the
+  stack and push it through the RAW vtable send (same path as data).
+- Recovery from poisoned channel: `getvar` fails; reboot bootloader
+  (or USB reset + patience) clears it. Timeouts that abandon mid-DATA
+  make it worse — always capture to file, never to terminal.
