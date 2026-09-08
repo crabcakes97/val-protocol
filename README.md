@@ -502,6 +502,25 @@ Consequences and constraints:
 - No GZ *payload* presets exist yet — SMMU/stage-2 gate design needs
   hypervisor disassembly first. The acceptance proof is what this unlocks.
 
+## Core pipeline tools (what each file does)
+
+The end-to-end flow is `lk_auto_patch.py` (analyze → patch → re-sign →
+verify). The rest are its stages, exposed for manual control.
+
+| Tool | What it does | How to use it |
+|---|---|---|
+| `lk_auto_patch.py` | Main entry point: extracts the `lk` payload, runs the analyzer, applies a `--preset`, rebuilds the container, updates CERT2, verifies `VALID`. Presets: `unlock-serial`, `erase-serial`, `unlock-serial-nvdata` (+ legacy `unlock-imei` aliases), research `modem-unlock`, `factory-allow`, `full-allow`, `gz-canary`, `gz-range`. | `python lk_auto_patch.py lk.img -o out.img --preset unlock-serial --key-token-secret "YourSecret"` |
+| `lk_static_analyzer.py` | Static analysis only: disassembles the payload, finds unlock flows, FRP/OEM checkers, key validators, erase ops, serialno source; writes `summary.txt`, JSON reports, flow graphs into an analysis dir. | `python lk_static_analyzer.py lk.img -o analysis/ [--full-disasm]` |
+| `lk_patch_partition.py` | Patch engine: applies gates/presets to an extracted payload using an analysis dir (report-only or `--apply`). All research gates (`--modem-size-bypass`, `--factory-allow`, …) live here with old-byte checks. | `python lk_patch_partition.py --analysis-dir analysis/ --apply --output lk.patched.bin --preset-flags…` |
+| `lk_keygen.py` | Generates 20-char unlock keys derived from secret + device serialno (deterministic with `--seed`). | `python lk_keygen.py --secret "YourSecret" --serialno "SERIAL" --count 1` |
+| `lk_repack_signed.py` | Reinserts a patched payload into the original container, updates CERT2 hashes, verifies the result. | `python lk_repack_signed.py --original-image lk.img --patched-lk-bin lk.patched.bin --output out.img` |
+| `ctk_lk_patcher_ui.py` | CustomTkinter desktop GUI over the same pipeline (`run_lk_patcher_ui.bat` on Windows). | `python ctk_lk_patcher_ui.py` |
+| `liblk/` | Minimal LK/LKS container parser (`image.py`, `constants.py`, `structures/`, `exceptions.py`); used by every tool above. | imported, not run directly |
+| `tools/build-part-img.py` | Rebuilds MTK multi-image containers: `replace` swaps one sub-image (header+data+certs), `concat` joins singles in order. Tolerates the trailing-CERT-padding quirk with a loud warning. | `python tools/build-part-img.py replace in.img --name lk --file lk.new -o out.img` |
+| `tools/sign_mtk_cert.py` | Reads/updates MTK CERT2 image hashes (`-w` writes, `--legacy` for old libsec bypass_mode=1). Vendored from pwnage24mtk. | `python tools/sign_mtk_cert.py -w in.img -o out.img` |
+| `tools/verify_mtk_image.py` | Verifies CERT1/CERT2 metadata (`-n` one image, `--all` everything). Post-sign gate. | `python tools/verify_mtk_image.py out.img` |
+| `tools/parse_mtk_certs.py` | DER/CERT parsing helpers shared by the sign/verify scripts. | imported, not run directly |
+
 ## Exploit-suite tools (nevada research set)
 
 Every tool below is **report-only by default**: static analysis, read-only
