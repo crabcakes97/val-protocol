@@ -489,6 +489,28 @@ old-byte gated, re-signs `VALID`). Status:
 - Builder prototype lives outside the repo for now (`/tmp`); it
   graduates to `--preset readdump-read` only once fully trusted.
 
+How to use the committed unrolled builder (16 straight-line reads, no
+loop counter — the only variant that terminates exactly):
+
+```bash
+# 1. analyze your LK pull (once):
+python lk_static_analyzer.py /tmp/lk_b_phone.img -o /tmp/lk_b_analysis --no-full-disasm
+# 2. build (self-tests + old-byte gates + VALID re-sign, refuses on mismatch):
+python tools/readdump_unrolled.py /tmp/lk_b_phone.img /tmp/lk_b_readdump.img \
+  --analysis-dir /tmp/lk_b_analysis
+# 3. flash inactive slot only, reboot to bootloader:
+fastboot flash lk_b /tmp/lk_b_readdump.img
+fastboot reboot bootloader
+# 4. read (lowercase hex, no 0x; 32-bit 0x50Fxxxxx auto-extends to LK VA;
+#    anything outside the allowlist answers "deny: no window"):
+fastboot oem readdump ffff000050fce7d0   # own code: must echo file bytes
+fastboot oem readdump 40000000           # 256 B of DRAM scratch
+```
+Allowlist lives in `WINDOWS` at the top of
+`tools/readdump_unrolled.py` — extend one proven 256 B probe at a time;
+an unmapped probe reboots the board (watchdog), never bricks it. `oem
+regex` is sacrificed for the slot while a readdump image is flashed.
+
 ### Cross-device: auto-detect + experimental
 
 Gate offsets are **discovered per image**, not hardcoded: anchor string →
