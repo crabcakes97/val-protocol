@@ -515,7 +515,15 @@ verify). The rest are its stages, exposed for manual control.
 | `lk_keygen.py` | Generates 20-char unlock keys derived from secret + device serialno (deterministic with `--seed`). | `python lk_keygen.py --secret "YourSecret" --serialno "SERIAL" --count 1` |
 | `lk_repack_signed.py` | Reinserts a patched payload into the original container, updates CERT2 hashes, verifies the result. | `python lk_repack_signed.py --original-image lk.img --patched-lk-bin lk.patched.bin --output out.img` |
 | `ctk_lk_patcher_ui.py` | CustomTkinter desktop GUI over the same pipeline (`run_lk_patcher_ui.bat` on Windows). | `python ctk_lk_patcher_ui.py` |
-| `liblk/` | Minimal LK/LKS container parser (`image.py`, `constants.py`, `structures/`, `exceptions.py`); used by every tool above. | imported, not run directly |
+| `liblk/` package (8 modules, all imported — never run directly) | Minimal LK/LKS container parser used by every tool above. |
+| `liblk/__init__.py` | Package exports (`LkImage`, structures, exceptions). |
+| `liblk/image.py` | `LkImage`: loads a container, exposes `partitions` dict (`lk`, `bl2_ext`, `aee`, `lk_main_dtb`, `lk_dtbo`, certs). |
+| `liblk/constants.py` | `Magic` (`0x58881688`/`0x58891689`), addressing modes, LK load/phys-offset patterns. |
+| `liblk/exceptions.py` | `LkImageError`, `InvalidLkPartition` — raised on malformed containers (wrong build = instant refuse). |
+| `liblk/structures/__init__.py` | Structure subpackage exports. |
+| `liblk/structures/header.py` | `part_hdr_t` header struct + `ImageType` (names, cert/group flags, list-end). |
+| `liblk/structures/partition.py` | `LkPartition`: sub-image data, padding, CERT linkage. |
+| `liblk/structures/certificate.py` | CERT1/CERT2 parsing + DER length helpers behind re-sign/verify. |
 | `tools/build-part-img.py` | Rebuilds MTK multi-image containers: `replace` swaps one sub-image (header+data+certs), `concat` joins singles in order. Tolerates the trailing-CERT-padding quirk with a loud warning. | `python tools/build-part-img.py replace in.img --name lk --file lk.new -o out.img` |
 | `tools/sign_mtk_cert.py` | Reads/updates MTK CERT2 image hashes (`-w` writes, `--legacy` for old libsec bypass_mode=1). Vendored from pwnage24mtk. | `python tools/sign_mtk_cert.py -w in.img -o out.img` |
 | `tools/verify_mtk_image.py` | Verifies CERT1/CERT2 metadata (`-n` one image, `--all` everything). Post-sign gate. | `python tools/verify_mtk_image.py out.img` |
