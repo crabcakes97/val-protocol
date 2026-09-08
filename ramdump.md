@@ -346,3 +346,25 @@ all that stands between us and every window.
   table root via `mrs tpidr_el1`->`[+0x38]`->`+0x58`, unmap callers
   @`0x7230/64/e8` (TLB helper nearby), `arch/arm64/mmu.c` xrefs
   @`0x68A4/6A34`, EL1 hinted (tpidr_el1) UNCONFIRMED.
+
+## 16. Silent-stall incident + button recovery (2026-09-08 ~12:xx UTC)
+- SYMPTOM: fastboot enumerates but ALL commands hang (even stock
+  getvar); no output for 240 s of draining; no watchdog reboot for
+  30+ min. Cause: runaway x20 walk reached MMIO that HANGS THE BUS
+  (no Data Abort, no fault — CPU stalled mid-instruction forever).
+  Distinct from earlier Data-Abort freezes (those rebooted cleanly).
+- LESSONS: (1) a silent stall needs BUTTONS (remote is powerless —
+  no root for port power, no adb, BROM needs keys); (2) timeout-kills
+  on the host can abandon transfers mid-stream and poison later
+  commands with stale responses; (3) `fastboot devices` working
+  proves NOTHING about CPU state (enumeration needs no CPU).
+- RECOVERY (user-executed, worked): Power 12 s -> Vol-Down+Power
+  12 s -> fastboot back, slot B intact. Then reflashed known-safe
+  unrolled image; usage+OKAY confirmed. NO data loss, slot A never
+  involved.
+- NEW RULE for all future read code: EVERY read address must come
+  from the allowlist table (deny-by-default stands), AND x20 advance
+  must be range-checked per line (defense in depth: even a runaway
+  counter then faults fast inside [lo,hi) instead of walking to
+  MMIO). Bulk DATA work resumes only under this rule.
+- PARKED: slot B = unrolled (`lk_b_unroll.img`), slot A stock.
