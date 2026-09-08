@@ -209,6 +209,33 @@ python lk_auto_patch.py "path/to/lk.img" \
 
 Use only replacement partition names that fit in the original string space. Short names such as `frp` and `cache` are typical examples.
 
+### `ramdump`
+
+Research preset (report-only, changes zero payload bytes). Maps the
+ramdump/MRDUMP subsystem in your LK: the fastboot command-table row, the
+handler entry, the subcommand slots it actually parses (`help`, `enable`,
+`disable`, `status` on the `-111-3` family), the USB `OKAY`/`INFO`
+markers, and the dead `mrdump_*` strings. Re-signs `VALID` like every
+other preset.
+
+```bash
+python lk_auto_patch.py "path/to/lk.img" \
+  -o "path/to/lk.ramdump-report.img" \
+  --preset ramdump
+```
+
+The runtime commands it unlocks context for (needs the `factory-allow`
+gates on a stock LK; already live on slot B):
+
+```bash
+fastboot oem ramdump          # usage text, not "command restricted"
+fastboot oem ramdump enable   # "enable full ramdump", OKAY
+fastboot oem ramdump status   # answers (SSM-permission gate, no freeze)
+```
+
+Slot B ground truth, freeze-triage notes, and live-test proof:
+[`ramdump` preset section below](#ramdump-preset-mrdump-freeze-triage-slot-b-ground-truth).
+
 ## Runtime Serial Derivation
 
 The current presets do not embed the target serial number into the LK image. Instead, the patched key validator calls the LK serial number getter at runtime and derives the validation condition from the serial reported by the device itself.

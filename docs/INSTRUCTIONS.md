@@ -90,11 +90,14 @@ known-build table or refuse (`--experimental` overrides for unknown builds,
 ```bash
 python lk_auto_patch.py lk.img -o factory.img \
   --preset factory-allow --factory-allow --factory-allow-unsafe
+python lk_auto_patch.py lk.img -o ramdump_report.img --preset ramdump
 python lk_auto_patch.py gz.img -o gz_canary.img --preset gz-canary
 # inactive slot only, then verify twice:
 fastboot flash lk_b factory.img; fastboot set_active b   # NOT set-active
 fastboot reboot bootloader   # PASS = fastboot answers
 fastboot oem ramdump         # usage text, not "command restricted"
+fastboot oem ramdump enable  # "enable full ramdump", OKAY (armed, persists)
+fastboot oem config unprotect enable_fulldump  # UTAG reads back true
 ```
 
 Flash/recovery: `fastboot --set-active=a` is home; deeper fallback is the
