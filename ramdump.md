@@ -228,3 +228,39 @@ OLD:
   OKAY lines — a swallowed timeout == treat image as NOT flashed.
 - OTHER PHONE ON BUS: `22b8:2e24 moto g play 2023` shares the host.
   ALWAYS use `-s ZT4229CJG5` for fastboot/adb.
+
+## 11. THE MMU WALL: LK cannot see DRAM (2026-09-08 ~10:xx UTC, context ~60%+)
+- HARD RESULT: true reads of `0x40000000` (and `0x48402000`,
+  `0x80000000`) Data-Abort. LK's page tables do NOT map low DRAM;
+  kernel iomem != LK map, confirmed 3x live. Only LK's own image VA
+  (`0xFFFF000050Fxxxxx`) ever truly read (cave oracle exact, header
+  file-identical `5c4238d5...`, hardcode-x20 test).
+- RETRACTED: every "DRAM success" (v10 18-line dump, mirror test
+  `400ce1e0`->cave, p1/p2 distinct lines) was STALE-x20 reads of
+  dispatcher scratch, NOT true reads. Mechanism: table-hit `b line`
+  SKIPPED `mov x20,x10` (mov sat before the label) in ALL counter
+  builds; stale x20 pointed near cave/argv scratch (mapped, coherent
+  garbage incl. ASCII arg strings). The mirror "miracle" = stale x20
+  near the window table (which lives in-cave). Lesson: byte-exact
+  ORACLE vs requested address on EVERY test, no exceptions.
+- efuse verdict (asked live): NO, efuse is not the blocker. efuse
+  gates secure boot, not runtime LK reads; LK-VA reads work fine.
+  Faults are unmapped-VA Data Aborts (deny-vs-fault pattern proves
+  it). TZ/EMI-MPU may additionally guard modem regions, but the
+  observed wall is page tables, not fuses.
+- Open-code-crash safety: repo pushed through `61d1e17`; builders in
+  /tmp are NOT all committed. On resume: `git log --oneline -3`,
+  check `fastboot getvar current-slot`, re-derive cave offsets from
+  the FLASHED image (layouts shift every build!).
+- PARKED STATE: slot B = unrolled build (`/tmp/lk_b_unroll.img`,
+  stale-x20 = accidentally safe, 16 lines + OKAY). Slot A stock.
+  Slot B flagged unbootable (retry 0) — fastboot fine, never
+  `fastboot reboot` on B. Second phone on bus (`22b8:2e24` 2023):
+  ALWAYS `-s ZT4229CJG5`.
+- PATHS NOW: (A) kernel module reads anything via kernel mappings —
+  needs GKI env rebuild (disk was the blocker; ~/gki DELETED, 91%
+  free); (B) LK MMU-remap command (add DRAM page-table entries, then
+  read — bigger RE, higher risk, true option-3); (C) map LK-visible
+  scratch (diminishing). RECOMMENDATION: A for full dump, B as
+  research. 256B INFO-hex can never cover 4GB; DATA bulk (vtable
+  `[0x51052280]+0x30`, `DATA%08x` fmt mapped) still untested live.
