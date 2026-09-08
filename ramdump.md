@@ -321,3 +321,28 @@ OLD:
 - Paths left: (A) kernel module (GKI env must be rebuilt; needs ~10G
   free — user files occupy the disk, do NOT touch without asking);
   (B) LK MMU-remap command (map-then-read; design in S12 notes).
+
+## 15. Option-B plan: LK MMU-remap (2026-09-08 ~12:xx UTC, context HIGH)
+GOAL: map DRAM from inside LK, then read with the proven readdump path.
+Why remap, not fight: LK's tables cover only its image; kernel DRAM is
+unmapped (Data Abort proven 6x). A 2 MB/1 GB block descriptor + TLBI is
+all that stands between us and every window.
+
+- STEP 1 (read-only, zero risk): sysreg probe via sentinel addrs in
+  the PROVEN unrolled builder (no new commands/slots):
+  `...F8`=CurrentEL, `...F9`=TTBR0_EL1, `...FA`=TTBR1_EL1,
+  `...FB`=MAIR_EL1. First line's 16 hex chars = u64 LE value.
+  Tells EL (TLB scope!) + table base + attr table. NEVER probe EL2
+  regs unless CurrentEL says EL2 (trap otherwise).
+- STEP 2: walk the tables with readdump (tables are LK memory) to find
+  a FREE slot + copy a working DRAM block descriptor (clone attrs,
+  swap output addr — zero attr-encoding RE).
+- STEP 3: `oem remap <phys>` writes the descriptor + dsb/tlbi/isb,
+  reads back via scratch VA. Brick-proofing: old-byte gates, exact
+  size, VALID, slot B only, one mapping at a time, restore-after-read
+  option. Worst case stays reboot-grade (page-table edits never touch
+  flash; a bad descriptor faults the same way unmapped reads do).
+- KNOWN STATICS: map fn @`0x6844` (walker + internal page alloc),
+  table root via `mrs tpidr_el1`->`[+0x38]`->`+0x58`, unmap callers
+  @`0x7230/64/e8` (TLB helper nearby), `arch/arm64/mmu.c` xrefs
+  @`0x68A4/6A34`, EL1 hinted (tpidr_el1) UNCONFIRMED.
