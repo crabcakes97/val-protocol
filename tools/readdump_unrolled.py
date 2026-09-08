@@ -26,10 +26,10 @@ DUMP_LEN = 256
 # faulting. Kernel iomem is NOT LK's map (lesson 0x80000000): extend ONLY
 # after a 256B probe of the new window completes with OKAY.
 WINDOWS = (
-    (0x40000000, 0x40010000),  # DRAM scratch, extended past proven base
-    (0x48402000, 0x48403000),  # PROBE: 635MB System-RAM window start
-    (0x74000000, 0x74001000),  # PROBE: 144MB System-RAM window start
-    (0xC0000000, 0xC0001000),  # PROBE: 256MB window (secure-adjacent?)
+    (0x40000000, 0x40010000),  # DRAM scratch (proven, no fault)
+    # NOTE 2026-09-08: 0x48402000/0x74000000/0xC0000000 REMOVED after live
+    # Data-Abort freeze (kernel System RAM != LK-mapped). Re-add ONE row
+    # per probe, never in batches: a fault costs a reboot.
     (LK_LO, LK_HI),            # LK image VA (proven: cave oracle exact)
 )
 
@@ -184,11 +184,12 @@ def build_handler(usage_va, tbl_va, deny_va):
     e(subs_imm32(12, 12, 1))
     a.bcond(1, "tloop")  # b.ne tloop
     a.b("deny")
-    e(W(0xAA0A03F4))  # mov x20,x10 (read ptr)
     # UNROLLED x16: no counter, no loop-back. Each block: format 16B at
     # x20, send INFO, advance x20. Straight-line: nothing to miscount.
     for _ln in range(16):
         a.label(f"line{_ln}")
+        if _ln == 0:
+            e(W(0xAA0A03F4))  # mov x20,x10 HERE: table-hit lands on it
         e(W(0xD10103A9))  # sub x9,x29,#0x40 (buf)
         e(W(0xD2800008))  # mov x8,#0 (col)
         a.label(f"col{_ln}")
@@ -308,7 +309,7 @@ def main():
     ap.add_argument("container")
     ap.add_argument("output")
     ap.add_argument("--analysis-dir", required=True)
-    ap.add_argument("--repo", default=str(Path(__file__).resolve().parent.parent))
+    ap.add_argument("--repo", default="/home/cameron/kansas-modem-unlock/val-protocol")
     args = ap.parse_args()
     repo = Path(args.repo)
 

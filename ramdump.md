@@ -142,7 +142,47 @@ git status --short; git diff --stat
 - Val work (preset) is committed? NO — working tree only (`git
   status`). Nothing pushed. Commit before risky flashes.
 
-## 8. Next steps (in order)
+## 9. v14+ : loop blown away, table allowlist, slot-B flag truth (2026-09-08 ~07:xx UTC)
+- Counter (reg AND stack-spilled) never terminated: init=1 STILL ran
+  away (475 K lines), so the exit path itself is suspect, NOT the init.
+  Scientific ladder: hello (dispatch/return OK) -> one-liner (body OK,
+  `72656164...` exact) -> unrolled x16 (EXACTLY 16 lines + OKAY).
+- Unrolled = no counter, no loop-back: 16 straight-line blocks.
+  Committed as `tools/readdump_unrolled.py` (+ README usage).
+- Root-caused a second silent killer the same night: table-hit `b
+  line` SKIPPED `mov x20,x10`, so every read used stale x20 (all
+  addresses echoed cave-adjacent garbage). Fix: mov lives INSIDE
+  block 0 now. Lesson: verify VAR=want per address, not just shape.
+- Deny path proven twice (`deny: no window` + OKAY, incl. isolated
+  `0x80000000` retest). An earlier 0x80000000 death was load/timing
+  (3rd rapid command), not the address — isolated retest denies clean.
+- `0x48402000` (kernel System RAM) = REAL Data Abort (device dropped
+  mid-read, watchdog rebooted). Kernel iomem != LK map, confirmed
+  live. Removed from table; re-add one row per probe, never batches.
+- SIDE EFFECT: repeated Data Aborts burned slot B's retries:
+  `slot-unbootable:_b: yes`, retry-count 0. Fastboot on B works fine
+  (system boot on B never existed anyway). Slot A untouched/healthy.
+  Rule stands: never `fastboot reboot` on B (system attempt), always
+  `reboot bootloader`. Recovery unchanged.
+- Throughput reality: 256 B INFO-hex calls can NEVER cover 4 GB
+  (~16 M calls). Next engineering step is DATA-phase bulk transport
+  (raw vtable send `[0x51052280]+0x30`), then window campaign, then
+  scripted sweep. Do NOT grind more 256 B probes until transport
+  exists — low value per flash cycle.
+
+## 8. Next steps (in order, updated)
+1. DONE: loop termination via unrolled build (16 exact + OKAY);
+   counter mystery archived (all counter forms ran away; unrolled
+   has no counter to break). Keep unrolled shape for all future revs.
+2. Length arg + bigger windows (one proven 256 B probe per window;
+   modem windows expected to fault -> reboot -> note + move on).
+3. DATA-phase transport for speed (currently 16 INFO lines per call).
+4. Graduate `readdump` from `/tmp` prototype to a real Val preset
+   (`--preset readdump-read`?) with docs, once fully trusted.
+5. Finish GKI module (option 2) as the no-flash parallel path.
+   (Old items 1-5 below were written before the loop was solved.)
+
+OLD:
 1. Fix the dump-loop termination (unrolled build already proves the
    shape works; graduate it or fix the counter, then re-test counts).
 2. Length arg + bigger windows (one proven 256 B probe per window;
