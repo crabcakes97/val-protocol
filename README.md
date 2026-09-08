@@ -98,7 +98,7 @@ This repository is intended for repair, interoperability research, recovery work
   - key validator candidates
   - partition erase operations
   - serial number runtime source
-- Applies research presets (unlock, erase, modem, ramdump, factory, and hypervisor flows).
+- Applies research presets (unlock, erase, modem, ramdump-map, factory, and hypervisor flows).
 - Uses runtime serial number derivation for generated keys.
 - Rebuilds the original multi-image container.
 - Updates MTK `CERT2` image hashes.
@@ -209,19 +209,21 @@ python lk_auto_patch.py "path/to/lk.img" \
 
 Use only replacement partition names that fit in the original string space. Short names such as `frp` and `cache` are typical examples.
 
-### `ramdump`
+### `ramdump-map`
 
-Research preset (report-only, changes zero payload bytes). Maps the
+Research preset (report-only: it **maps, it enables nothing** — the
+commands themselves are ungated by `factory-allow`). Maps the
 ramdump/MRDUMP subsystem in your LK: the fastboot command-table row, the
 handler entry, the subcommand slots it actually parses (`help`, `enable`,
 `disable`, `status` on the `-111-3` family), the USB `OKAY`/`INFO`
 markers, and the dead `mrdump_*` strings. Re-signs `VALID` like every
-other preset.
+other preset. (`ramdump` is not a preset name — if you see it, it means
+this map.)
 
 ```bash
 python lk_auto_patch.py "path/to/lk.img" \
   -o "path/to/lk.ramdump-report.img" \
-  --preset ramdump
+  --preset ramdump-map
 ```
 
 The runtime commands it unlocks context for (needs the `factory-allow`
@@ -234,7 +236,7 @@ fastboot oem ramdump status   # answers (SSM-permission gate, no freeze)
 ```
 
 Slot B ground truth, freeze-triage notes, and live-test proof:
-[`ramdump` preset section below](#ramdump-preset-mrdump-freeze-triage-slot-b-ground-truth).
+[`ramdump-map` ground-truth section below](#ramdump-map-preset-mrdump-freeze-triage-slot-b-ground-truth).
 
 ## Runtime Serial Derivation
 
@@ -427,7 +429,7 @@ OEM census: `lk_oem_cmd_mapper.py lk.bin` maps all 76 known commands
 `--preset full-allow --modem-size-bypass --modem-allow-unsafe
 --factory-allow --factory-allow-unsafe`.
 
-### `ramdump` preset (MRDUMP freeze triage, slot B ground truth)
+### `ramdump-map` preset (MRDUMP freeze triage, slot B ground truth)
 
 Same Val pipeline, report-only: maps the ramdump/MRDUMP subsystem per
 image (command-table row → handler entry, subcommand strcmp slots, USB
@@ -437,7 +439,7 @@ factory-allow already applied there):
 
 ```bash
 python lk_auto_patch.py lk_b_phone.img -o /tmp/lk_b_ramdump_report.img \
-  --preset ramdump
+  --preset ramdump-map
 ```
 
 | Item | slot B lk.bin offset / VA |
@@ -574,7 +576,7 @@ verify). The rest are its stages, exposed for manual control.
 
 | Tool | What it does | How to use it |
 |---|---|---|
-| `lk_auto_patch.py` | Main entry point: extracts the `lk` payload, runs the analyzer, applies a `--preset`, rebuilds the container, updates CERT2, verifies `VALID`. Presets: `unlock-serial`, `erase-serial`, `unlock-serial-nvdata` (+ legacy `unlock-imei` aliases), research `modem-unlock`, `ramdump`, `factory-allow`, `full-allow`, `gz-canary`, `gz-range`. | `python lk_auto_patch.py lk.img -o out.img --preset unlock-serial --key-token-secret "YourSecret"` |
+| `lk_auto_patch.py` | Main entry point: extracts the `lk` payload, runs the analyzer, applies a `--preset`, rebuilds the container, updates CERT2, verifies `VALID`. Presets: `unlock-serial`, `erase-serial`, `unlock-serial-nvdata` (+ legacy `unlock-imei` aliases), research `modem-unlock`, `ramdump-map`, `factory-allow`, `full-allow`, `gz-canary`, `gz-range`. | `python lk_auto_patch.py lk.img -o out.img --preset unlock-serial --key-token-secret "YourSecret"` |
 | `lk_static_analyzer.py` | Static analysis only: disassembles the payload, finds unlock flows, FRP/OEM checkers, key validators, erase ops, serialno source; writes `summary.txt`, JSON reports, flow graphs into an analysis dir. | `python lk_static_analyzer.py lk.img -o analysis/ [--full-disasm]` |
 | `lk_patch_partition.py` | Patch engine: applies gates/presets to an extracted payload using an analysis dir (report-only or `--apply`). All research gates (`--modem-size-bypass`, `--factory-allow`, …) live here with old-byte checks. | `python lk_patch_partition.py --analysis-dir analysis/ --apply --output lk.patched.bin --preset-flags…` |
 | `lk_keygen.py` | Generates 20-char unlock keys derived from secret + device serialno (deterministic with `--seed`). | `python lk_keygen.py --secret "YourSecret" --serialno "SERIAL" --count 1` |

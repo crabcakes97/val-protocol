@@ -4595,7 +4595,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--ramdump-research-report-only",
         action="store_true",
         help=(
-            "RESEARCH REPORT-ONLY para --preset ramdump: mapea el subsistema "
+            "RESEARCH REPORT-ONLY para --preset ramdump-map: mapea el subsistema "
             "ramdump/MRDUMP (command-table row, handler, subcomandos, "
             "marcadores USB, strings mrdump muertas) y reporta "
             "offsets/VA sin modificar ningun byte."

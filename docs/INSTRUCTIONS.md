@@ -82,7 +82,7 @@ known-build table or refuse (`--experimental` overrides for unknown builds,
 |---|---|---|---|---|
 | `modem-unlock` | LK MD-table validation (LK-side parsing only — no sig/DMA/EL3) | `0x49A9C/0x49AAC/0x49B24` → NOP (12B) | `--modem-size-bypass --modem-allow-unsafe` | report + VALID |
 | `factory-allow` | oem dispatcher deny + config-subcommand deny | `0xF3F4`/`0xAD88` → NOP (8B) | `--factory-allow --factory-allow-unsafe` | **live slot B**: ramdump/config reach handlers |
-| `ramdump` | MRDUMP freeze triage: table row → handler → subcommand slots → USB markers (REPORT-ONLY, 0B) | none (read-only) | none | **live slot B**: row `0x120870`, handler `0xDE1C`, sub `help/enable/disable/status`, no pull/now/clear slot, `mrdump_*` dead |
+| `ramdump-map` | MRDUMP freeze triage: table row → handler → subcommand slots → USB markers (REPORT-ONLY, 0B; enables nothing — that is `factory-allow`) | none (read-only) | none | **live slot B**: row `0x120870`, handler `0xDE1C`, sub `help/enable/disable/status`, no pull/now/clear slot, `mrdump_*` dead |
 | `full-allow` | both above | 5 NOPs (20B) | all four flags | builds VALID |
 | `gz-canary` | 1 behavior-neutral log byte in GZ + re-sign, exact-size trim | 1B | none | **live slot B**: boots to fastboot |
 | `gz-range` | hypervisor range-check force-pass `0x200E4/0x200EC` → NOP | 8B | none (own preset) | **live slot B**: boots, no regression |
@@ -90,7 +90,7 @@ known-build table or refuse (`--experimental` overrides for unknown builds,
 ```bash
 python lk_auto_patch.py lk.img -o factory.img \
   --preset factory-allow --factory-allow --factory-allow-unsafe
-python lk_auto_patch.py lk.img -o ramdump_report.img --preset ramdump
+python lk_auto_patch.py lk.img -o ramdump_report.img --preset ramdump-map
 python lk_auto_patch.py gz.img -o gz_canary.img --preset gz-canary
 # inactive slot only, then verify twice:
 fastboot flash lk_b factory.img; fastboot set_active b   # NOT set-active

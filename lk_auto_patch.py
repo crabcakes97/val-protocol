@@ -18,7 +18,7 @@ PRESETS = (
     "erase-serial",
     "unlock-serial-nvdata",
     "modem-unlock",
-    "ramdump",
+    "ramdump-map",
     "factory-allow",
     "full-allow",
     "gz-canary",
@@ -190,9 +190,9 @@ def build_parser() -> argparse.ArgumentParser:
             "erase-serial y unlock-serial-nvdata son los nombres explicitos. "
              "modem-unlock es RESEARCH REPORT-ONLY: localiza marcadores "
              "modem/CCCI/MPU/MMU reales en este lk y no modifica ningun byte. "
-             "ramdump es RESEARCH REPORT-ONLY: mapea la tabla de comandos, "
+             "ramdump-map es RESEARCH REPORT-ONLY: mapea la tabla de comandos, "
              "el handler y los subcomandos ramdump/MRDUMP sin modificar "
-             "ningun byte."
+             "ningun byte (no habilita nada; eso lo hace factory-allow)."
         ),
     )
     parser.add_argument(
@@ -479,7 +479,7 @@ def build_patch_command(args: argparse.Namespace, root: Path, analysis_dir: Path
             patch_cmd.append("--modem-research-report-only")
         return patch_cmd
 
-    if args.preset == "ramdump":
+    if args.preset == "ramdump-map":
         patch_cmd.append("--ramdump-research-report-only")
         return patch_cmd
 
