@@ -20,6 +20,7 @@ PRESETS = (
     "modem-unlock",
     "ramdump-map",
     "readdump-read",
+    "scp-bridge",
     "factory-allow",
     "full-allow",
     "gz-canary",
@@ -174,6 +175,81 @@ def run_readdump_read(args: argparse.Namespace, root: Path) -> int:
     return 0
 
 
+# SCP bridge step 1 (canary): 1-byte behavior-neutral log-text change
+# proving SCP re-sign acceptance (mirrors the GZ-canary pattern).
+# SCP verifies nothing itself (AP verifies SCP), same 0xA0 hash-override
+# path as lk/gz/md1img. Roadmap (kansas ramdump.md S7): IPI parsing,
+# custom_cmd/log-ctrl, heap, MPU/remap, patched SCP with CCIF +
+# shared-DRAM access to the modem.
+SCP_PART = "tinysys-scp-RV55_A"
+SCP_CANARY_OFF = 0x5F8BF
+SCP_CANARY_OLD = b"L2TCM-MPU ENABLED!!\n"
+SCP_CANARY_NEW = b"L2TCM-MPU ENABLED!?\n"
+
+
+def run_scp_bridge(args: argparse.Namespace, root: Path) -> int:
+    """--preset scp-bridge: 1-byte SCP log canary + CERT re-sign (WORKING).
+
+    Extracts the tinysys-scp-RV55_A payload via liblk (NO ARM disasm —
+    SCP is RISC-V), refuses unless the canary anchor occurs exactly
+    once, flips one log-text byte, reinserts with lk_repack_signed.py
+    (--name), and requires Result: VALID. Flash to the INACTIVE scp
+    slot only (scp_b while on _a), Send+Write OKAY or treat as failed.
+    """
+    image = args.image.resolve()
+    output = (args.output or image.with_name(image.stem + ".scpbridge.img")).resolve()
+    sys.path.insert(0, str(root))
+    from liblk.image import LkImage
+
+    img = LkImage(image)
+    if SCP_PART not in img.partitions:
+        print(f"Error: subimagen {SCP_PART!r} no esta en {image} "
+              f"(hay: {sorted(img.partitions)})", file=sys.stderr)
+        return 1
+    payload = bytearray(img.partitions[SCP_PART].data)
+    hits = []
+    start = 0
+    while True:
+        idx = payload.find(SCP_CANARY_OLD, start)
+        if idx < 0:
+            break
+        hits.append(idx)
+        start = idx + 1
+    if len(hits) != 1:
+        print(f"Error: canary anchor found {len(hits)}x (need exactly 1): refusing",
+              file=sys.stderr)
+        return 1
+    off = hits[0]
+    print(f"Canary  : {SCP_CANARY_OLD!r} -> {SCP_CANARY_NEW!r} @ payload+0x{off:x}")
+    payload[off:off + len(SCP_CANARY_OLD)] = SCP_CANARY_NEW
+
+    import tempfile
+    with tempfile.TemporaryDirectory() as td:
+        pb = Path(td) / "scp.patched.bin"
+        pb.write_bytes(bytes(payload))
+        cmd = [
+            sys.executable, str(root / "lk_repack_signed.py"),
+            "--original-image", str(image),
+            "--patched-lk-bin", str(pb),
+            "--output", str(output),
+            "--name", SCP_PART,
+        ]
+        print("+ " + " ".join(cmd))
+        r = subprocess.run(cmd, cwd=str(root), text=True, capture_output=True)
+        if r.stdout:
+            print(r.stdout, end="")
+        if r.stderr:
+            print(r.stderr, end="", file=sys.stderr)
+        if r.returncode != 0 or "Result: VALID" not in (r.stdout or ""):
+            print("Error: SCP repack did not verify VALID: refusing", file=sys.stderr)
+            return 1
+    print()
+    print("Done (scp-bridge PoC: 1 byte + re-sign, VALID)")
+    print(f"Patched image: {output}")
+    print("Flash SOLO al slot scp inactivo (scp_b en _a) con Send+Write OKAY.")
+    return 0
+
+
 def _gz_sign_and_finish(patched: bytes, input_len: int, output: Path,
                         root: Path, done_label: str) -> int:
     """CERT2 re-sign + exact-size trim + VALID gate for GZ images."""
@@ -253,7 +329,10 @@ def build_parser() -> argparse.ArgumentParser:
               "readdump-read es PROOF-OF-CONCEPT: construye el comando "
               "oem readdump (INFO 256 B + DATA 16 KB) con gates capstone "
               "y re-firma VALID. Requiere factory-allow previo en lk_b; "
-              "ver lk-tools/README.md."
+              "ver lk-tools/README.md. "
+              "scp-bridge es WORKING PoC: canario de 1 byte en el firmware "
+              "SCP (RISC-V) + re-firma VALID. Flash solo al slot scp "
+              "inactivo."
         ),
     )
     parser.add_argument(
@@ -697,6 +776,9 @@ def main() -> int:
         except RuntimeError as exc:
             print(f"Error: {exc}", file=sys.stderr)
             return 1
+
+    if args.preset == "scp-bridge":
+        return run_scp_bridge(args, root)
 
     try:
         analysis_cmd = [

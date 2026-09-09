@@ -98,7 +98,7 @@ This repository is intended for repair, interoperability research, recovery work
   - key validator candidates
   - partition erase operations
   - serial number runtime source
-- Applies research presets (unlock, erase, modem, ramdump-map, readdump-read, factory, and hypervisor flows).
+- Applies research presets (unlock, erase, modem, ramdump-map, readdump-read, scp-bridge, factory, and hypervisor flows).
 - Uses runtime serial number derivation for generated keys.
 - Rebuilds the original multi-image container.
 - Updates MTK `CERT2` image hashes.
@@ -276,6 +276,25 @@ Current map (nevada `-111-3` LK maps its own image + USB + a registry
 window only; kernel DRAM is NOT LK-mapped — `0x80000000` etc. fault):
 see `lk-tools/README.md` (every builder documented, lineage, standing
 orders) and `ramdump.md` (session log, MMU/remap workfront).
+
+### `scp-bridge` (SCP firmware canary — WORKING proof-of-concept preset)
+
+The SCP co-processor (RISC-V) runs firmware the AP verifies, not
+itself — so it re-signs the same way LK does. Step 1 (this preset):
+1-byte behavior-neutral log-text canary in `tinysys-scp-RV55_A`
+(`L2TCM-MPU ENABLED!!` → `ENABLED!?`), old-byte gated (exactly once
+or refuse), CERT re-sign, `Result: VALID` required. Roadmap (IPI
+parsing, custom_cmd/log-ctrl, heap, MPU/remap, patched SCP with CCIF +
+shared-DRAM access to the modem): `../ramdump.md` S7.
+
+```bash
+python lk_auto_patch.py <scp_a.bin> -o <scp_a_bridge.img> \
+  --preset scp-bridge
+fastboot -s ZT4229CJG5 flash scp_b <scp_a_bridge.img>  # inactive slot!
+```
+
+Flash to the INACTIVE scp slot only (`scp_b` while on `_a`), Send+Write
+OKAY or treat as failed. Never touch preloader/efuse.
 
 #### Files needed for a working readdump (minimal set)
 
@@ -708,7 +727,7 @@ verify). The rest are its stages, exposed for manual control.
 
 | Tool | What it does | How to use it |
 |---|---|---|
-| `lk_auto_patch.py` | Main entry point: extracts the `lk` payload, runs the analyzer, applies a `--preset`, rebuilds the container, updates CERT2, verifies `VALID`. Presets: `unlock-serial`, `erase-serial`, `unlock-serial-nvdata` (+ legacy `unlock-imei` aliases), research `modem-unlock`, `ramdump-map`, working PoC `readdump-read`, `factory-allow`, `full-allow`, `gz-canary`, `gz-range`. | `python lk_auto_patch.py lk.img -o out.img --preset unlock-serial --key-token-secret "YourSecret"` |
+| `lk_auto_patch.py` | Main entry point: extracts the `lk` payload, runs the analyzer, applies a `--preset`, rebuilds the container, updates CERT2, verifies `VALID`. Presets: `unlock-serial`, `erase-serial`, `unlock-serial-nvdata` (+ legacy `unlock-imei` aliases), research `modem-unlock`, `ramdump-map`, working PoC `readdump-read`, working PoC `scp-bridge`, `factory-allow`, `full-allow`, `gz-canary`, `gz-range`. | `python lk_auto_patch.py lk.img -o out.img --preset unlock-serial --key-token-secret "YourSecret"` |
 | `lk_static_analyzer.py` | Static analysis only: disassembles the payload, finds unlock flows, FRP/OEM checkers, key validators, erase ops, serialno source; writes `summary.txt`, JSON reports, flow graphs into an analysis dir. | `python lk_static_analyzer.py lk.img -o analysis/ [--full-disasm]` |
 | `lk_patch_partition.py` | Patch engine: applies gates/presets to an extracted payload using an analysis dir (report-only or `--apply`). All research gates (`--modem-size-bypass`, `--factory-allow`, …) live here with old-byte checks. | `python lk_patch_partition.py --analysis-dir analysis/ --apply --output lk.patched.bin --preset-flags…` |
 | `lk_keygen.py` | Generates 20-char unlock keys derived from secret + device serialno (deterministic with `--seed`). | `python lk_keygen.py --secret "YourSecret" --serialno "SERIAL" --count 1` |

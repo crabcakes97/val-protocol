@@ -1,3 +1,8 @@
+# READDUMP.md — the living session log (supersedes ramdump.md).
+# Created 2026-09-08 ~20:xx UTC: ramdump.md kept getting clobbered across
+# windows, so everything continues HERE. Old file left untouched.
+# (Original header preserved below for history.)
+
 # ramdump.md — session log: slot-B MRDUMP triage + `readdump` custom LK command
 # (val-protocol session, started 2026-09-08. Read this first on resume.)
 
@@ -479,7 +484,8 @@ phys_reader.c (fixed). 179 MB total. Survives reboot + tmpfs wipe.
   host uploader. `fastboot boot` re-add = plausible later (boot fns
   exist); BROM proper = different stage, out of scope.
 
-## 22. Reference: SCP bridge + misc vectors (static analysis, 2026-09-08)- SCP (`scp_a.bin`, 6,291,456 B, stock, CERT1/CERT2, re-signable with the
+## 22. Reference: SCP bridge + misc vectors (static analysis, 2026-09-08)
+- SCP (`scp_a.bin`, 6,291,456 B, stock, CERT1/CERT2, re-signable with the
   `0xA0` trick): SRAM payload 962,740 B (RV32, entry `j 0x118`, `mhartid`
   init) + DRAM payload 2,580,608 B (audio/VOW, `CCIF_irq_handler.c`).
   `lk_static_analyzer.py` is ARM-only — SCP was done with a RISC-V
@@ -500,3 +506,119 @@ phys_reader.c (fixed). 179 MB total. Survives reboot + tmpfs wipe.
 - UTAG knob note: static `utags.bin` pull shows identity only, but
   `<name>` reads work live (knobs resolve at runtime) — static absence
   proves nothing.
+
+## 23. FULL-DAY HANDOFF (2026-09-08 ~20:30 UTC — read this to resume!)
+
+### 23.0 Where everything is RIGHT NOW
+- Phone: slot A Android (adb up, rooted Magisk uid=0, SELinux PERMISSIVE
+  — user switched it, do NOT set back without asking). Slot B = LK
+  playground (last live: remap6 lineage; slot A stock, NEVER flash).
+- Second phone on USB bus (2023, 22b8:2e24) — ALWAYS `-s ZT4229CJG5`.
+- GKI sync DONE (`~/gki`, common+prebuilts, NO .repo — deleted for space;
+  disk ~1-3G free, WATCH IT). Module builds, vermagic forged IDENTICAL
+  to stock, loads blocked on ELF PLT sections (fix in flight). GKI ON
+  HOLD per standing order — do not touch unless ordered.
+- Branch `full-exploit-suite` (fork crabcakes97, NOT main). Push needs a
+  fresh PAT (old burned; ask user, wipe after). ramdump.md (old, shared
+  with other windows) LEFT ALONE — this file is the log now.
+- Backup truth: `~/val-session-backup-2026-09-08/` (pulls, analysis,
+  images incl. b17-b28/sysreg/probe/remap, builders, evidence incl.
+  md1img_a.bin + scp_a.bin + ccci_dump.txt, iomem.txt, phys_reader.c,
+  NEW stocks/ subdir: scp_b, seccfg).
+
+### 23.1 PROVEN WORKING (do not re-prove, just use)
+1. Custom `oem readdump` on slot-B LK: parse (lowercase hex, argc==2,
+   `+` suffix, x16 bulk flag), deny-by-default window table, usage.
+2. INFO reads: 256 B / 16 lines, byte-exact vs file, 100s of clean runs
+   (cave oracle). Unrolled shape only (counters run away — loop bug).
+3. Bulk 16 KB DATA: header 7E00 + data 7E24 + flush 7E34, byte-exact
+   16384/16384 + OKAY (custom host client REQUIRED — stock fastboot
+   never enters DATA on oem; all its EOVERFLOWs mean bytes pending).
+4. Full LK megabyte swept (64x16KB, diffs ONLY our cave page).
+5. Sysreg sentinels: f8 CurrentEL=EL1, f9/fA TTBRs, fb MAIR, fe tpidr
+   (current THREAD, magic "thrd"), ff [tpidr+0x38]=0, fc phys_to_virt.
+6. Registry (0xFFFF000051022000): 8 regions decoded (VIRT=PHYS+linear),
+   free slot e08, APPEND VERIFIED LIVE (read-back exact; boot wipes it).
+7. Live builds: `lk-tools/build_bulk28.py` (transport), `build_remap6.py`
+   (recon), `tools/readdump_unrolled.py` (safe fallback).
+8. Host: `lk-tools/fb_dump.py` (16KB pulls), `fb_min.py` (wire tap),
+   `sweep_lk.py` (1MB sweeper). Deps: capstone, pyusb.
+9. Presets (TESTED, byte-identical/VALID): `--preset readdump-read`
+   (bulk vehicle), `--preset scp-bridge` (1-byte SCP canary, VALID).
+10. Android side: permissive SELinux; md1img_a 200MB pulled (= stock
+    version V18.6.6); scp_a/scp_b/seccfg pulled; ccci_dump (MD layout!);
+    DT reserved ranges (modem addrs!); bugreport 12MB; md1_sta 56B live
+    read; radio-UID writes ACCEPTED (no-op without binary protocol).
+11. BROM: preloader handshake WORKS (MT6835V/ZA Dimensity 6100+, full
+    target config: SBC on, SLA off, DAA on, mem-auth off); watchdog
+    disable works; preloader port 0e8d:2000 appears ~10-20s per boot.
+12. Stock on machine: RETUS full firmware, NDK r29 (aarch64 clang!),
+    local mtkclient (runs), TWRP zips. Preloader USB seen during
+    recoveries (0e8d:2000).
+
+### 23.2 WALLS (what's blocked and why)
+- LK maps image+USB+registry ONLY (0-for-6 probes + 4/4 DRAM faults).
+  map() can't run at runtime (tpidr chain null; fab-struct faults in
+  walker on unregistered table pages; +2 was argc artifact). remap
+  variants EXHAUSTED until new info (thread-pool scan: 2 threads found,
+  both null; registry has no table pages).
+- e00 linear span [0x50F00000,+288MB] IS mapped (proven 0x52/0x52F,
+  zeros). Modem lives outside it (0x8C/0x8E/0xD0 per DT).
+- Bulk framing via stock client: impossible (client limitation, proven
+  by wire tap). Custom client only.
+- BROM DA upload: DAA_SIG_VERIFY_FAILED (need Moto-signed 6835 DA).
+  Infinix rejected; moto-6768 DAs untested (wrong SoC, safe-fail odds).
+- Android writes: SELinux permissive + root NOT enough (drivers gate
+  internally: mdsys/dump, md_en, sysfs). Radio-UID writes accepted.
+- Kernel module: built, vermagic identical, loads blocked on missing
+  PLT sections (linker recipe fix pending) + possible seccomp on
+  finit_module (Magisk-boot-module fallback exists). GKI ON HOLD.
+- md1rom body encrypted (53k strings, version + noise). md1 7.5MB
+  stock-vs-pull diff OPEN (likely padding, unverified).
+- Rung-A anomaly OPEN (benign stack-build crashed 2x; A0 lived).
+
+### 23.3 Modem addresses (ground truth, use these)
+- Shared cached 0x8C000000+0x1360000, shared non-cached 0x8E000000+
+  0x130000, tag 0xBFFEF000+0x10000, md_mem 0xD0000000+0x2C70000 (+30/33/
+  34/35 more), DPMAIF queues live, SCP reserved 0xBF300000+9M, SCP
+  share 0x8F000000+~10.6M. Full table: evidence/ccci_dump.txt.
+- Force Assert EXISTS (FW strings + driver export
+  `ccci_md_force_assert`) — NO trigger found (writes sealed, AT silent,
+  logger idle, fifo dead, ioctl needs code).
+
+### 23.4 SCP track (active front when handed off)
+- FW parsed (RV55 SRAM+dram), canary preset WORKS, IPI channel
+  `/dev/audio_ipi` OPENS as media UID, writes EINVAL (needs header).
+- FW wants magic+header (strings confirm checks). NEXT: user plays
+  audio on phone -> capture live IPI bytes -> dissect -> fuzz ASSERTs
+  (40+ with file/line oracles) -> log-ctrl dump path (SIZE field!).
+- Docs: kansas ramdump.md S7 (program), S8 (misc vectors).
+
+### 23.5 Resume checklist (exact)
+```bash
+cd /home/cameron/kansas-modem-unlock/val-protocol
+git log --oneline -3; git status --short | grep -v pycache
+fastboot -s ZT4229CJG5 devices; fastboot -s ZT4229CJG5 getvar current-slot
+adb devices; adb shell getprop ro.boot.slot_suffix; adb shell getenforce
+tail -5 READDUMP.md   # this file = the workfront (NOT ramdump.md)
+```
+- Slot A = home (Android, root, permissive). Slot B = playground.
+- Never flash A / preloader / efuse. lk_b only, Send+Write OKAY or it
+  didn't happen. Reboot-bootloader between bulk tests. -s always.
+- USB silent but enumerating = wedged pipe: replug first, buttons
+  (Power 12s, Vol-Down+Power 12s) second. Pink screen = LK exception,
+  recovers alone.
+- Push: branch full-exploit-suite ONLY, fresh PAT from user, wipe after.
+
+### 23.6 Next actions, ranked (pick one)
+1. SCP audio capture (needs user: play music 1 min) -> IPI dissect ->
+   ASSERT hunt -> dump path. Closest to new bytes, zero flashes.
+2. BROM moto-DA attempts (needs buttons + preloader window): 6 files,
+   safe-fail expected, huge if one passes.
+3. GKI module PLT fix (ON HOLD — needs order to resume).
+4. LK remap round 2 (tight-bounds fab / wider thread scan) — low odds.
+5. META protocol (days). MD-EE trigger hunt (stalled on writes).
+6. Graduate all (presets+docs) + push with user token.
+
+(End of handoff — 2026-09-08 ~20:45 UTC. Board: slot A Android, healthy.
+Live LK on B: remap6 lineage. GKI tree staged. Sync quiet.)
