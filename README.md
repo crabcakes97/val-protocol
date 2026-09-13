@@ -395,6 +395,31 @@ alias to `normal` anyway — covered by an early
 `/data/adb/post-fs-data.d` `resetprop` (pre-app timing) until the
 override is found.
 
+#### Using the factory props (Android side)
+
+The LK patch gives you `ro.boot.bootmode=factory` natively. For the
+legacy `ro.bootmode` alias (what most apps check), install the
+companion script (needs Magisk/KernelSU root; `tools/factory_bootmode_postfsdata.sh`
+is the exact copy):
+
+```bash
+adb shell su -c "mkdir -p /data/adb/post-fs-data.d"
+adb push tools/factory_bootmode_postfsdata.sh /sdcard/
+adb shell su -c "cp /sdcard/factory_bootmode_postfsdata.sh \
+  /data/adb/post-fs-data.d/factory_bootmode.sh \
+  && chmod 755 /data/adb/post-fs-data.d/factory_bootmode.sh"
+adb reboot bootloader            # factory UTAG holds here; then:
+fastboot -s ZT4229CJG5 continue  # boot kernel
+adb shell getprop ro.bootmode       # want: factory
+adb shell getprop ro.boot.bootmode  # want: factory (LK-native, no script)
+```
+
+Back to normal: delete the script, set UTAG `fastboot` from a patched
+slot (`fastboot oem config bootmode fastboot`), reboot. Note: factory
+mode powers the cellular radio down (`POWER_OFF`, SIM stays `READY`) —
+service returns on the normal stack. Kill timer must be empty
+(`oem config factory_kill_timeout ""`) or unplug = shutdown.
+
 ```bash
 python lk_auto_patch.py <stock-lk.img> -o <lk_bootmode.img> \
   --preset bootmode-cmdline --factory-allow --factory-allow-unsafe \
