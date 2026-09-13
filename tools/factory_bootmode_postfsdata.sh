@@ -1,12 +1,18 @@
 #!/system/bin/sh
-# factory_bootmode.sh — post-fs-data.d early-boot companion to the
-# --preset bootmode-cmdline LK patch (nevada XT2615V).
+# factory_bootmode_postfsdata.sh — post-fs-data.d companion to the
+# --preset wide-open LK stack (nevada XT2615V).
 #
-# Why this still exists: the LK patch natively carries
-# androidboot.bootmode=factory (verified in /proc/bootconfig, lands as
-# ro.boot.bootmode=factory with zero userspace help), but vendor init
-# forces the legacy ro.bootmode alias back to "normal" on every boot.
-# This re-applies it before apps start (post-fs-data timing).
+# Part 1 (needs LK): ro.boot.bootmode=factory already arrives natively
+# via the bootmode-cmdline hook (verified in /proc/bootconfig).
+# Part 2 (below): vendor init forces the legacy ro.bootmode alias back
+# to "normal", so re-apply pre-app.
+# Part 3 (report-locked spoof, cosmetic only): LK lockspoof covers
+# fastboot `getvar securestate`; these cover the Android-side reporters
+# while enforcement (flashing, root, slots) keeps working. Reversible:
+# delete this file + reboot, and every label reads stock again.
 # Install: /data/adb/post-fs-data.d/factory_bootmode.sh, chmod 755.
-# Remove for a fully normal stack (then ro.bootmode reads normal).
 resetprop ro.bootmode factory
+resetprop ro.boot.flash.locked 1
+resetprop ro.boot.verifiedbootstate green
+resetprop persist.motosecure.secure_lock_state 1
+resetprop ro.oem_unlock_supported 0

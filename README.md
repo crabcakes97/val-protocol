@@ -420,6 +420,36 @@ mode powers the cellular radio down (`POWER_OFF`, SIM stays `READY`) —
 service returns on the normal stack. Kill timer must be empty
 (`oem config factory_kill_timeout ""`) or unplug = shutdown.
 
+#### Report-locked spoof (both layers)
+
+Fastboot (`--preset lockspoof`, in `wide-open`): `getvar securestate`
+reads `flashing_locked` while flashing, slot switches, and root keep
+working — verified same boot. The on-screen fastboot menu and Android
+read *different* reporters, covered by the companion script
+(`tools/factory_bootmode_postfsdata.sh` → `/data/adb/post-fs-data.d/`):
+`ro.bootmode=factory`, `ro.boot.flash.locked=1`,
+`ro.boot.verifiedbootstate=green`,
+`persist.motosecure.secure_lock_state=1`, `ro.oem_unlock_supported=0`
+— all live-verified with adb root still working. Fully reversible
+(delete script + reboot; LK side needs a reflash of a non-spoof image).
+
+#### Results ledger (all live-verified unless noted)
+
+- `factory-force`: kill-timer isolation vs stock control (forced slot
+  shuts down on unplug, stock stays on, identical UTAGs).
+- `bootmode-cmdline`: `androidboot.bootmode` in `/proc/bootconfig`,
+  `ro.boot.bootmode=factory` with no userspace help.
+- `mrdump-force`: `oem ramdump enable` → `enable full ramdump`,
+  UTAG true. Fullmem/output legs are crash-time only (no trigger fired
+  yet — sysrq reboots clean, `/dev/watchdog` held 100 s with no bark).
+- `lockspoof`: `flashing_locked` + free flashing. Android reporters via
+  script (above).
+- Fuzz v1: `oem config` names ≤53 safe / ≥54 hang+wedge (reproduced);
+  `getvar all` 46 vars mined (`factory-modes: disabled` traced to a
+  DRAM-resident `check(0xd)` jump table — display-only, nothing gates
+  on it); `hw`/`partition` dumps mined; `p2u`/`meta`/`engineering` not
+  dispatched; `adb reboot meta|bptools` fall through to fastboot.
+
 ```bash
 python lk_auto_patch.py <stock-lk.img> -o <lk_bootmode.img> \
   --preset bootmode-cmdline --factory-allow --factory-allow-unsafe \
