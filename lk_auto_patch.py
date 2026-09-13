@@ -22,6 +22,8 @@ PRESETS = (
     "readdump-read",
     "scp-bridge",
     "factory-allow",
+    "factory-force",
+    "bootmode-cmdline",
     "full-allow",
     "gz-canary",
     "gz-range",
@@ -332,7 +334,10 @@ def build_parser() -> argparse.ArgumentParser:
               "ver lk-tools/README.md. "
               "scp-bridge es WORKING PoC: canario de 1 byte en el firmware "
               "SCP (RISC-V) + re-firma VALID. Flash solo al slot scp "
-              "inactivo."
+              "inactivo. "
+              "factory-allow ungatea oem (2x tbz->nop). "
+              "factory-force = factory-allow + spoof cable (2x b.eq->b + "
+              "1x b.ne->nop, auto-factory cada boot, 5 parches)."
         ),
     )
     parser.add_argument(
@@ -508,11 +513,37 @@ def build_parser() -> argparse.ArgumentParser:
         help="Confirmacion explicita de riesgo para --factory-allow.",
     )
     parser.add_argument(
+        "--factory-force",
+        action="store_true",
+        help=(
+            "UNSAFE RESEARCH para --preset factory-force: fuerza "
+            "bootmode=factory + mmi,factory-cable (2x b.eq->b + 1x b.ne->nop)."
+        ),
+    )
+    parser.add_argument(
+        "--factory-force-unsafe",
+        action="store_true",
+        help="Confirmacion explicita de riesgo para --factory-force.",
+    )
+    parser.add_argument(
+        "--bootmode-cmdline",
+        action="store_true",
+        help=(
+            "UNSAFE RESEARCH para --preset bootmode-cmdline: agrega "
+            "androidboot.bootmode=factory al cmdline (hook+cave verificados)."
+        ),
+    )
+    parser.add_argument(
+        "--bootmode-cmdline-unsafe",
+        action="store_true",
+        help="Confirmacion explicita de riesgo para --bootmode-cmdline.",
+    )
+    parser.add_argument(
         "--experimental",
         action="store_true",
         help=(
             "Permite builds LK desconocidos en los presets modem-unlock, "
-            "factory-allow y full-allow (descubrimiento por-image verificado). "
+            "factory-allow, factory-force y full-allow (descubrimiento por-image verificado). "
             "Sin esto, un build fuera de la tabla se rehusa."
         ),
     )
@@ -630,6 +661,50 @@ def build_patch_command(args: argparse.Namespace, root: Path, analysis_dir: Path
             "--preset factory-allow requiere --factory-allow-unsafe.",
         )
         patch_cmd.extend(["--factory-allow", "--factory-allow-unsafe"])
+        if args.experimental:
+            patch_cmd.append("--experimental")
+        return patch_cmd
+
+    if args.preset == "factory-force":
+        require_arg(args.factory_allow, "--preset factory-force requiere --factory-allow.")
+        require_arg(
+            args.factory_allow_unsafe,
+            "--preset factory-force requiere --factory-allow-unsafe.",
+        )
+        require_arg(args.factory_force, "--preset factory-force requiere --factory-force.")
+        require_arg(
+            args.factory_force_unsafe,
+            "--preset factory-force requiere --factory-force-unsafe.",
+        )
+        patch_cmd.extend([
+            "--factory-allow", "--factory-allow-unsafe",
+            "--factory-force", "--factory-force-unsafe",
+        ])
+        if args.experimental:
+            patch_cmd.append("--experimental")
+        return patch_cmd
+
+    if args.preset == "bootmode-cmdline":
+        require_arg(args.factory_allow, "--preset bootmode-cmdline requiere --factory-allow.")
+        require_arg(
+            args.factory_allow_unsafe,
+            "--preset bootmode-cmdline requiere --factory-allow-unsafe.",
+        )
+        require_arg(args.factory_force, "--preset bootmode-cmdline requiere --factory-force.")
+        require_arg(
+            args.factory_force_unsafe,
+            "--preset bootmode-cmdline requiere --factory-force-unsafe.",
+        )
+        require_arg(args.bootmode_cmdline, "--preset bootmode-cmdline requiere --bootmode-cmdline.")
+        require_arg(
+            args.bootmode_cmdline_unsafe,
+            "--preset bootmode-cmdline requiere --bootmode-cmdline-unsafe.",
+        )
+        patch_cmd.extend([
+            "--factory-allow", "--factory-allow-unsafe",
+            "--factory-force", "--factory-force-unsafe",
+            "--bootmode-cmdline", "--bootmode-cmdline-unsafe",
+        ])
         if args.experimental:
             patch_cmd.append("--experimental")
         return patch_cmd

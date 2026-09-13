@@ -102,22 +102,55 @@ AARCH64_NOP = bytes.fromhex("1f2003d5")
 # which loads "command restricted" and branches to the deny path, while
 # fall-through calls the command handler (ldr x8,[x21,#0x10]; blr x8).
 # Entry: (label, file_offset, expected_old_bytes, new_bytes, why).
-FACTORY_GATES: tuple[tuple[str, int, bytes, bytes, str], ...] = (
+# Factory-force (cable spoof) gates (nevada XT2615V phone LK, aarch64,
+# LK base 0xffff000050f00000; offsets are lk.bin file offsets).
+# LK checks UTAG bootmode == "factory" by building 0x0079726f74636166
+# ("factory\0") in x9 (mov x9,#0x6166 + 3x movk) then cmp x8,x9 + b.eq to
+# the factory entry. Empty UTAG falls through to normal boot. Forcing the
+# b.eq to b takes the factory arm with no UTAG write, no cable, no button.
+# Behind it, w0==2 is the mmi,factory-cable UTAG read; NOPing its b.ne
+# forces the cable path always.
+# Entry: (label, file_offset, expected_old_bytes, new_bytes, why).
+FACTORY_FORCE_GATES: tuple[tuple[str, int, bytes, bytes, str], ...] = (
     (
-        "restricted-tbz",
-        0xF3F4,
-        bytes.fromhex("00010036"),  # tbz w0,#0 -> deny("command restricted")
-        bytes.fromhex("1f2003d5"),  # nop: fall through to handler-call path
-        "tbz status-bit0 deny -> fall through to command handler",
+        "factory-boot-early",
+        0x159CC,
+        bytes.fromhex("a0000054"),  # b.eq -> 0x159e0 (early factory arm)
+        bytes.fromhex("05000014"),  # b -> same target (force early path)
+        "cmp x8,x9 vs factory + b.eq early -> b always",
     ),
     (
-        "config-unprotect-tbz",
-        0xAD88,
-        bytes.fromhex("a0090036"),  # tbz w0,#0 -> deny("Not allowed command")
-        bytes.fromhex("1f2003d5"),  # nop: fall through to config subcommand
-        "tbz perm-bit0 deny -> fall through (unprotect/protect/set)",
+        "factory-boot-main",
+        0x17700,
+        bytes.fromhex("80010054"),  # b.eq -> 0x17730 (Entering factory mode)
+        bytes.fromhex("0c000014"),  # b -> same target (force factory entry)
+        "cmp x8,x9 vs factory + b.eq main -> b always",
+    ),
+    (
+        "factory-cable-ne",
+        0x17ECC,
+        bytes.fromhex("c1010054"),  # b.ne -> 0x17f04 (skip cable path)
+        bytes.fromhex("1f2003d5"),  # nop: fall through to mmi,factory-cable
+        "cmp w0,#2 + b.ne skip -> nop falls into cable path",
     ),
 )
+
+
+# Bootmode-cmdline (native ro.bootmode, no prop hack).
+# LK builds androidboot.* cmdline with snprintf(buf,99,fmt,val) + a bounded
+# append setter (file 0x28DF0, takes x0 = NUL-terminated string). LK never
+# emits androidboot.bootmode (absent from the whole image), so Android's
+# init always falls back to ro.bootmode=normal. This hooks the serialno
+# stanza's setter call (file 0x1ADF0, bl -> setter) to a cave that first
+# runs the original append, then appends the static
+# "androidboot.bootmode=factory" string, restoring the original return in
+# x0 so the caller sees zero behavior change. Same-footprint hook (4B),
+# cave code + string verified by disassembly before any byte is touched.
+BOOTMODE_CAVE_OFF = 0xCE080
+BOOTMODE_CAVE_SIZE = 0x200  # zero-gated region (code + string must fit)
+BOOTMODE_CMDLINE_STR = b"androidboot.bootmode=factory\x00"
+BOOTMODE_HOOK_OFF = 0x1ADF0
+BOOTMODE_SETTER_OFF = 0x28DF0
 
 
 # ---- ramdump / MRDUMP research (slot-B freeze triage) ----
@@ -204,6 +237,9 @@ GATE_ANCHORS: dict[str, bytes] = {
     "region-log": b"Header version detect fail[size:%d]",
     "restricted-log": b"command restricted",
     "notallowed-log": b"Not allowed command",
+    "factory-enter-log": b"Entering factory mode",
+    "factory-bootmode-log": b"bootmode UTAG is set to factory",
+    "factory-cable-log": b"mmi,factory-cable",
 }
 
 # Verified LK builds: discovery must reproduce these offsets or refuse
@@ -216,6 +252,8 @@ KNOWN_LK_BUILDS: tuple[dict, ...] = (
         "version_needle": b"W1WNS36.18-111-3",
         "modem_offsets": (0x49A9C, 0x49AAC, 0x49B24),
         "factory_offsets": (0xF3F4, 0xAD88),
+        "force_offsets": (0x159CC, 0x17700, 0x17ECC),
+        "bootmode_offsets": (0x1ADF0,),
     },
     {
         "id": "nevada XT2615V bootloader -114-1 (RETUS stock)",
@@ -224,6 +262,8 @@ KNOWN_LK_BUILDS: tuple[dict, ...] = (
         "version_needle": b"W1WNS36.18-114-1",
         "modem_offsets": (0x49A9C, 0x49AAC, 0x49B24),
         "factory_offsets": (0xF3F4, 0xAD88),
+        "force_offsets": (0x159CC, 0x17700, 0x17ECC),
+        "bootmode_offsets": (0x1ADF0,),
     },
 )
 
@@ -443,6 +483,403 @@ def discover_factory_gates(
     return gates
 
 
+def _decode_b_uncond(word: int, va: int) -> int | None:
+    """Decode B -> target_va. None if not B."""
+    if (word & 0xFC000000) != 0x14000000:
+        return None
+    imm = word & 0x3FFFFFF
+    if imm & 0x2000000:
+        imm -= 0x4000000
+    return va + imm * 4
+
+
+def discover_factory_force_gates(
+    data: bytes, base: int
+) -> list[tuple[str, int, bytes, bytes, str]]:
+    """Locate factory-cable-spoof gates per-image. Raises on any gap.
+
+    Boot gates: cmp x8,x9 (1f0109eb, x9 built as "factory") + b.eq into
+    the factory-entry zone (refs to Entering factory mode / bootmode UTAG
+    is set to factory). Cable gate: cmp w0,#2 (1f080071) + b.ne skipping
+    the mmi,factory-cable block. New bytes preserve targets (b.eq->b) or
+    fall through (b.ne->nop). Never guesses: any missing anchor, xref,
+    cmp, or branch shape refuses.
+    """
+    if base == 0:
+        raise ValueError("LK base unknown: cannot resolve VAs, refusing")
+    gates: list[tuple[str, int, bytes, bytes, str]] = []
+    # --- factory entry zone from string xrefs ---
+    entry_refs: list[int] = []
+    for anchor_key in ("factory-enter-log", "factory-bootmode-log"):
+        needle = GATE_ANCHORS[anchor_key]
+        hit = data.find(needle)
+        if hit < 0:
+            raise ValueError(
+                f"anchor {anchor_key!r} not in this LK: layout unknown, refusing"
+            )
+        str_off = _string_start(data, hit)
+        refs = _find_string_refs(data, base, base + str_off)
+        if not refs:
+            raise ValueError(
+                f"anchor {anchor_key!r} present but unreferenced: refusing"
+            )
+        entry_refs.extend(refs)
+    if not entry_refs:
+        raise ValueError("no factory-entry xrefs: refusing")
+    entry_lo = min(entry_refs) - 0x200
+    entry_hi = max(entry_refs) + 0x200
+    # --- boot gates: cmp x8,x9 + b.eq -> entry zone ---
+    boot_found: list[int] = []
+    for off in range(0, len(data) - 8, 4):
+        word = struct.unpack_from("<I", data, off)[0]
+        dec = _decode_b_cond(word, base + off)
+        if dec is None or dec[0] != 0:  # B.EQ only (cond 0)
+            continue
+        tgt_off = dec[1] - base
+        if not (entry_lo <= tgt_off <= entry_hi):
+            continue
+        if off < 4:
+            continue
+        prev = struct.unpack_from("<I", data, off - 4)[0]
+        if prev != 0xEB09011F:  # cmp x8,x9 LE of 1f0109eb
+            continue
+        # x9 must be built as "factory" just above (mov #0x6166 + 3x movk)
+        window = bytes(data[max(0, off - 0x20):off - 4])
+        if window.find(bytes.fromhex("c92c8cd2")) < 0:  # mov x9,#0x6166
+            continue
+        boot_found.append(off)
+    if len(boot_found) != 2:
+        raise ValueError(
+            f"expected 2 factory boot gates (early+main), found {len(boot_found)} "
+            f"({[hex(o) for o in boot_found]}): refusing"
+        )
+    boot_found.sort()
+    for off, label in zip(boot_found, ("factory-boot-early", "factory-boot-main")):
+        old = bytes(data[off:off + 4])
+        dec = _decode_b_cond(struct.unpack_from("<I", data, off)[0], base + off)
+        assert dec is not None
+        tgt_va = dec[1]
+        delta = tgt_va - (base + off)
+        imm26 = delta // 4
+        new = struct.pack("<I", 0x14000000 | (imm26 & 0x3FFFFFF))
+        # sanity: new must decode as B to same target
+        ntgt = _decode_b_uncond(struct.unpack("<I", new)[0], base + off)
+        if ntgt != tgt_va:
+            raise ValueError(f"{label}: branch re-encode mismatch: refusing")
+        gates.append(
+            (
+                label,
+                off,
+                old,
+                new,
+                "cmp x8,x9 vs factory + b.eq -> b always (same target)",
+            )
+        )
+    # --- cable gate: cmp w0,#2 + b.ne skipping mmi,factory-cable block ---
+    cable_needle = GATE_ANCHORS["factory-cable-log"]
+    cable_hit = data.find(cable_needle)
+    if cable_hit < 0:
+        raise ValueError("anchor factory-cable-log not in this LK: refusing")
+    cable_str = _string_start(data, cable_hit)
+    cable_refs = _find_string_refs(data, base, base + cable_str)
+    if not cable_refs:
+        raise ValueError("mmi,factory-cable present but unreferenced: refusing")
+    cable_ref = min(cable_refs)
+    cable_found: list[int] = []
+    for off in range(max(0, cable_ref - 0x40), cable_ref, 4):
+        word = struct.unpack_from("<I", data, off)[0]
+        dec = _decode_b_cond(word, base + off)
+        if dec is None or dec[0] != 1:  # B.NE only (cond 1)
+            continue
+        if off < 4:
+            continue
+        prev = struct.unpack_from("<I", data, off - 4)[0]
+        if prev != 0x7100081F:  # cmp w0,#2 LE of 1f080071
+            continue
+        # must sit just before the cable block (within 0x40 above ref)
+        cable_found.append(off)
+    if len(cable_found) != 1:
+        raise ValueError(
+            f"expected 1 factory-cable gate, found {len(cable_found)}: refusing"
+        )
+    off = cable_found[0]
+    gates.append(
+        (
+            "factory-cable-ne",
+            off,
+            bytes(data[off:off + 4]),
+            AARCH64_NOP,
+            "cmp w0,#2 + b.ne skip -> nop falls into cable path",
+        )
+    )
+    return gates
+
+
+def apply_factory_force_gates(data: bytearray, analysis_dir: Path) -> list[tuple[str, int, bytes, bytes]]:
+    """Apply FACTORY_FORCE_GATES with old-byte verification. Returns applied list."""
+    return apply_discovered_gates(
+        data, analysis_dir, "force", experimental=False,
+    )
+
+
+def apply_factory_force_gates(data: bytearray, analysis_dir: Path) -> list[tuple[str, int, bytes, bytes]]:
+    """Apply FACTORY_FORCE_GATES with old-byte verification. Returns applied list."""
+    return apply_discovered_gates(
+        data, analysis_dir, "force", experimental=False,
+    )
+
+
+def _enc_bl(src_va: int, dst_va: int) -> bytes:
+    """Encode BL src->dst. Raises on misalignment/range (never hand-trust)."""
+    delta = dst_va - src_va
+    if delta % 4:
+        raise ValueError(f"bl no alineado: 0x{src_va:x} -> 0x{dst_va:x}")
+    imm = delta // 4
+    if imm < -(1 << 25) or imm >= (1 << 25):
+        raise ValueError(f"bl fuera de rango: 0x{src_va:x} -> 0x{dst_va:x}")
+    return struct.pack("<I", 0x94000000 | (imm & 0x3FFFFFF))
+
+
+def _enc_b(src_va: int, dst_va: int) -> bytes:
+    delta = dst_va - src_va
+    if delta % 4:
+        raise ValueError(f"b no alineado: 0x{src_va:x} -> 0x{dst_va:x}")
+    imm = delta // 4
+    if imm < -(1 << 25) or imm >= (1 << 25):
+        raise ValueError(f"b fuera de rango: 0x{src_va:x} -> 0x{dst_va:x}")
+    return struct.pack("<I", 0x14000000 | (imm & 0x3FFFFFF))
+
+
+def _enc_adrp_add(rd: int, src_va: int, dst_va: int) -> tuple[bytes, bytes]:
+    """Encode ADRP+ADD rd, dst. Raises when the string leaves ADD range."""
+    page_diff = ((dst_va & ~0xFFF) - (src_va & ~0xFFF)) // 0x1000
+    if not (-(1 << 20) <= page_diff < (1 << 20)):
+        raise ValueError(f"adrp fuera de rango: 0x{src_va:x} -> 0x{dst_va:x}")
+    imm = page_diff & 0x1FFFFF
+    adrp = struct.pack(
+        "<I", 0x90000000 | ((imm & 3) << 29) | (((imm >> 2) & 0x7FFFF) << 5) | rd
+    )
+    lo12 = dst_va & 0xFFF
+    if lo12 > 0xFFF:
+        raise ValueError("add imm12 imposible")
+    add = struct.pack("<I", 0x91000000 | (lo12 << 10) | (rd << 5) | rd)
+    return adrp, add
+
+
+def _dec_bl_target(word: int, va: int) -> int | None:
+    if (word & 0xFC000000) != 0x94000000:
+        return None
+    imm = word & 0x3FFFFFF
+    if imm & 0x2000000:
+        imm -= 0x4000000
+    return va + imm * 4
+
+
+def build_bootmode_cave(data: bytes, base: int) -> tuple[bytes, int, int]:
+    """Build the cmdline-append cave. Returns (cave_bytes, hook_off, str_off).
+
+    Layout at BOOTMODE_CAVE_OFF: frame, run original setter, append static
+    string, restore original return, return to hook+4. Every emitted word is
+    decode-verified (class + target) before use; any mismatch raises.
+    """
+    if base == 0:
+        raise ValueError("LK base unknown: cannot resolve VAs, refusing")
+    cave_va = base + BOOTMODE_CAVE_OFF
+    str_off = BOOTMODE_CAVE_OFF + 0x40
+    str_va = base + str_off
+    if str_off + len(BOOTMODE_CMDLINE_STR) > BOOTMODE_CAVE_OFF + BOOTMODE_CAVE_SIZE:
+        raise ValueError("bootmode string does not fit the gated cave: refusing")
+    hook_off = BOOTMODE_HOOK_OFF
+    hook_va = base + hook_off
+    # Resolve the setter from the hook's own BL (never assume the address).
+    hook_word = struct.unpack_from("<I", data, hook_off)[0]
+    setter_va = _dec_bl_target(hook_word, hook_va)
+    if setter_va is None:
+        raise ValueError(
+            f"hook at 0x{hook_off:x} is not BL (found 0x{hook_word:08x}): refusing"
+        )
+    out = bytearray(0x40)
+
+    words: list[bytes] = []
+    # stp x29,x30,[sp,#-0x20]! / mov x29,sp / str x0,[sp,#0x10] (buf)
+    words.append(bytes.fromhex("fd7bbea9"))
+    words.append(bytes.fromhex("fd030091"))
+    words.append(bytes.fromhex("e00b00f9"))
+    # bl setter (original append, x0 = caller buf untouched)
+    words.append(_enc_bl(cave_va + 0xC, setter_va))
+    # str x0,[sp,#0x18] (save original return)
+    words.append(bytes.fromhex("e00f00f9"))
+    # adrp+add x0, cmdline string
+    adrp, add = _enc_adrp_add(0, cave_va + 0x14, str_va)
+    words.append(adrp)
+    words.append(add)
+    # bl setter (our append)
+    words.append(_enc_bl(cave_va + 0x1C, setter_va))
+    # ldr x0,[sp,#0x18] (restore original return) / ldp / b back
+    words.append(bytes.fromhex("e00f40f9"))
+    words.append(bytes.fromhex("fd7bc2a8"))
+    words.append(_enc_b(cave_va + 0x28, hook_va + 4))
+    blob = b"".join(words)
+    out[: len(blob)] = blob
+    # ---- decode-verify every word (gate, not trust) ----
+    expect = ["stp", "mov", "str", "bl", "str", "adrp", "add", "bl", "ldr", "ldp", "b"]
+    for idx, w in enumerate(words):
+        word = struct.unpack("<I", w)[0]
+        va = cave_va + idx * 4
+        kind = expect[idx]
+        if kind == "stp":
+            ok = word == 0xA9BE7BFD
+        elif kind == "mov":
+            ok = word == 0x910003FD
+        elif kind == "str":
+            ok = (idx == 2 and word == 0xF9000BE0) or (  # buf -> [sp,#0x10]
+                idx == 4 and word == 0xF9000FE0  # orig ret -> [sp,#0x18]
+            )
+        elif kind == "bl":
+            ok = _dec_bl_target(word, va) == setter_va
+        elif kind == "adrp":
+            ok = (word & 0x9F000000) == 0x90000000 and (word & 0x1F) == 0
+        elif kind == "add":
+            ok = (word & 0xFF800000) == 0x91000000
+        elif kind == "ldr":
+            ok = word == 0xF9400FE0
+        elif kind == "ldp":
+            ok = word == 0xA8C27BFD
+        elif kind == "b":
+            ok = (word & 0xFC000000) == 0x14000000 and (
+                va + ((word & 0x3FFFFFF) if not word & 0x2000000 else (word & 0x3FFFFFF) - 0x4000000) * 4
+            ) == hook_va + 4
+        else:
+            ok = False
+        if not ok:
+            raise ValueError(
+                f"bootmode cave word {idx} failed {kind} gate "
+                f"(0x{word:08x} at VA 0x{va:x}): refusing"
+            )
+    # adrp+add must land exactly on the string
+    adrp_w = struct.unpack("<I", words[5])[0]
+    add_w = struct.unpack("<I", words[6])[0]
+    imm = ((((adrp_w >> 5) & 0x7FFFF) << 2) | ((adrp_w >> 29) & 0x3))
+    if imm & 0x100000:
+        imm -= 0x200000
+    page = (cave_va + 0x14) & ~0xFFF
+    resolved = page + imm * 0x1000 + ((add_w >> 10) & 0xFFF)
+    if resolved != str_va:
+        raise ValueError(
+            f"bootmode adrp/add resolves 0x{resolved:x} != string 0x{str_va:x}: refusing"
+        )
+    return bytes(out), hook_off, str_off
+
+
+def discover_bootmode_hook(data: bytes, base: int) -> tuple[int, int]:
+    """Locate the cmdline setter hook per-image. Returns (hook_off, setter_va).
+
+    Anchor androidboot.serialno -> code xref -> forward scan for a
+    snprintf-BL followed within 64B by a second BL whose target starts
+    with the setter prologue (stp x29,x30,[sp,#-0x20]! = FD7BBEA9).
+    Raises on any gap (never guesses).
+    """
+    if base == 0:
+        raise ValueError("LK base unknown: cannot resolve VAs, refusing")
+    needle = b"androidboot.serialno"
+    hit = data.find(needle)
+    if hit < 0:
+        raise ValueError("anchor androidboot.serialno absent: refusing")
+    refs = _find_string_refs(data, base, base + _string_start(data, hit))
+    if not refs:
+        raise ValueError("serialno anchor unreferenced by code: refusing")
+    start = min(refs)
+    for off in range(start, min(len(data) - 4, start + 0x400), 4):
+        w1 = struct.unpack_from("<I", data, off)[0]
+        t1 = _dec_bl_target(w1, base + off)
+        if t1 is None:
+            continue
+        for off2 in range(off + 8, min(len(data) - 4, off + 72), 4):
+            w2 = struct.unpack_from("<I", data, off2)[0]
+            t2 = _dec_bl_target(w2, base + off2)
+            if t2 is None or t2 == t1:
+                continue
+            t2_off = t2 - base
+            if t2_off < 0 or t2_off + 4 > len(data):
+                continue
+            if bytes(data[t2_off : t2_off + 4]) != bytes.fromhex("fd7bbea9"):
+                continue
+            return off2, t2
+    raise ValueError("no snprintf->setter hook pair near serialno: refusing")
+
+
+def apply_bootmode_cmdline(
+    data: bytearray, analysis_dir: Path, experimental: bool
+) -> list[tuple[str, int, bytes, bytes]]:
+    """Append androidboot.bootmode=factory to the kernel cmdline.
+
+    Steps: arch gate -> fingerprint -> per-image hook discovery (must
+    reproduce the known offset on known builds) -> cave-zero gate ->
+    decode-verified cave build -> old-byte hook swap. Returns applied.
+    Raises ValueError on any trigger.
+    """
+    arch = load_analysis_architecture(analysis_dir)
+    if arch != "aarch64":
+        raise ValueError(
+            f"bootmode-cmdline supports aarch64 only; this LK is {arch!r}: refusing"
+        )
+    try:
+        lk_base = load_analysis_base(analysis_dir)
+    except (OSError, ValueError, FileNotFoundError):
+        lk_base = 0
+    build, describe = fingerprint_lk(bytes(data), arch, lk_base)
+    print(f"Fingerprint: {describe}")
+    hook_off, setter_va = discover_bootmode_hook(bytes(data), lk_base)
+    if build is not None:
+        if hook_off != BOOTMODE_HOOK_OFF:
+            raise ValueError(
+                f"known build {build['id']!r} but hook resolved "
+                f"0x{hook_off:x} vs expected 0x{BOOTMODE_HOOK_OFF:x}: "
+                "layout drift, refusing"
+            )
+        print(f"KnownBuild: {build['id']} (hook reproduced)")
+    elif not experimental:
+        raise ValueError(
+            "unknown LK build: re-run with --experimental to trust "
+            f"per-image discovery (hook 0x{hook_off:x} unverified)"
+        )
+    else:
+        print("Mode    : EXPERIMENTAL cross-device (unknown build)")
+    if setter_va != lk_base + BOOTMODE_SETTER_OFF and build is not None:
+        raise ValueError(
+            f"setter resolved 0x{setter_va:x} vs expected "
+            f"0x{lk_base + BOOTMODE_SETTER_OFF:x}: refusing"
+        )
+    cave = bytes(data[BOOTMODE_CAVE_OFF : BOOTMODE_CAVE_OFF + BOOTMODE_CAVE_SIZE])
+    if any(cave):
+        raise ValueError(
+            f"cave 0x{BOOTMODE_CAVE_OFF:x}+0x{BOOTMODE_CAVE_SIZE:x} not zeroed "
+            "(occupied, refusing to clobber)"
+        )
+    cave_blob, _, str_off = build_bootmode_cave(bytes(data), lk_base)
+    applied: list[tuple[str, int, bytes, bytes]] = []
+    # 1. hook swap (old-byte gated inside patch_bytes_checked)
+    hook_va = lk_base + hook_off
+    cave_va = lk_base + BOOTMODE_CAVE_OFF
+    new_hook = _enc_bl(hook_va, cave_va)
+    old_hook = bytes(data[hook_off : hook_off + 4])
+    if _dec_bl_target(struct.unpack("<I", old_hook)[0], hook_va) != setter_va:
+        raise ValueError("hook no longer points at the setter: refusing")
+    patch_bytes_checked(data, hook_off, old_hook, new_hook, "bootmode-hook")
+    applied.append(("bootmode-hook", hook_off, old_hook, new_hook))
+    print(f"Patch   : bootmode bootmode-hook @ 0x{hook_off:x}  "
+          f"{old_hook.hex()} -> {new_hook.hex()}")
+    # 2. cave code + string (zero-gated above, so any write is new)
+    data[BOOTMODE_CAVE_OFF : BOOTMODE_CAVE_OFF + len(cave_blob)] = cave_blob
+    data[str_off : str_off + len(BOOTMODE_CMDLINE_STR)] = BOOTMODE_CMDLINE_STR
+    applied.append(("bootmode-cave", BOOTMODE_CAVE_OFF, bytes(0x40), cave_blob))
+    applied.append(("bootmode-str", str_off, bytes(len(BOOTMODE_CMDLINE_STR)),
+                    BOOTMODE_CMDLINE_STR))
+    print(f"Patch   : bootmode cave+str @ 0x{BOOTMODE_CAVE_OFF:x}/0x{str_off:x}  "
+          f"{len(cave_blob) + len(BOOTMODE_CMDLINE_STR)}B new")
+    return applied
+
+
 def apply_discovered_gates(
     data: bytearray,
     analysis_dir: Path,
@@ -451,7 +888,7 @@ def apply_discovered_gates(
 ) -> list[tuple[str, int, bytes, bytes]]:
     """Cross-device gate patcher with refusal triggers.
 
-    family: "modem" or "factory". Steps: arch gate (aarch64 only) ->
+    family: "modem", "factory", or "force". Steps: arch gate (aarch64 only) ->
     fingerprint -> known-build cross-check (offsets must reproduce) or
     --experimental for unknown builds -> per-gate old-byte verification.
     Returns applied list. Raises ValueError on any trigger.
@@ -474,6 +911,9 @@ def apply_discovered_gates(
     elif family == "factory":
         gates = discover_factory_gates(bytes(data), lk_base)
         key = "factory_offsets"
+    elif family == "force":
+        gates = discover_factory_force_gates(bytes(data), lk_base)
+        key = "force_offsets"
     else:
         raise ValueError(f"unknown gate family {family!r}")
     found = tuple(off for _, off, _, _, _ in gates)
@@ -557,15 +997,20 @@ def detect_report(analysis_dir: Path, experimental: bool) -> int:
     if arch != "aarch64":
         print("Modem   : REFUSE (aarch64 discovery only)")
         print("Factory : REFUSE (aarch64 discovery only)")
+        print("Force   : REFUSE (aarch64 discovery only)")
+        print("Bootmode: REFUSE (aarch64 discovery only)")
         return 1
     if build is None and not experimental:
         print("Modem   : REFUSE unknown build without --experimental")
         print("Factory : REFUSE unknown build without --experimental")
+        print("Force   : REFUSE unknown build without --experimental")
+        print("Bootmode: REFUSE unknown build without --experimental")
         return 1
     rc = 0
-    for family, discover in (
-        ("modem", discover_modem_gates),
-        ("factory", discover_factory_gates),
+    for family, discover, key in (
+        ("modem", discover_modem_gates, "modem_offsets"),
+        ("factory", discover_factory_gates, "factory_offsets"),
+        ("force", discover_factory_force_gates, "force_offsets"),
     ):
         try:
             gates = discover(data, base)
@@ -574,7 +1019,6 @@ def detect_report(analysis_dir: Path, experimental: bool) -> int:
             rc = 1
             continue
         if build is not None:
-            key = "modem_offsets" if family == "modem" else "factory_offsets"
             found = tuple(off for _, off, _, _, _ in gates)
             if sorted(found) != sorted(build[key]):
                 print(f"{family.capitalize():<8}: REFUSE layout drift "
@@ -584,6 +1028,19 @@ def detect_report(analysis_dir: Path, experimental: bool) -> int:
         offsets = ", ".join(f"0x{off:x}" for _, off, _, _, _ in gates)
         print(f"{family.capitalize():<8}: OK gates=[{offsets}]"
               + (" (experimental, unknown build)" if build is None else ""))
+    try:
+        hook_off, _ = discover_bootmode_hook(data, base)
+    except ValueError as exc:
+        print(f"Bootmode: REFUSE {exc}")
+        rc = 1
+    else:
+        if build is not None and hook_off != build["bootmode_offsets"][0]:
+            print(f"Bootmode: REFUSE layout drift 0x{hook_off:x} vs "
+                  f"0x{build['bootmode_offsets'][0]:x}")
+            rc = 1
+        else:
+            print(f"Bootmode: OK hook=[0x{hook_off:x}]"
+                  + (" (experimental, unknown build)" if build is None else ""))
     try:
         rd = ramdump_research_scan(data, base)
     except (ValueError, struct.error):
@@ -4639,6 +5096,41 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--factory-force",
+        action="store_true",
+        help=(
+            "UNSAFE RESEARCH: fuerza bootmode=factory + mmi,factory-cable "
+            "sin cable ni escritura UTAG (2x b.eq->b + 1x b.ne->nop). "
+            "Requiere --factory-force-unsafe. Auto-factory en cada boot "
+            "de este LK; manten USB conectado (factory_kill_timeout)."
+        ),
+    )
+    parser.add_argument(
+        "--factory-force-unsafe",
+        action="store_true",
+        help=(
+            "Confirmacion explicita de riesgo para --factory-force. "
+            "Sin esto, se rehusa."
+        ),
+    )
+    parser.add_argument(
+        "--bootmode-cmdline",
+        action="store_true",
+        help=(
+            "UNSAFE RESEARCH: agrega androidboot.bootmode=factory al cmdline "
+            "del kernel (hook + cave verificados por decode). Requiere "
+            "--bootmode-cmdline-unsafe. Init fija ro.bootmode=factory nativo."
+        ),
+    )
+    parser.add_argument(
+        "--bootmode-cmdline-unsafe",
+        action="store_true",
+        help=(
+            "Confirmacion explicita de riesgo para --bootmode-cmdline. "
+            "Sin esto, se rehusa."
+        ),
+    )
+    parser.add_argument(
         "--experimental",
         action="store_true",
         help=(
@@ -4773,11 +5265,13 @@ def main() -> int:
         and not args.ramdump_research_report_only
         and not args.modem_size_bypass
         and not args.factory_allow
+        and not args.factory_force
+        and not args.bootmode_cmdline
     ):
         print(
             "Error: usa --erase-partition <nombre>, --from/--to, --frp-skip-check, "
             "--frp-compare-value, --key-force-success, --key-custom-signature, --key-token-secret, "
-            "--erase-token-partition, --unlock-erase-only, --modem-research-report-only, --ramdump-research-report-only, --modem-size-bypass, --factory-allow, o una combinacion.",
+            "--erase-token-partition, --unlock-erase-only, --modem-research-report-only, --ramdump-research-report-only, --modem-size-bypass, --factory-allow, --factory-force, o una combinacion.",
             file=sys.stderr,
         )
         return 2
@@ -4791,6 +5285,18 @@ def main() -> int:
     if args.factory_allow and not args.factory_allow_unsafe:
         print(
             "Error: --factory-allow requiere --factory-allow-unsafe.",
+            file=sys.stderr,
+        )
+        return 2
+    if args.factory_force and not args.factory_force_unsafe:
+        print(
+            "Error: --factory-force requiere --factory-force-unsafe.",
+            file=sys.stderr,
+        )
+        return 2
+    if args.bootmode_cmdline and not args.bootmode_cmdline_unsafe:
+        print(
+            "Error: --bootmode-cmdline requiere --bootmode-cmdline-unsafe.",
             file=sys.stderr,
         )
         return 2
@@ -4852,6 +5358,8 @@ def main() -> int:
             args.unlock_erase_only,
             args.modem_size_bypass,
             args.factory_allow,
+            args.factory_force,
+            args.bootmode_cmdline,
             args.ramdump_research_report_only,
         ]
         if any(conflicting):
@@ -4877,6 +5385,8 @@ def main() -> int:
             args.modem_research_report_only,
             args.modem_size_bypass,
             args.factory_allow,
+            args.factory_force,
+            args.bootmode_cmdline,
         ]
         if any(conflicting):
             print(
@@ -4914,6 +5424,31 @@ def main() -> int:
         print("Warn    : cada gate se resolvio por-image con verificacion; otros")
         print("Warn    : checks vecinos pueden seguir negando. El test en")
         print("Warn    : el equipo decide: 'oem ramdump' sin 'restricted' = win.")
+
+    if args.factory_force:
+        try:
+            applied = apply_discovered_gates(
+                data, args.analysis_dir, "force", args.experimental
+            )
+        except (OSError, ValueError) as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 1
+        print(f"ForceGates: {len(applied)} factory-force gates -> B/NOP")
+        print("Warn    : auto-factory en cada boot de este LK; manten USB")
+        print("Warn    : conectado (factory_kill_timeout apaga sin USB).")
+        print("Warn    : slot B solo; vuelve con --set-active=a.")
+
+    if args.bootmode_cmdline:
+        try:
+            applied = apply_bootmode_cmdline(
+                data, args.analysis_dir, args.experimental
+            )
+        except (OSError, ValueError) as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 1
+        print(f"BootmodeGates: {len(applied)} cmdline hook + cave + str")
+        print("Warn    : init fija ro.bootmode=factory desde cmdline; verifica")
+        print("Warn    : con cat /proc/cmdline en Android.")
 
     if partition_patch is not None:
         old_name, new_name = partition_patch

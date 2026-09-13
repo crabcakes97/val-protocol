@@ -98,7 +98,7 @@ This repository is intended for repair, interoperability research, recovery work
   - key validator candidates
   - partition erase operations
   - serial number runtime source
-- Applies research presets (unlock, erase, modem, ramdump-map, readdump-read, scp-bridge, factory, and hypervisor flows).
+- Applies research presets (unlock, erase, modem, ramdump-map, readdump-read, scp-bridge, factory-allow, factory-force, bootmode-cmdline, and hypervisor flows).
 - Uses runtime serial number derivation for generated keys.
 - Rebuilds the original multi-image container.
 - Updates MTK `CERT2` image hashes.
@@ -340,6 +340,97 @@ python lk-tools/fb_dump.py oem readdump ffff000050f00000+ chunk.bin
 # 5. sweep a whole mapped megabyte (64 x 16 KB):
 python lk-tools/sweep_lk.py OUTDIR [LK.BIN]
 ```
+
+### `factory-force` (software factory cable — TESTED preset)
+
+Forces the `bootmode == "factory"` + `mmi,factory-cable` path with no
+cable, no button, no UTAG write: LK builds `0x0079726f74636166`
+(`factory\0`) in `x9` and `cmp x8,x9` + `b.eq` to `Entering factory
+mode`. Two such gates (`0x159CC` early, `0x17700` main → `0x17730:
+bootmode UTAG is set to factory`) become unconditional `b` (same
+target, capstone-verified); the cable check (`cmp w0,#2` + `b.ne` at
+`0x17ECC`, skipping the `mmi,factory-cable` block at `0x17ED0`)
+becomes `nop`. Per-image discovery (string xref → `cmp` shape →
+branch-into-factory-zone) must reproduce the known offsets on known
+builds (`-111-3`, `-114-1`) or refuse. Includes `factory-allow` (5
+patches total), old-byte gated, `Result: VALID` required.
+
+```bash
+python lk_auto_patch.py <stock-lk.img> -o <lk_factoryforce.img> \
+  --preset factory-force --factory-allow --factory-allow-unsafe \
+  --factory-force --factory-force-unsafe
+fastboot -s ZT4229CJG5 flash lk_b <lk_factoryforce.img>  # Send+Write OKAY
+fastboot -s ZT4229CJG5 reboot bootloader
+fastboot -s ZT4229CJG5 oem ramdump   # usage, NOT "command restricted"
+```
+
+**Proof (kill-timer isolation, stock control):** with UTAG
+`bootmode=fastboot` + kill timer armed (`10`), unplug → forced slot
+shuts down; stock slot with identical UTAGs stays on. The kill timer
+(`factory_kill_timeout`: empty = disabled, `0` = instant, `1~100` =
+seconds) only fires on the factory path — so the branches took it with
+no genuine UTAG. Clear after testing (`oem config
+factory_kill_timeout ""` writes empty = disabled). Genuine path also
+works: `oem config bootmode factory` + reboot holds the bootloader
+(authentic cable behavior — `reboot` loops to fastboot, `continue`
+boots the kernel). Note: factory mode powers the cellular radio down
+(`POWER_OFF`, SIM stays `READY`) — service returns on the normal
+stack. Full record: `READDUMP.md` workfront + session notes.
+
+### `bootmode-cmdline` (native `ro.bootmode` — TESTED preset)
+
+LK never forwards the mode to Android (no `androidboot.bootmode`
+anywhere in the 1.2 MB image; stock boot with UTAG=`factory` still
+reads `ro.bootmode=normal`). This hooks the serialno stanza's cmdline
+setter call (`0x1ADF0: bl setter@0x28DF0`, discovered per-image via the
+`androidboot.serialno` xref → snprintf→setter pair, setter confirmed by
+its `stp x29,x30,[sp,#-0x20]!` prologue) to a decode-verified cave at
+`0xCE080`: run the original append, append static
+`androidboot.bootmode=factory`, restore the original return. 67 bytes
+vs the live image (4 B hook + 64 B cave+string), zero-gated cave,
+`Result: VALID` required. Verified live: `/proc/bootconfig` carries
+`androidboot.bootmode="factory"` and `ro.boot.bootmode=factory` with
+no userspace help. Quirk: vendor init forces the legacy `ro.bootmode`
+alias to `normal` anyway — covered by an early
+`/data/adb/post-fs-data.d` `resetprop` (pre-app timing) until the
+override is found.
+
+```bash
+python lk_auto_patch.py <stock-lk.img> -o <lk_bootmode.img> \
+  --preset bootmode-cmdline --factory-allow --factory-allow-unsafe \
+  --factory-force --factory-force-unsafe \
+  --bootmode-cmdline --bootmode-cmdline-unsafe
+fastboot -s ZT4229CJG5 flash lk_b <lk_bootmode.img>  # no-brick check first
+fastboot -s ZT4229CJG5 reboot bootloader             # must stay alive
+fastboot -s ZT4229CJG5 flash lk_a <lk_bootmode.img>  # booting slot
+fastboot -s ZT4229CJG5 reboot bootloader
+fastboot -s ZT4229CJG5 continue                      # boots kernel
+adb shell 'su -c "cat /proc/bootconfig"' | grep -A1 bootmode
+```
+
+### `oem` fuzzing (`tools/oem_fuzz.py`, read-only v1)
+
+Enumerates the fastboot `oem`/getvar surface for hidden subcommands
+and fault-oracles (hang/drop/reboot/new strings). Strictly read-only:
+bare usages, single-arg `config` reads, `getvar`; never `lock`,
+`unlock`, `cid_prov_req`, `off-mode-charge`, `fb_mode` writes,
+`config` writes, or `hwid` add/remove. One command per fresh state,
+15 s timeout, stops on wedge (replug + buttons). First blood: `oem
+config` + 64-char name hangs the board (matches the `utag name length
+must not exceed` check — retest pending); `hw` (50 lines),
+`partition` (40 lines), `hwid` (29), `read_sv`, `get_unlock_data` all
+answer and are mined for the next corpus.
+
+```bash
+python tools/oem_fuzz.py --out fuzz1.jsonl   # slot B fastboot, -s ZT4229CJG5
+```
+
+### Extra vehicle: `lk-tools/build_bulk29.py`
+
+`build_bulk28` + one 16 KB window `[0xFFFF000051052000,
+0xFFFF000051056000)` covering the proven USB vtable page (stock
+dereferences `[0x51052280]` on every command — same 4 K page, so
+mapped) for factory-flag/registry reads. Same gates + VALID.
 
 ## Runtime Serial Derivation
 
