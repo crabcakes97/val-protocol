@@ -450,6 +450,59 @@ answer and are mined for the next corpus.
 python tools/oem_fuzz.py --out fuzz1.jsonl   # slot B fastboot, -s ZT4229CJG5
 ```
 
+### `mrdump-force` (forced crash dumps — TESTED preset)
+
+Forces LK's mrdump path: enable resolver fallback reports armed (`2`),
+unknown output device becomes `internal-storage` (flash-backed,
+pullable), and the fallocate handler always picks `fullmem`.
+Same-footprint `MOVZ`/`B` flips, old-byte + decode gated
+(the old words are `MOV Rd,wzr`, the gate checks that shape —
+a wrong-register encoding was caught here before anything shipped).
+
+```bash
+python lk_auto_patch.py <stock-lk.img> -o <lk_mrdump.img> \
+  --preset mrdump-force --mrdump-force --mrdump-force-unsafe
+```
+
+Verify: `fastboot oem ramdump enable` → `enable full ramdump`;
+`status` may still print the SSM-permission line (separate display
+path, not the resolver). The fullmem/output legs only run at crash
+time — trigger is still open (sysrq reboots clean; watchdog bark next).
+
+### `lockspoof` (report `locked`, stay unlocked — TESTED preset)
+
+Table-walks the 24 B `[name,handler,flags]` getvar table to the
+`securestate` getter, hooks its helper call to a 12 B cave (`adrp+add
+x0, flashing_locked` + back; the string already lives in-image, and
+the cave search starts past the bootmode reservation after a real
+NUL-terminator collision was caught pre-ship). `getvar securestate`
+then reads `flashing_locked` while flashing, slot switches, and every
+other unlocked ability keep working. Report-only by design.
+
+```bash
+python lk_auto_patch.py <stock-lk.img> -o <lk_spoof.img> \
+  --preset lockspoof --lockspoof --lockspoof-unsafe
+fastboot -s ZT4229CJG5 getvar securestate   # want: flashing_locked
+```
+
+### `wide-open` (everything together — TESTED preset)
+
+`factory-allow` + `factory-force` + `bootmode-cmdline` +
+`mrdump-force` + `lockspoof` from a stock base in one build
+(13 patch records, VALID). B first (no-brick check), then the booting
+slot:
+
+```bash
+python lk_auto_patch.py <stock-lk.img> -o <lk_wideopen.img> \
+  --preset wide-open --factory-allow --factory-allow-unsafe \
+  --factory-force --factory-force-unsafe \
+  --bootmode-cmdline --bootmode-cmdline-unsafe \
+  --mrdump-force --mrdump-force-unsafe \
+  --lockspoof --lockspoof-unsafe
+fastboot -s ZT4229CJG5 flash lk_b <lk_wideopen.img>   # Send+Write OKAY
+fastboot -s ZT4229CJG5 reboot bootloader              # must stay alive
+```
+
 ### Extra vehicle: `lk-tools/build_bulk29.py`
 
 `build_bulk28` + one 16 KB window `[0xFFFF000051052000,

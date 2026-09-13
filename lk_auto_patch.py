@@ -24,6 +24,9 @@ PRESETS = (
     "factory-allow",
     "factory-force",
     "bootmode-cmdline",
+    "mrdump-force",
+    "lockspoof",
+    "wide-open",
     "full-allow",
     "gz-canary",
     "gz-range",
@@ -539,6 +542,26 @@ def build_parser() -> argparse.ArgumentParser:
         help="Confirmacion explicita de riesgo para --bootmode-cmdline.",
     )
     parser.add_argument(
+        "--mrdump-force",
+        action="store_true",
+        help="UNSAFE RESEARCH para presets mrdump-force/wide-open.",
+    )
+    parser.add_argument(
+        "--mrdump-force-unsafe",
+        action="store_true",
+        help="Confirmacion explicita de riesgo para --mrdump-force.",
+    )
+    parser.add_argument(
+        "--lockspoof",
+        action="store_true",
+        help="REPORT-ONLY para presets lockspoof/wide-open.",
+    )
+    parser.add_argument(
+        "--lockspoof-unsafe",
+        action="store_true",
+        help="Confirmacion explicita de riesgo para --lockspoof.",
+    )
+    parser.add_argument(
         "--experimental",
         action="store_true",
         help=(
@@ -704,6 +727,49 @@ def build_patch_command(args: argparse.Namespace, root: Path, analysis_dir: Path
             "--factory-allow", "--factory-allow-unsafe",
             "--factory-force", "--factory-force-unsafe",
             "--bootmode-cmdline", "--bootmode-cmdline-unsafe",
+        ])
+        if args.experimental:
+            patch_cmd.append("--experimental")
+        return patch_cmd
+
+    if args.preset == "mrdump-force":
+        require_arg(args.mrdump_force, "--preset mrdump-force requiere --mrdump-force.")
+        require_arg(
+            args.mrdump_force_unsafe,
+            "--preset mrdump-force requiere --mrdump-force-unsafe.",
+        )
+        patch_cmd.extend(["--mrdump-force", "--mrdump-force-unsafe"])
+        if args.experimental:
+            patch_cmd.append("--experimental")
+        return patch_cmd
+
+    if args.preset == "lockspoof":
+        require_arg(args.lockspoof, "--preset lockspoof requiere --lockspoof.")
+        require_arg(
+            args.lockspoof_unsafe,
+            "--preset lockspoof requiere --lockspoof-unsafe.",
+        )
+        patch_cmd.extend(["--lockspoof", "--lockspoof-unsafe"])
+        if args.experimental:
+            patch_cmd.append("--experimental")
+        return patch_cmd
+
+    if args.preset == "wide-open":
+        for flag, unsafe in [
+            ("factory_allow", "factory_allow_unsafe"),
+            ("factory_force", "factory_force_unsafe"),
+            ("bootmode_cmdline", "bootmode_cmdline_unsafe"),
+            ("mrdump_force", "mrdump_force_unsafe"),
+            ("lockspoof", "lockspoof_unsafe"),
+        ]:
+            require_arg(getattr(args, flag), f"--preset wide-open requiere --{flag.replace('_', '-')}.")
+            require_arg(getattr(args, unsafe), f"--preset wide-open requiere --{unsafe.replace('_', '-')}.")
+        patch_cmd.extend([
+            "--factory-allow", "--factory-allow-unsafe",
+            "--factory-force", "--factory-force-unsafe",
+            "--bootmode-cmdline", "--bootmode-cmdline-unsafe",
+            "--mrdump-force", "--mrdump-force-unsafe",
+            "--lockspoof", "--lockspoof-unsafe",
         ])
         if args.experimental:
             patch_cmd.append("--experimental")

@@ -153,6 +153,60 @@ BOOTMODE_HOOK_OFF = 0x1ADF0
 BOOTMODE_SETTER_OFF = 0x28DF0
 
 
+# MRDUMP force gates (nevada XT2615V LK, aarch64; offsets are lk.bin
+# file offsets). Crash-dump enablement reads UTAG enable_fulldump
+# (2=armed) and the output device mapper turns unknown/empty into 0
+# (dropped). The fallocate handler picks halfmem/fullmem by arg.
+# Each entry: (label, file_offset, expected_old_bytes, new_bytes, why).
+# New bytes are re-derived in code (movz-32 / B) and decode-gated, never
+# trusted from this table alone.
+MRDUMP_FORCE_GATES: tuple[tuple[str, int, bytes, bytes, str], ...] = (
+    (
+        "mrdump-enable",
+        0x3A180,
+        bytes.fromhex("f3031f2a"),  # mov w19,wzr (false/fallback -> 0)
+        bytes.fromhex("53008052"),  # mov w19,#2 (report armed)
+        "enable resolver fallback-0 -> armed-2",
+    ),
+    (
+        "mrdump-output",
+        0x39C54,
+        bytes.fromhex("f4031f2a"),  # mov w20,wzr (unknown -> drop)
+        bytes.fromhex("74008052"),  # mov w20,#3 (internal-storage)
+        "output mapper unknown-0 -> internal-storage-3",
+    ),
+    (
+        "mrdump-fullmem",
+        0x9268,
+        bytes.fromhex("a0040054"),  # b.eq -> fullmem arm (w8==2 only)
+        bytes.fromhex("25000014"),  # b -> fullmem arm (any w8)
+        "fallocate w8==2-only -> always fullmem",
+    ),
+)
+
+
+def _enc_movz_w(rd: int, imm16: int) -> bytes:
+    """Encode MOVZ 32-bit rd,#imm16. Raises on range (never hand-trust)."""
+    if not (0 <= imm16 <= 0xFFFF):
+        raise ValueError(f"movz imm out of range: {imm16:#x}")
+    return struct.pack("<I", 0x52800000 | (imm16 << 5) | rd)
+
+
+# Lock-spoof (report flashing_locked, stay flashing_unlocked).
+# The securestate getvar getter (file 0x114DC) prints whatever its helper
+# returns; the image already contains b"flashing_locked" (file 0xD90C9),
+# so the cave only redirects the pointer: adrp+add x0, locked_str, then
+# fall back into the original format path. Enforcement (fastboot flash,
+# unlock checks) is untouched by design.
+LOCKSPOOF_STR_OFF = 0xD90C9
+LOCKSPOOF_STR = b"flashing_locked"
+LOCKSPOOF_CAVE_SIZE = 0x40
+# Cave search starts AFTER the bootmode reservation: the zero-run scan
+# cannot tell a string NUL terminator from free space, so the whole
+# BOOTMODE_CAVE range is off-limits even when bootmode ran first.
+LOCKSPOOF_SEARCH_START = 0xCE280
+
+
 # ---- ramdump / MRDUMP research (slot-B freeze triage) ----
 # Ground truth from the live -111-3 phone LK (aarch64, base
 # 0xffff000050f00000): the top-level "ramdump" fastboot command lives in the
@@ -253,6 +307,7 @@ KNOWN_LK_BUILDS: tuple[dict, ...] = (
         "modem_offsets": (0x49A9C, 0x49AAC, 0x49B24),
         "factory_offsets": (0xF3F4, 0xAD88),
         "force_offsets": (0x159CC, 0x17700, 0x17ECC),
+        "mrdump_offsets": (0x3A180, 0x39C54, 0x9268),
         "bootmode_offsets": (0x1ADF0,),
     },
     {
@@ -263,6 +318,7 @@ KNOWN_LK_BUILDS: tuple[dict, ...] = (
         "modem_offsets": (0x49A9C, 0x49AAC, 0x49B24),
         "factory_offsets": (0xF3F4, 0xAD88),
         "force_offsets": (0x159CC, 0x17700, 0x17ECC),
+        "mrdump_offsets": (0x3A180, 0x39C54, 0x9268),
         "bootmode_offsets": (0x1ADF0,),
     },
 )
@@ -880,6 +936,206 @@ def apply_bootmode_cmdline(
     return applied
 
 
+def _dec_movz_w(word: int) -> tuple[int, int] | None:
+    """Decode MOVZ-32 -> (rd, imm16). None if not MOVZ-32/LSL#0."""
+    if (word & 0xFF800000) != 0x52800000:
+        return None
+    if (word >> 21) & 0x3:
+        return None
+    return (word & 0x1F, (word >> 5) & 0xFFFF)
+
+
+def _table_entry_for_name(
+    data: bytes, base: int, name: bytes, stride: int = 24
+) -> tuple[int, int]:
+    """Walk the 24B [name_ptr, handler, flags] getvar table.
+
+    Returns (entry_off, handler_off). Raises on any gap: name absent,
+    pointer missing/ambiguous, or handler out of image.
+    """
+    if base == 0:
+        raise ValueError("LK base unknown: cannot resolve VAs, refusing")
+    hit = data.find(name + b"\x00")
+    if hit < 0:
+        raise ValueError(f"table name {name!r} absent: refusing")
+    want = struct.pack("<Q", base + hit)
+    ptrs: list[int] = []
+    pos = 0
+    while True:
+        idx = data.find(want, pos)
+        if idx < 0:
+            break
+        ptrs.append(idx)
+        pos = idx + 1
+        if len(ptrs) > 4:
+            break
+    if len(ptrs) != 1:
+        raise ValueError(
+            f"name {name!r} has {len(ptrs)} table refs (need exactly 1): refusing"
+        )
+    entry = ptrs[0]
+    handler_va = struct.unpack_from("<Q", data, entry + 8)[0]
+    handler_off = handler_va - base
+    if handler_off < 0 or handler_off + 4 > len(data):
+        raise ValueError(f"handler for {name!r} out of image: refusing")
+    flags = struct.unpack_from("<Q", data, entry + 16)[0]
+    if flags > 0xFF:
+        raise ValueError(
+            f"name {name!r} entry flags 0x{flags:x} don't look table-shaped: refusing"
+        )
+    return entry, handler_off
+
+
+def discover_mrdump_gates(
+    data: bytes, base: int
+) -> list[tuple[str, int, bytes, bytes, str]]:
+    """Locate mrdump force gates per-image. Raises on any gap."""
+    if base == 0:
+        raise ValueError("LK base unknown: cannot resolve VAs, refusing")
+    for anchor in (b"mrdump_allocate_size", b"mrdump_output",
+                   b"enable_fulldump", b"fullmem"):
+        if data.find(anchor) < 0:
+            raise ValueError(f"anchor {anchor!r} absent: refusing")
+    gates: list[tuple[str, int, bytes, bytes, str]] = []
+    for label, offset, old, new, why in MRDUMP_FORCE_GATES:
+        actual = bytes(data[offset : offset + 4])
+        if actual != old:
+            raise ValueError(
+                f"{label}: old-byte mismatch at 0x{offset:x}: expected "
+                f"{old.hex()}, found {actual.hex()}: refusing"
+            )
+        word = struct.unpack("<I", old)[0]
+        nword = struct.unpack("<I", new)[0]
+        if label == "mrdump-fullmem":
+            dec = _decode_b_cond(word, base + offset)
+            if dec is None or dec[0] != 0:
+                raise ValueError(f"{label}: old is not B.EQ: refusing")
+            tgt = dec[1]
+            if (_enc_b(base + offset, tgt) != new) or (
+                _decode_b_uncond(nword, base + offset) != tgt
+            ):
+                raise ValueError(f"{label}: B re-encode mismatch: refusing")
+        else:
+            # old: MOV Rd,wzr (register move of zero); new: MOVZ same Rd
+            if (word & 0xFFFFFFE0) != 0x2A1F03E0:
+                raise ValueError(f"{label}: old is not MOV-Rd,wzr: refusing")
+            ndec = _dec_movz_w(nword)
+            if ndec is None or ndec[0] != (word & 0x1F):
+                raise ValueError(f"{label}: new is not MOVZ same-rd: refusing")
+        gates.append((label, offset, old, new, why))
+    return gates
+
+
+def discover_lockspoof(
+    data: bytes, base: int
+) -> tuple[int, int, int]:
+    """Locate the securestate spoof site. Returns (hook_off, cave_off, str_va).
+
+    Table-walks to the securestate getter, confirms the BL-to-helper
+    shape at its head, and finds a zero run for the 12B cave in the
+    CE000 page without touching known-used ranges.
+    """
+    if base == 0:
+        raise ValueError("LK base unknown: cannot resolve VAs, refusing")
+    if data.find(LOCKSPOOF_STR + b"\x00") < 0:
+        raise ValueError("locked string absent: refusing")
+    _, getter = _table_entry_for_name(data, base, b"securestate")
+    head = bytes(data[getter : getter + 20])
+    if head[0:4] != bytes.fromhex("fd7bbea9") or head[8:12] != bytes.fromhex("fd030091"):
+        raise ValueError(
+            f"securestate getter head mismatch at 0x{getter:x}: refusing"
+        )
+    hook_off = getter + 0x10
+    hook_word = struct.unpack_from("<I", data, hook_off)[0]
+    if (_dec_bl_target(hook_word, base + hook_off) or 0) == 0:
+        raise ValueError(f"hook at 0x{hook_off:x} is not BL: refusing")
+    page = 0xCE000
+    cave_off = -1
+    run = 0
+    for off in range(LOCKSPOOF_SEARCH_START, page + 0x1000):
+        if data[off] == 0:
+            run += 1
+            if run >= LOCKSPOOF_CAVE_SIZE:
+                cave_off = off - LOCKSPOOF_CAVE_SIZE + 1
+                break
+        else:
+            run = 0
+    if cave_off < 0:
+        raise ValueError("no zero cave in CE000 page: refusing")
+    str_hit = data.find(LOCKSPOOF_STR + b"\x00")
+    return hook_off, cave_off, base + str_hit
+
+
+def build_lockspoof_cave(base: int, hook_off: int, cave_off: int,
+                         str_va: int) -> bytes:
+    """Build adrp+add x0,locked_str + b back. Decode-verified."""
+    hook_va = base + hook_off
+    cave_va = base + cave_off
+    adrp, add = _enc_adrp_add(0, cave_va, str_va)
+    back = _enc_b(cave_va + 8, hook_va + 4)
+    blob = adrp + add + back
+    aw = struct.unpack("<I", adrp)[0]
+    dw = struct.unpack("<I", add)[0]
+    if (aw & 0x9F000000) != 0x90000000 or (aw & 0x1F) != 0:
+        raise ValueError("lockspoof adrp gate failed: refusing")
+    if (dw & 0xFF800000) != 0x91000000:
+        raise ValueError("lockspoof add gate failed: refusing")
+    imm = ((((aw >> 5) & 0x7FFFF) << 2) | ((aw >> 29) & 0x3))
+    if imm & 0x100000:
+        imm -= 0x200000
+    if ((cave_va & ~0xFFF) + imm * 0x1000 + ((dw >> 10) & 0xFFF)) != str_va:
+        raise ValueError("lockspoof adrp/add target mismatch: refusing")
+    bw = struct.unpack("<I", back)[0]
+    if _decode_b_uncond(bw, cave_va + 8) != hook_va + 4:
+        raise ValueError("lockspoof back-branch mismatch: refusing")
+    return blob
+
+
+def apply_mrdump_gates(data: bytearray, analysis_dir: Path) -> list[tuple[str, int, bytes, bytes]]:
+    """Apply MRDUMP_FORCE_GATES with old-byte verification. Returns applied list."""
+    return apply_discovered_gates(
+        data, analysis_dir, "mrdump", experimental=False,
+    )
+
+
+def apply_lockspoof(
+    data: bytearray, analysis_dir: Path, experimental: bool
+) -> list[tuple[str, int, bytes, bytes]]:
+    """Report-locked spoof with table-walked hook + zero-gated cave."""
+    arch = load_analysis_architecture(analysis_dir)
+    if arch != "aarch64":
+        raise ValueError(f"lockspoof supports aarch64 only, got {arch!r}: refusing")
+    try:
+        lk_base = load_analysis_base(analysis_dir)
+    except (OSError, ValueError, FileNotFoundError):
+        lk_base = 0
+    build, describe = fingerprint_lk(bytes(data), arch, lk_base)
+    print(f"Fingerprint: {describe}")
+    hook_off, cave_off, str_va = discover_lockspoof(bytes(data), lk_base)
+    if build is not None:
+        print(f"KnownBuild: {build['id']} (table-walked, no fixed offsets)")
+    elif not experimental:
+        raise ValueError("unknown LK build: re-run with --experimental")
+    else:
+        print("Mode    : EXPERIMENTAL cross-device (unknown build)")
+    hook_va = lk_base + hook_off
+    new_hook = _enc_bl(hook_va, lk_base + cave_off)
+    old_hook = bytes(data[hook_off : hook_off + 4])
+    if _dec_bl_target(struct.unpack("<I", old_hook)[0], hook_va) is None:
+        raise ValueError("hook slot is not BL: refusing")
+    cave_blob = build_lockspoof_cave(lk_base, hook_off, cave_off, str_va)
+    applied: list[tuple[str, int, bytes, bytes]] = []
+    patch_bytes_checked(data, hook_off, old_hook, new_hook, "lockspoof-hook")
+    applied.append(("lockspoof-hook", hook_off, old_hook, new_hook))
+    print(f"Patch   : lockspoof hook @ 0x{hook_off:x}  "
+          f"{old_hook.hex()} -> {new_hook.hex()}")
+    data[cave_off : cave_off + len(cave_blob)] = cave_blob
+    applied.append(("lockspoof-cave", cave_off, bytes(len(cave_blob)), cave_blob))
+    print(f"Patch   : lockspoof cave @ 0x{cave_off:x}  {len(cave_blob)}B new")
+    print("Warn    : REPORT-ONLY spoof (getvar lies, enforcement untouched).")
+    return applied
+
+
 def apply_discovered_gates(
     data: bytearray,
     analysis_dir: Path,
@@ -908,6 +1164,9 @@ def apply_discovered_gates(
     if family == "modem":
         gates = discover_modem_gates(bytes(data), lk_base)
         key = "modem_offsets"
+    elif family == "mrdump":
+        gates = discover_mrdump_gates(bytes(data), lk_base)
+        key = "mrdump_offsets"
     elif family == "factory":
         gates = discover_factory_gates(bytes(data), lk_base)
         key = "factory_offsets"
@@ -1011,6 +1270,7 @@ def detect_report(analysis_dir: Path, experimental: bool) -> int:
         ("modem", discover_modem_gates, "modem_offsets"),
         ("factory", discover_factory_gates, "factory_offsets"),
         ("force", discover_factory_force_gates, "force_offsets"),
+        ("mrdump", discover_mrdump_gates, "mrdump_offsets"),
     ):
         try:
             gates = discover(data, base)
@@ -1041,6 +1301,14 @@ def detect_report(analysis_dir: Path, experimental: bool) -> int:
         else:
             print(f"Bootmode: OK hook=[0x{hook_off:x}]"
                   + (" (experimental, unknown build)" if build is None else ""))
+    try:
+        lhook, lcave, _ = discover_lockspoof(data, base)
+    except ValueError as exc:
+        print(f"Lockspoof: REFUSE {exc}")
+        rc = 1
+    else:
+        print(f"Lockspoof: OK hook=[0x{lhook:x}] cave=[0x{lcave:x}]"
+              + (" (experimental, unknown build)" if build is None else ""))
     try:
         rd = ramdump_research_scan(data, base)
     except (ValueError, struct.error):
@@ -5123,6 +5391,33 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--mrdump-force",
+        action="store_true",
+        help=(
+            "UNSAFE RESEARCH: fuerza mrdump (enable=armed, output="
+            "internal-storage, fallocate=fullmem). Requiere "
+            "--mrdump-force-unsafe."
+        ),
+    )
+    parser.add_argument(
+        "--mrdump-force-unsafe",
+        action="store_true",
+        help="Confirmacion explicita de riesgo para --mrdump-force.",
+    )
+    parser.add_argument(
+        "--lockspoof",
+        action="store_true",
+        help=(
+            "REPORT-ONLY: getvar securestate miente flashing_locked "
+            "(enforcement intacto). Requiere --lockspoof-unsafe."
+        ),
+    )
+    parser.add_argument(
+        "--lockspoof-unsafe",
+        action="store_true",
+        help="Confirmacion explicita de riesgo para --lockspoof.",
+    )
+    parser.add_argument(
         "--bootmode-cmdline-unsafe",
         action="store_true",
         help=(
@@ -5267,6 +5562,8 @@ def main() -> int:
         and not args.factory_allow
         and not args.factory_force
         and not args.bootmode_cmdline
+        and not args.mrdump_force
+        and not args.lockspoof
     ):
         print(
             "Error: usa --erase-partition <nombre>, --from/--to, --frp-skip-check, "
@@ -5297,6 +5594,18 @@ def main() -> int:
     if args.bootmode_cmdline and not args.bootmode_cmdline_unsafe:
         print(
             "Error: --bootmode-cmdline requiere --bootmode-cmdline-unsafe.",
+            file=sys.stderr,
+        )
+        return 2
+    if args.mrdump_force and not args.mrdump_force_unsafe:
+        print(
+            "Error: --mrdump-force requiere --mrdump-force-unsafe.",
+            file=sys.stderr,
+        )
+        return 2
+    if args.lockspoof and not args.lockspoof_unsafe:
+        print(
+            "Error: --lockspoof requiere --lockspoof-unsafe.",
             file=sys.stderr,
         )
         return 2
@@ -5360,6 +5669,8 @@ def main() -> int:
             args.factory_allow,
             args.factory_force,
             args.bootmode_cmdline,
+            args.mrdump_force,
+            args.lockspoof,
             args.ramdump_research_report_only,
         ]
         if any(conflicting):
@@ -5387,6 +5698,8 @@ def main() -> int:
             args.factory_allow,
             args.factory_force,
             args.bootmode_cmdline,
+            args.mrdump_force,
+            args.lockspoof,
         ]
         if any(conflicting):
             print(
@@ -5449,6 +5762,28 @@ def main() -> int:
         print(f"BootmodeGates: {len(applied)} cmdline hook + cave + str")
         print("Warn    : init fija ro.bootmode=factory desde cmdline; verifica")
         print("Warn    : con cat /proc/cmdline en Android.")
+
+    if args.mrdump_force:
+        try:
+            applied = apply_discovered_gates(
+                data, args.analysis_dir, "mrdump", args.experimental
+            )
+        except (OSError, ValueError) as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 1
+        print(f"MrdumpGates: {len(applied)} mrdump force gates")
+        print("Warn    : crash dumps van a internal-storage fullmem; un crash")
+        print("Warn    : real puede tardar y llenar flash. Trigger = watchdog.")
+
+    if args.lockspoof:
+        try:
+            applied = apply_lockspoof(
+                data, args.analysis_dir, args.experimental
+            )
+        except (OSError, ValueError) as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 1
+        print(f"LockspoofGates: {len(applied)} hook + cave (report-only)")
 
     if partition_patch is not None:
         old_name, new_name = partition_patch
