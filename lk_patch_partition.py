@@ -308,6 +308,7 @@ KNOWN_LK_BUILDS: tuple[dict, ...] = (
         "factory_offsets": (0xF3F4, 0xAD88),
         "force_offsets": (0x159CC, 0x17700, 0x17ECC),
         "mrdump_offsets": (0x3A180, 0x39C54, 0x9268),
+        "ssm_force_offsets": (0x9F83C, 0x9DAA4),
         "bootmode_offsets": (0x1ADF0,),
     },
     {
@@ -319,6 +320,7 @@ KNOWN_LK_BUILDS: tuple[dict, ...] = (
         "factory_offsets": (0xF3F4, 0xAD88),
         "force_offsets": (0x159CC, 0x17700, 0x17ECC),
         "mrdump_offsets": (0x3A180, 0x39C54, 0x9268),
+        "ssm_force_offsets": (0x9F83C, 0x9DAA4),
         "bootmode_offsets": (0x1ADF0,),
     },
 )
@@ -337,6 +339,16 @@ def _decode_b_cond(word: int, va: int) -> tuple[int, int] | None:
 def _decode_tbz(word: int, va: int) -> tuple[int, int] | None:
     """Decode TBZ -> (bit, target_va). None if not TBZ (TBNZ excluded)."""
     if (word & 0x7F000000) != 0x36000000:
+        return None
+    imm = (word >> 5) & 0x3FFF
+    if imm & 0x2000:
+        imm -= 0x4000
+    return ((word >> 19) & 0x1F, va + imm * 4)
+
+
+def _decode_tbnz(word: int, va: int) -> tuple[int, int] | None:
+    """Decode TBNZ -> (bit, target_va). None if not TBNZ (TBZ excluded)."""
+    if (word & 0x7F000000) != 0x37000000:
         return None
     imm = (word >> 5) & 0x3FFF
     if imm & 0x2000:
@@ -1171,6 +1183,101 @@ def discover_ssm_surface(data: bytes) -> list[int]:
     return found
 
 
+# SSM enforcement gates (nevada XT2615V LK, aarch64; offsets are lk.bin
+# file offsets). Traced on the -111-3 pull, strcmp-dispatch verified:
+# - thinkshift-disable @ 0x9F83C: the `oem disable-thinkshield` handler
+#   (strcmp chain) calls the FDR work fn, then `tbnz w8,#0` selects the
+#   success report (w0=0/OKAY path); fall-through prints "Failed to
+#   disable-thinkshield!" (w0=3). Replacing with B->success forces the
+#   success report; the work call still executes. Functional caveat (NOT
+#   a brick risk): a genuinely failed op would still report success.
+# - avb-red @ 0x9DAA4: boot-state var compare + `b.eq -> AVB-red deny
+#   block` ("AVB state is red and disallow to boot", boot stops).
+#   NOP means red state never denies: boot continues.
+# The sibling `oem disable-verity` handler (strcmp chain) is straight-line
+# to success (no conditional fail branch), so it needs only the dispatcher
+# ungate and gets no enforcement gate here. `oem enable-thinkshield` is
+# left untouched (not needed to turn protection off).
+# Each entry: (label, file_offset, expected_old_bytes, why). New bytes are
+# derived in code (B with re-verified target / NOP) and decode-gated.
+SSM_FORCE_GATES: tuple[tuple[str, int, bytes, str], ...] = (
+    (
+        "ssm-thinkshield-disable",
+        0x9F83C,
+        bytes.fromhex("48ff0737"),  # tbnz w8,#0 -> success report
+        "tbnz-bit3 success-select -> B success (fail print dead)",
+    ),
+    (
+        "ssm-avb-red",
+        0x9DAA4,
+        bytes.fromhex("c0010054"),  # b.eq -> AVB-red deny block
+        "b.eq AVB-red deny -> nop never denies boot",
+    ),
+)
+
+SSM_FORCE_FAIL_STR = b"Failed to disable-thinkshield!"
+SSM_FORCE_AVB_STR = b"mot_sec: AVB state is red and disallow to boot"
+SSM_FORCE_SUCCESS_WORD = 0x2A1F03E0  # mov w0, wzr (success-block head)
+
+
+def discover_ssm_force_gates(
+    data: bytes, base: int
+) -> list[tuple[str, int, bytes, bytes, str]]:
+    """Locate SSM enforcement gates per-image. Raises on any gap."""
+    if base == 0:
+        raise ValueError("LK base unknown: cannot resolve VAs, refusing")
+    fail_refs = _find_string_refs(data, base, base + data.find(SSM_FORCE_FAIL_STR))
+    if data.find(SSM_FORCE_FAIL_STR) < 0 or not fail_refs:
+        raise ValueError("SSM fail-string absent/unreferenced: refusing")
+    avb_hit = data.find(SSM_FORCE_AVB_STR)
+    if avb_hit < 0:
+        raise ValueError("SSM AVB-red string absent: refusing")
+    avb_refs = _find_string_refs(data, base, base + avb_hit)
+    if not avb_refs:
+        raise ValueError("SSM AVB-red string unreferenced: refusing")
+    gates: list[tuple[str, int, bytes, bytes, str]] = []
+    for label, offset, old, why in SSM_FORCE_GATES:
+        actual = bytes(data[offset : offset + 4])
+        if actual != old:
+            raise ValueError(
+                f"{label}: old-byte mismatch at 0x{offset:x}: expected "
+                f"{old.hex()}, found {actual.hex()}: refusing"
+            )
+        word = struct.unpack("<I", old)[0]
+        va = base + offset
+        if label == "ssm-thinkshield-disable":
+            dec = _decode_tbnz(word, va)
+            if dec is None or dec[0] != 0:
+                raise ValueError(f"{label}: old is not TBNZ-bit0: refusing")
+            tgt = dec[1]
+            if tgt >= va:
+                raise ValueError(f"{label}: target not backwards: refusing")
+            # Success shape: `mov w0,wzr` immediately before the shared
+            # epilogue the branch lands on (w0=0/OKAY on return).
+            head = struct.unpack_from("<I", data, tgt - base - 4)[0]
+            if head != SSM_FORCE_SUCCESS_WORD:
+                raise ValueError(
+                    f"{label}: word before target 0x{tgt - base:x} is not "
+                    f"mov-w0-wzr: refusing"
+                )
+            new = _enc_b(va, tgt)
+            nword = struct.unpack("<I", new)[0]
+            if _decode_b_uncond(nword, va) != tgt:
+                raise ValueError(f"{label}: B re-encode mismatch: refusing")
+        else:
+            dec = _decode_b_cond(word, va)
+            if dec is None or dec[0] != 0:
+                raise ValueError(f"{label}: old is not B.EQ: refusing")
+            if dec[1] != base + avb_refs[0]:
+                raise ValueError(
+                    f"{label}: target 0x{dec[1] - base:x} is not the AVB-red "
+                    f"block 0x{avb_refs[0]:x}: refusing"
+                )
+            new = AARCH64_NOP
+        gates.append((label, offset, old, new, why))
+    return gates
+
+
 def apply_ssm_bypass(
     data: bytearray, analysis_dir: Path, experimental: bool
 ) -> list[tuple[str, int, bytes, bytes]]:
@@ -1187,10 +1294,14 @@ def apply_ssm_bypass(
     print("SSM     : verbs present at "
           + ", ".join(f"0x{off:x}" for off in surface))
     applied = apply_discovered_gates(data, analysis_dir, "factory", experimental)
+    forced = apply_discovered_gates(data, analysis_dir, "ssm-force", experimental)
+    applied.extend(forced)
     print("Warn    : UNTESTED preset (never flown live): the verbs are now")
-    print("Warn    : reachable, but their handlers may still check unlock /")
-    print("Warn    : CID / SSM state. Live verdict = run 'fastboot oem")
-    print("Warn    : disable-verity' + 'fastboot oem disable-thinkshield'.")
+    print("Warn    : reachable and the two enforcement gates forced, but a")
+    print("Warn    : genuinely failed op still reports success and handlers")
+    print("Warn    : may check unlock / CID / SSM state. Live verdict = run")
+    print("Warn    : 'fastboot oem disable-verity' + 'fastboot oem")
+    print("Warn    : disable-thinkshield' + attempt boot with red state.")
     return applied
 
 
@@ -1231,6 +1342,9 @@ def apply_discovered_gates(
     elif family == "force":
         gates = discover_factory_force_gates(bytes(data), lk_base)
         key = "force_offsets"
+    elif family == "ssm-force":
+        gates = discover_ssm_force_gates(bytes(data), lk_base)
+        key = "ssm_force_offsets"
     else:
         raise ValueError(f"unknown gate family {family!r}")
     found = tuple(off for _, off, _, _, _ in gates)
@@ -1329,6 +1443,7 @@ def detect_report(analysis_dir: Path, experimental: bool) -> int:
         ("factory", discover_factory_gates, "factory_offsets"),
         ("force", discover_factory_force_gates, "force_offsets"),
         ("mrdump", discover_mrdump_gates, "mrdump_offsets"),
+        ("ssm-force", discover_ssm_force_gates, "ssm_force_offsets"),
     ):
         try:
             gates = discover(data, base)
@@ -5883,7 +5998,8 @@ def main() -> int:
         except (OSError, ValueError) as exc:
             print(f"Error: {exc}", file=sys.stderr)
             return 1
-        print(f"SsmGates: {len(applied)} dispatcher gates -> NOP (SSM verbs reachable)")
+        print(f"SsmGates: {len(applied)} patches (dispatcher ungate + "
+              f"2 enforcement gates)")
         print("Warn    : UNTESTED: live-run 'oem disable-verity' + 'oem disable-thinkshield'")
         print("Warn    : to learn each handler's own checks. Slot B first.")
 

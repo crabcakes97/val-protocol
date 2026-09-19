@@ -546,13 +546,27 @@ live-probed ROUTED) and ships `oem disable-thinkshield` /
 `oem enable-thinkshield` ("disable thinkshield protection (persistent)",
 `mot_sec: Entering ThinkShield protection check`). The OEM mapper confirms
 these verbs sit behind the SHARED dispatcher restriction gates
-(factory-allow scope: every routed command), so this preset applies the
-proven factory-allow ungate (`0xF3F4` / `0xAD88`, old-byte gated,
-known-build cross-checked — byte-identical output to `factory-allow`,
-verified) and additionally refuses when any SSM verb anchor is absent, so
-a wrong-build image can never silently ship. The verbs' own handlers may
-still check unlock / CID / SSM state: the live answers are the verdict
-this preset cannot give.
+(factory-allow scope: every routed command). Traced on the `-111-3` pull
+(RETUS `-114-1` matches byte-identical) via the strcmp dispatch:
+* dispatcher ungate (`0xF3F4` / `0xAD88`, old-byte gated, known-build
+  cross-checked — byte-identical output to `factory-allow`, verified);
+* `ssm-thinkshield-disable` (`0x9F83C`): the disable handler calls the FDR
+  work fn, then `tbnz w8,#0` selects the success report (`w0=0`/OKAY) while
+  fall-through prints `Failed to disable-thinkshield!` (`w0=3`). Replaced
+  with `B -> success` (target re-resolved per-image, decode-gated). The
+  work call still executes; caveat: a genuinely failed op would still
+  report success;
+* `ssm-avb-red` (`0x9DAA4`): boot-state compare + `b.eq -> AVB-red deny`
+  (`mot_sec: AVB state is red and disallow to boot`, boot stops). NOPed —
+  red state never denies, boot continues (target re-resolved per-image to
+  the AVB-red string xref, decode-gated).
+The sibling `oem disable-verity` handler is straight-line to success (no
+conditional fail branch), so it needs only the dispatcher ungate.
+`oem enable-thinkshield` is deliberately untouched. Any absent anchor,
+missing xref, shape drift, or unknown build refuses instead of patching.
+Handlers may still check unlock / CID / SSM state: the live answers
+(`oem disable-verity`, `oem disable-thinkshield`, boot with red state)
+are the verdict this preset cannot give.
 
 ```bash
 python lk_auto_patch.py <stock-lk.img> -o <lk_ssm.img> \
