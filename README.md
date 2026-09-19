@@ -626,7 +626,8 @@ Result: VALID
 - [Usage Guide](docs/USAGE.md)
 - [Architecture Notes](docs/ARCHITECTURE.md)
 - [Analysis Outputs](docs/ANALYSIS_OUTPUTS.md)
-- [Troubleshooting](docs/TROUBLESHOOTING.md)
+- [Troubleshooting](docs/TROUBLESHOOTING.md) (includes the
+  2026-09-19 brick-recovery log: preloader loop, DA trials, stock image)
 - [CustomTkinter UI](docs/UI.md)
 - [Publishing Checklist](docs/PUBLISHING.md)
 
