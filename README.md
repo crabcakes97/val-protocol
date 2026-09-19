@@ -515,10 +515,11 @@ python lk_auto_patch.py <stock-lk.img> -o <lk_spoof.img> \
 fastboot -s ZT4229CJG5 getvar securestate   # want: flashing_locked
 ```
 
-Note: there is no SSM/verity-disable preset. `disable-verity` /
-`disable-verification` exist only as candidate names in
+Note: no preset patches the verity/ThinkShield enforcement itself.
+`disable-verity` / `disable-verification` exist as candidate names in
 `lk_oem_cmd_mapper.py` (map-only, never flashed); `lockspoof` only spoofs
-the `securestate` report while every unlocked ability keeps working.
+the `securestate` report while every unlocked ability keeps working. The
+`ssm-bypass` preset below ungates the verbs instead (UNTESTED).
 
 ### `wide-open` (everything together — TESTED preset)
 
@@ -538,8 +539,31 @@ fastboot -s ZT4229CJG5 flash lk_b <lk_wideopen.img>   # Send+Write OKAY
 fastboot -s ZT4229CJG5 reboot bootloader              # must stay alive
 ```
 
-### Extra vehicle: `lk-tools/build_bulk29.py`
+### `ssm-bypass` (ungate verity + ThinkShield verbs — UNTESTED preset)
 
+Never flown live. The Nevada LK routes `oem disable-verity` (code refs,
+live-probed ROUTED) and ships `oem disable-thinkshield` /
+`oem enable-thinkshield` ("disable thinkshield protection (persistent)",
+`mot_sec: Entering ThinkShield protection check`). The OEM mapper confirms
+these verbs sit behind the SHARED dispatcher restriction gates
+(factory-allow scope: every routed command), so this preset applies the
+proven factory-allow ungate (`0xF3F4` / `0xAD88`, old-byte gated,
+known-build cross-checked — byte-identical output to `factory-allow`,
+verified) and additionally refuses when any SSM verb anchor is absent, so
+a wrong-build image can never silently ship. The verbs' own handlers may
+still check unlock / CID / SSM state: the live answers are the verdict
+this preset cannot give.
+
+```bash
+python lk_auto_patch.py <stock-lk.img> -o <lk_ssm.img> \
+  --preset ssm-bypass --ssm-bypass --ssm-bypass-unsafe
+fastboot -s ZT4229CJG5 flash lk_b <lk_ssm.img>   # Send+Write OKAY
+fastboot -s ZT4229CJG5 reboot bootloader         # must stay alive
+fastboot -s ZT4229CJG5 oem disable-verity
+fastboot -s ZT4229CJG5 oem disable-thinkshield
+```
+
+### Extra vehicle: `lk-tools/build_bulk29.py`
 `build_bulk28` + one 16 KB window `[0xFFFF000051052000,
 0xFFFF000051056000)` covering the proven USB vtable page (stock
 dereferences `[0x51052280]` on every command — same 4 K page, so
@@ -962,7 +986,7 @@ unit where marked; the rest is ready-to-run recon.
 
 | Tool | What it does | How to use it |
 |---|---|---|
-| `lk_oem_cmd_mapper.py` | Maps all 76 known `oem` commands against the global gates (`0xF3F4`/`0xAD88`): PROVEN_LIVE / ROUTED / ABSENT + JSON. Read-only, never probes destructive commands. | `python lk_oem_cmd_mapper.py lk.bin -o out.oemmap.json` |
+| `lk_oem_cmd_mapper.py` | Maps all 78 known `oem` commands against the global gates (`0xF3F4`/`0xAD88`): PROVEN_LIVE / ROUTED / ABSENT + JSON. Read-only, never probes destructive commands. | `python lk_oem_cmd_mapper.py lk.bin -o out.oemmap.json` |
 | `bl2_ext_patcher.py` | Reports `sec_get_vfy_policy`/cert-verify anchors in a bl2_ext image; gated `--apply` replaces the policy entry with `mov w0,#0; ret`, re-signs, exact-size trims, verifies `VALID`. | `python bl2_ext_patcher.py bl2_ext.bin` (add `--apply --unsafe --old-bytes … --entry …` to build) |
 | `kree shit/kree_ioctl_explorer.c` | NDK userspace KREE prober with the measured ABI (`0x5404` = register-shm, 32B struct documented in-file). Phases: recon, `--self-share`, gated `--target`. | Build with NDK clang, run as root on device |
 | `kree shit/kree_abi_recon.py` | Recovers KREE ioctl numbers from vendor libs (GOT→PLT two-hop + `w1` backscan + per-function attribution) into JSON. | `python "kree shit/kree_abi_recon.py" libgz_uree.so -o kree_abi.json` |

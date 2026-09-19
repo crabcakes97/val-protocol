@@ -1136,6 +1136,64 @@ def apply_lockspoof(
     return applied
 
 
+# SSM bypass (ungate mot_sec-gated OEM verbs: verity + ThinkShield).
+# The Nevada LK routes `disable-verity` (code refs, live-probed ROUTED) and
+# ships `disable-thinkshield` / `enable-thinkshield` verbs ("disable
+# thinkshield protection (persistent)"). The OEM mapper confirms these verbs
+# sit behind the SHARED dispatcher restriction gates (factory-allow scope:
+# every routed command), so the delivery vehicle is the proven
+# factory-allow ungate (0xF3F4 / 0xAD88, old-byte gated, known-build
+# cross-checked). The preset additionally anchors on the SSM verb surface
+# and refuses when absent, so a wrong-build image can never silently ship.
+# UNTESTED: never flown live (lab unit bricked at authoring time); the
+# verbs' own handlers may carry further per-command checks (unlock / CID /
+# SSM state) that only a live `fastboot oem disable-verity` +
+# `fastboot oem disable-thinkshield` run can reveal.
+SSM_VERB_ANCHORS: tuple[bytes, ...] = (
+    b"disable-verity",
+    b"disable-thinkshield",
+    b"enable-verity",
+    b"mot_sec: Entering ThinkShield protection check",
+)
+
+
+def discover_ssm_surface(data: bytes) -> list[int]:
+    """Verify the SSM verb surface is present. Returns anchor offsets.
+
+    Raises on the first absent anchor (wrong image: refusing).
+    """
+    found: list[int] = []
+    for anchor in SSM_VERB_ANCHORS:
+        off = data.find(anchor)
+        if off < 0:
+            raise ValueError(f"SSM anchor {anchor!r} absent: refusing")
+        found.append(off)
+    return found
+
+
+def apply_ssm_bypass(
+    data: bytearray, analysis_dir: Path, experimental: bool
+) -> list[tuple[str, int, bytes, bytes]]:
+    """Ungate SSM verbs (verity + ThinkShield) via shared dispatcher gates.
+
+    Anchor-checks the SSM verb surface, then applies the factory gate
+    family (same old-byte + known-build gates as --factory-allow).
+    Returns the applied list.
+    """
+    arch = load_analysis_architecture(analysis_dir)
+    if arch != "aarch64":
+        raise ValueError(f"ssm-bypass supports aarch64 only, got {arch!r}: refusing")
+    surface = discover_ssm_surface(bytes(data))
+    print("SSM     : verbs present at "
+          + ", ".join(f"0x{off:x}" for off in surface))
+    applied = apply_discovered_gates(data, analysis_dir, "factory", experimental)
+    print("Warn    : UNTESTED preset (never flown live): the verbs are now")
+    print("Warn    : reachable, but their handlers may still check unlock /")
+    print("Warn    : CID / SSM state. Live verdict = run 'fastboot oem")
+    print("Warn    : disable-verity' + 'fastboot oem disable-thinkshield'.")
+    return applied
+
+
 def apply_discovered_gates(
     data: bytearray,
     analysis_dir: Path,
@@ -1308,6 +1366,14 @@ def detect_report(analysis_dir: Path, experimental: bool) -> int:
         rc = 1
     else:
         print(f"Lockspoof: OK hook=[0x{lhook:x}] cave=[0x{lcave:x}]"
+              + (" (experimental, unknown build)" if build is None else ""))
+    try:
+        ssm = discover_ssm_surface(data)
+    except ValueError as exc:
+        print(f"Ssm     : REFUSE {exc}")
+        rc = 1
+    else:
+        print(f"Ssm     : OK verbs=[{', '.join(f'0x{o:x}' for o in ssm)}]"
               + (" (experimental, unknown build)" if build is None else ""))
     try:
         rd = ramdump_research_scan(data, base)
@@ -5418,6 +5484,21 @@ def build_parser() -> argparse.ArgumentParser:
         help="Confirmacion explicita de riesgo para --lockspoof.",
     )
     parser.add_argument(
+        "--ssm-bypass",
+        action="store_true",
+        help=(
+            "UNSAFE RESEARCH (UNTESTED): ungates the mot_sec SSM verbs "
+            "(disable-verity, disable-thinkshield) via the shared "
+            "dispatcher gates + refuses when the SSM verb surface is "
+            "absent. Requiere --ssm-bypass-unsafe."
+        ),
+    )
+    parser.add_argument(
+        "--ssm-bypass-unsafe",
+        action="store_true",
+        help="Confirmacion explicita de riesgo para --ssm-bypass.",
+    )
+    parser.add_argument(
         "--bootmode-cmdline-unsafe",
         action="store_true",
         help=(
@@ -5564,11 +5645,12 @@ def main() -> int:
         and not args.bootmode_cmdline
         and not args.mrdump_force
         and not args.lockspoof
+        and not args.ssm_bypass
     ):
         print(
             "Error: usa --erase-partition <nombre>, --from/--to, --frp-skip-check, "
             "--frp-compare-value, --key-force-success, --key-custom-signature, --key-token-secret, "
-            "--erase-token-partition, --unlock-erase-only, --modem-research-report-only, --ramdump-research-report-only, --modem-size-bypass, --factory-allow, --factory-force, o una combinacion.",
+            "--erase-token-partition, --unlock-erase-only, --modem-research-report-only, --ramdump-research-report-only, --modem-size-bypass, --factory-allow, --factory-force, --ssm-bypass, o una combinacion.",
             file=sys.stderr,
         )
         return 2
@@ -5606,6 +5688,12 @@ def main() -> int:
     if args.lockspoof and not args.lockspoof_unsafe:
         print(
             "Error: --lockspoof requiere --lockspoof-unsafe.",
+            file=sys.stderr,
+        )
+        return 2
+    if args.ssm_bypass and not args.ssm_bypass_unsafe:
+        print(
+            "Error: --ssm-bypass requiere --ssm-bypass-unsafe.",
             file=sys.stderr,
         )
         return 2
@@ -5671,6 +5759,7 @@ def main() -> int:
             args.bootmode_cmdline,
             args.mrdump_force,
             args.lockspoof,
+            args.ssm_bypass,
             args.ramdump_research_report_only,
         ]
         if any(conflicting):
@@ -5700,6 +5789,7 @@ def main() -> int:
             args.bootmode_cmdline,
             args.mrdump_force,
             args.lockspoof,
+            args.ssm_bypass,
         ]
         if any(conflicting):
             print(
@@ -5784,6 +5874,18 @@ def main() -> int:
             print(f"Error: {exc}", file=sys.stderr)
             return 1
         print(f"LockspoofGates: {len(applied)} hook + cave (report-only)")
+
+    if args.ssm_bypass:
+        try:
+            applied = apply_ssm_bypass(
+                data, args.analysis_dir, args.experimental
+            )
+        except (OSError, ValueError) as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return 1
+        print(f"SsmGates: {len(applied)} dispatcher gates -> NOP (SSM verbs reachable)")
+        print("Warn    : UNTESTED: live-run 'oem disable-verity' + 'oem disable-thinkshield'")
+        print("Warn    : to learn each handler's own checks. Slot B first.")
 
     if partition_patch is not None:
         old_name, new_name = partition_patch

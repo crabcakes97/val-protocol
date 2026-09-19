@@ -44,6 +44,7 @@ COMMANDS: tuple[tuple[str, str], ...] = (
     ("force-fastboot", "top"), ("enable-verity", "top"),
     ("disable-verity", "top"), ("enable-verification", "top"),
     ("disable-verification", "top"), ("clear_dm_verity_error", "top"),
+    ("disable-thinkshield", "top"), ("enable-thinkshield", "top"),
     ("fuse-lock", "top"), ("fuse-version", "top"), ("help", "top"),
     ("uart", "top"), ("p2u", "top"), ("passwd", "top"),
     ("writeimei", "top"), ("getimei1", "top"), ("getimei2", "top"),

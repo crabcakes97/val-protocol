@@ -26,6 +26,7 @@ PRESETS = (
     "bootmode-cmdline",
     "mrdump-force",
     "lockspoof",
+    "ssm-bypass",
     "wide-open",
     "full-allow",
     "gz-canary",
@@ -562,6 +563,16 @@ def build_parser() -> argparse.ArgumentParser:
         help="Confirmacion explicita de riesgo para --lockspoof.",
     )
     parser.add_argument(
+        "--ssm-bypass",
+        action="store_true",
+        help="UNSAFE RESEARCH (UNTESTED) para preset ssm-bypass.",
+    )
+    parser.add_argument(
+        "--ssm-bypass-unsafe",
+        action="store_true",
+        help="Confirmacion explicita de riesgo para --ssm-bypass.",
+    )
+    parser.add_argument(
         "--experimental",
         action="store_true",
         help=(
@@ -750,6 +761,17 @@ def build_patch_command(args: argparse.Namespace, root: Path, analysis_dir: Path
             "--preset lockspoof requiere --lockspoof-unsafe.",
         )
         patch_cmd.extend(["--lockspoof", "--lockspoof-unsafe"])
+        if args.experimental:
+            patch_cmd.append("--experimental")
+        return patch_cmd
+
+    if args.preset == "ssm-bypass":
+        require_arg(args.ssm_bypass, "--preset ssm-bypass requiere --ssm-bypass.")
+        require_arg(
+            args.ssm_bypass_unsafe,
+            "--preset ssm-bypass requiere --ssm-bypass-unsafe.",
+        )
+        patch_cmd.extend(["--ssm-bypass", "--ssm-bypass-unsafe"])
         if args.experimental:
             patch_cmd.append("--experimental")
         return patch_cmd
