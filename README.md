@@ -515,6 +515,11 @@ python lk_auto_patch.py <stock-lk.img> -o <lk_spoof.img> \
 fastboot -s ZT4229CJG5 getvar securestate   # want: flashing_locked
 ```
 
+Note: there is no SSM/verity-disable preset. `disable-verity` /
+`disable-verification` exist only as candidate names in
+`lk_oem_cmd_mapper.py` (map-only, never flashed); `lockspoof` only spoofs
+the `securestate` report while every unlocked ability keeps working.
+
 ### `wide-open` (everything together — TESTED preset)
 
 `factory-allow` + `factory-force` + `bootmode-cmdline` +
@@ -975,6 +980,13 @@ unit where marked; the rest is ready-to-run recon.
 | `da_extractor.py` | USB-capture DA-transfer census (metadata/hashes only — DA bytes are never written or bundled). | `python da_extractor.py capture.txt [--raw]` |
 | `preloader_payload_builder.py` | EL3 research scaffold: cave survey + return-to-caller canary *source template*; binary emission needs reviewer-confirmed offsets, and no flash command is ever printed (preloader has no slot). | `python preloader_payload_builder.py --image preloader.bin` |
 | `brom_exploit_prober.py` | Evaluates known BROM exploit preconditions against your seccfg/boot-log evidence (APPLICABLE/BLOCKED); live probing refused on fused devices. No execute flag exists. | `python brom_exploit_prober.py --boot-log boot.log` |
+| `kree shit/kree_map_all.S` + `build_kmap_all.sh`, `kree_map_{recon,run}.sh`, `kmap_service.sh` | KREE map-all sweep kit: static-PIE mapper source + NDK build script + on-device recon/run wrappers (crash-resume via `/data/local/tmp/kmap.prog`) + optional Magisk service stub. | `bash "kree shit/build_kmap_all.sh"`, push binary + scripts, run as root |
+| `lk-tools/kmod-relay/` (`reader.c` + `Makefile`) | GKI relay module source: standard sysfs params (`ticket`, `buildtag`) for the DRAM-scratch relay test (module writes scratch, LK reads after reboot). | GKI `5.15` headers + `make`, Magisk-boot install (fresh id per install) |
+| `lk-tools/kmod-spin/` (`spin.c` + `Makefile`) | GKI execution-probe module source: init issues `panic("SPINMARKER")` to prove the init body ran. | same build/install path as the relay module |
+| `lk-tools/valbridge_pull.py` | Host half of VALBRIDGE: pulls `jobs.txt` from sdcard, reboots to bootloader, per-job readdump pulls via `fb_dump.py`, reboots and pushes results back. | `python lk-tools/valbridge_pull.py [--serial ZT4229CJG5]` |
+| `tools/btf_parse.py` | Struct member offsets from raw BTF (`/sys/kernel/btf/vmlinux`). No dependencies. | `python tools/btf_parse.py <btf> --want task_struct:cred,...` |
+| `tools/kallsyms_parse.py` | Full static kallsyms recovery from a raw arm64 `Image` (handles `BASE_RELATIVE` u32 addrs). | `python tools/kallsyms_parse.py <Image> [--want a,b]` |
+| `ghostlock/` | Cred/session-shift sweep: preload + sweep scripts (`sweep.sh`, `preflight.sh`), measured offsets, panic-console + sweep logs, port notes. | see `ghostlock/README.md` + `ghostlock/RUNLOG.md` |
 
 Live-proven so far: OEM census reproduces byte-identical on the phone LK;
 KREE session + share handshake completes against `com.mediatek.geniezone.srv.mem`

